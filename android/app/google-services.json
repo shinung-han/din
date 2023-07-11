@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "983604255533",
+    "project_id": "do-it-now-a5725",
+    "storage_bucket": "do-it-now-a5725.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983604255533:android:8b6c7cb9545e14c11bd1a4",
+        "android_client_info": {
+          "package_name": "com.example.din"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983604255533-t8e1qtd4o1cftgulinmm47upc0bprj1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_EGfJh6EWwcDyXC8RdCiVaBPlgnhfvp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983604255533-a8mb4g6dqi0blj1pcogjv6if5v3loies.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "983604255533-9mb9t5omfqa5n72g25r2pg0tlj832ega.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.din.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
