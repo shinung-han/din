@@ -57,7 +57,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
   bool isErrorText = false;
 
   void _onSubmit() {
-    ref.read(signUpProvider.notifier).signUp();
+    ref.read(signUpProvider.notifier).signUp(context);
   }
 
   bool _isButtonEnabled = false;
@@ -128,11 +128,6 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
 
                             return null;
                           },
-                          // onSaved: (newValue) {
-                          //   if (newValue != null) {
-                          //     formData['email'] = newValue;
-                          //   }
-                          // },
                         ),
                         TextFormField(
                           controller: _passwordController,
@@ -161,11 +156,6 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                             }
                             return null;
                           },
-                          // onSaved: (value) {
-                          //   if (value != null) {
-                          //     formData['password'] = value;
-                          //   }
-                          // },
                         ),
                         if (!isErrorText) Gaps.v40,
                         if (isErrorText)
