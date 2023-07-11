@@ -92,7 +92,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             children: [
               Gaps.v40,
               const CircleAvatar(
-                radius: 60,
+                radius: 70,
                 backgroundImage: AssetImage('assets/images/profile.jpeg'),
                 // child: Text('신웅'),
               ),
@@ -116,19 +116,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 icon: FontAwesomeIcons.bullhorn,
                 company: 'Notice',
               ),
-              Gaps.v14,
+              Gaps.v10,
               AuthSocialButton(
                 icon: FontAwesomeIcons.toggleOn,
                 company: 'Dark mode',
                 onTap: _onLogoutTap,
               ),
-              Gaps.v14,
+              Gaps.v10,
               AuthSocialButton(
                 icon: FontAwesomeIcons.arrowRightFromBracket,
                 company: 'Log Out',
                 onTap: _onLogoutTap,
               ),
-              Gaps.v14,
               /* ListTile(
                 minVerticalPadding: 30,
                 leading: Container(

@@ -17,7 +17,7 @@ class AuthHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          Gaps.v60,
+          Gaps.v80,
           Text(
             title,
             style: const TextStyle(
@@ -30,7 +30,7 @@ class AuthHeader extends StatelessWidget {
             subTitle,
             textAlign: TextAlign.center,
           ),
-          Gaps.v60,
+          Gaps.v80,
         ],
       ),
     );

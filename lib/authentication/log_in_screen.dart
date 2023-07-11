@@ -52,17 +52,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 icon: FontAwesomeIcons.user,
                 onTap: _onUseEmailLoginTap,
               ),
-              Gaps.v14,
+              Gaps.v10,
               const AuthSocialButton(
                 company: 'Continue with Google',
                 icon: FontAwesomeIcons.google,
               ),
-              Gaps.v14,
+              Gaps.v10,
               const AuthSocialButton(
                 company: 'Continue with Apple',
                 icon: FontAwesomeIcons.apple,
               ),
-              Gaps.v14,
+              Gaps.v10,
               const AuthSocialButton(
                 company: 'Continue with Facebook',
                 icon: FontAwesomeIcons.facebook,
