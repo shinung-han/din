@@ -5,6 +5,7 @@ import 'package:din/authentication/widgets/auth_header.dart';
 import 'package:din/authentication/widgets/auth_submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/utils.dart';
 import 'package:din/view_models/signup_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,29 +20,33 @@ class SignUpFormScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
-  late final TextEditingController emailController = TextEditingController()
+  void _onScaffoldTap() {
+    FocusScope.of(context).unfocus();
+  }
+
+  late final TextEditingController _emailController = TextEditingController()
     ..addListener(() {
       setState(() {
-        formData['email'] = emailController.text;
+        formData['email'] = _emailController.text;
       });
     });
 
-  late final TextEditingController passwordController = TextEditingController()
+  late final TextEditingController _passwordController = TextEditingController()
     ..addListener(() {
       setState(() {
-        formData['password'] = passwordController.text;
+        formData['password'] = _passwordController.text;
       });
     });
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Map<String, String> formData = {};
+  Map<String, dynamic> formData = {};
 
   void _onLoginTap() {
     context.goNamed(LoginScreen.routeName);
   }
 
-  bool obscureText = true;
+  bool obscureText = false;
 
   void _toggleObscureText() {
     setState(() {
@@ -52,62 +57,39 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
   bool isErrorText = false;
 
   void _onSubmit() {
-    if (formKey.currentState != null) {
-      if (formKey.currentState!.validate()) {
-        ref.read(signUpForm.notifier).state = {
-          'email': formData['email'],
-          'password': formData['password']
-        } as Null;
-        print(ref.read(signUpForm));
-        // if (formData['email'] == 'hsuj86@gmail.com' &&
-        //     formData['password'] == '12345') {
-        //   formKey.currentState!.save();
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => const SignUpScreen(),
-        //     ),
-        //   );
-        // } else {
-        //   setState(() {
-        //     isErrorText = true;
-        //   });
-        // }
-      }
-    }
+    ref.read(signUpProvider.notifier).signUp();
   }
 
-  bool isButtonEnabled = false;
+  bool _isButtonEnabled = false;
 
   void _validateInputs() {
-    if (formData['email']!.isNotEmpty && formData['password'] != null) {
-      if (formData['password']!.length > 4) {
+    if (_formKey.currentState != null) {
+      if (_formKey.currentState!.validate()) {
         setState(() {
-          isButtonEnabled = true;
+          _isButtonEnabled = true;
         });
       } else {
         setState(() {
-          isButtonEnabled = false;
+          _isButtonEnabled = false;
         });
       }
     }
+
+    ref.read(signUpForm.notifier).state = {
+      'email': formData['email'],
+      'password': formData['password'],
+    };
   }
 
   void _onCancelTap() {
-    // FocusScope.of(context).unfocus();
-    // const Duration(milliseconds: 50);
     Navigator.pop(context);
   }
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
-  }
-
-  void _onScaffoldTap() {
-    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -127,12 +109,12 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                         'Create a profile, follow other accounts, make your own videos, and more.',
                   ),
                   Form(
-                    key: formKey,
+                    key: _formKey,
                     onChanged: _validateInputs,
                     child: Column(
                       children: [
                         TextFormField(
-                          controller: emailController,
+                          controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           cursorHeight: Sizes.size16,
@@ -140,22 +122,20 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                             labelText: 'Email',
                           ),
                           validator: (value) {
-                            if (value != null && value.length < 5) {
-                              // return 'Please write your email';
-                              return null;
-                            } else if (value!.isEmpty) {
-                              return '';
+                            if (!emailValid(value)) {
+                              return '이메일 형식을 확인해 주세요.';
                             }
+
                             return null;
                           },
-                          onSaved: (newValue) {
-                            if (newValue != null) {
-                              formData['email'] = newValue;
-                            }
-                          },
+                          // onSaved: (newValue) {
+                          //   if (newValue != null) {
+                          //     formData['email'] = newValue;
+                          //   }
+                          // },
                         ),
                         TextFormField(
-                          controller: passwordController,
+                          controller: _passwordController,
                           obscureText: obscureText,
                           cursorHeight: Sizes.size16,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -176,52 +156,17 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                             ),
                           ),
                           validator: (value) {
-                            if (value!.length < 5) {
-                              // return 'Please enter your password';
-                              return null;
+                            if (value!.length < 6) {
+                              return '6자 이상 입력해주세요!';
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            if (value != null) {
-                              formData['password'] = value;
-                            }
-                          },
+                          // onSaved: (value) {
+                          //   if (value != null) {
+                          //     formData['password'] = value;
+                          //   }
+                          // },
                         ),
-                        /* TextFormField(
-                          controller: passwordController,
-                          obscureText: obscureText,
-                          cursorHeight: Sizes.size16,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            suffix: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: GestureDetector(
-                                onTap: _toggleObscureText,
-                                child: FaIcon(
-                                  obscureText
-                                      ? FontAwesomeIcons.eye
-                                      : FontAwesomeIcons.eyeSlash,
-                                  size: 16,
-                                  color: Colors.grey.shade700,
-                                ),
-                              ),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value!.length < 5) {
-                              // return 'Please enter your password';
-                              return null;
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            if (value != null) {
-                              formData['password'] = value;
-                            }
-                          },
-                        ), */
                         if (!isErrorText) Gaps.v40,
                         if (isErrorText)
                           Container(
@@ -235,11 +180,8 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                               ),
                             ),
                           ),
-                        // if (_isErrorText)
-                        //   const
-                        // const SizedBox(height: 14),
                         AuthSubmitButton(
-                          disabled: isButtonEnabled,
+                          disabled: _isButtonEnabled,
                           onTap: _onSubmit,
                           buttonText: 'Sign Up',
                         ),
