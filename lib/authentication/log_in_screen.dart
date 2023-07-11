@@ -1,7 +1,7 @@
 import 'package:din/authentication/log_in_form_screen.dart';
 import 'package:din/authentication/sign_up_screen.dart';
 import 'package:din/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/authentication/widgets/auth_button.dart';
+import 'package:din/authentication/widgets/auth_social_button.dart';
 import 'package:din/authentication/widgets/auth_header.dart';
 import 'package:din/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
@@ -33,17 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
     context.pushNamed(SignUpScreen.routeName);
   }
 
-  void _onGoHomeTap() {
-    context.go('/home');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               const AuthHeader(
@@ -62,12 +58,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 icon: FontAwesomeIcons.google,
               ),
               Gaps.v14,
-              GestureDetector(
-                onTap: _onGoHomeTap,
-                child: const AuthSocialButton(
-                  company: 'Continue with Facebook',
-                  icon: FontAwesomeIcons.facebook,
-                ),
+              const AuthSocialButton(
+                company: 'Continue with Apple',
+                icon: FontAwesomeIcons.apple,
+              ),
+              Gaps.v14,
+              const AuthSocialButton(
+                company: 'Continue with Facebook',
+                icon: FontAwesomeIcons.facebook,
               ),
               const Spacer(),
               const AuthPolicy(),
@@ -82,43 +80,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-// class LogInButton extends StatelessWidget {
-//   final bool disabled;
-//   final Function() onTap;
-
-//   const LogInButton({
-//     super.key,
-//     required this.disabled,
-//     required this.onTap,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: FractionallySizedBox(
-//         widthFactor: 1,
-//         child: Container(
-//           alignment: Alignment.center,
-//           padding: const EdgeInsets.all(Sizes.size14),
-//           decoration: BoxDecoration(
-//             border: Border.all(
-//               width: 0.5,
-//               color: Colors.grey.shade300,
-//             ),
-//             color: disabled ? Colors.black : Colors.white,
-//             borderRadius: BorderRadius.circular(Sizes.size3),
-//           ),
-//           child: Text(
-//             'Log In',
-//             style: TextStyle(
-//               color: disabled ? Colors.white : Colors.grey.shade300,
-//               fontWeight: FontWeight.w500,
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

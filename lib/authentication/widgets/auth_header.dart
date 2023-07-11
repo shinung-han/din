@@ -13,23 +13,26 @@ class AuthHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Gaps.v60,
-        Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 30,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Gaps.v60,
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
           ),
-        ),
-        Gaps.v10,
-        Text(
-          subTitle,
-          textAlign: TextAlign.center,
-        ),
-        Gaps.v60,
-      ],
+          Gaps.v10,
+          Text(
+            subTitle,
+            textAlign: TextAlign.center,
+          ),
+          Gaps.v60,
+        ],
+      ),
     );
   }
 }

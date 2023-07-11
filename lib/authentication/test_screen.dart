@@ -1,6 +1,6 @@
 import 'package:din/authentication/sign_up_screen.dart';
 import 'package:din/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/authentication/widgets/auth_button.dart';
+import 'package:din/authentication/widgets/auth_social_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:flutter/material.dart';

@@ -1,12 +1,12 @@
 import 'package:din/authentication/sign_up_screen.dart';
 import 'package:din/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/authentication/widgets/auth_button.dart';
+import 'package:din/authentication/widgets/auth_social_button.dart';
 import 'package:din/authentication/widgets/auth_header.dart';
 import 'package:din/authentication/widgets/auth_submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/utils.dart';
-import 'package:din/view_models/login_view_model.dart';
+import 'package:din/authentication/view_models/login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -105,7 +105,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
       child: Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(40.0),
+            padding: const EdgeInsets.all(20.0),
             child: SingleChildScrollView(
               child: Column(
                 children: [

@@ -1,6 +1,6 @@
 import 'package:din/authentication/sign_up_form_screen.dart';
 import 'package:din/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/authentication/widgets/auth_button.dart';
+import 'package:din/authentication/widgets/auth_social_button.dart';
 import 'package:din/authentication/widgets/auth_header.dart';
 import 'package:din/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
@@ -37,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               const AuthHeader(
@@ -54,6 +54,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const AuthSocialButton(
                 company: 'Continue with Google',
                 icon: FontAwesomeIcons.google,
+              ),
+              Gaps.v14,
+              const AuthSocialButton(
+                company: 'Continue with Apple',
+                icon: FontAwesomeIcons.apple,
               ),
               Gaps.v14,
               const AuthSocialButton(

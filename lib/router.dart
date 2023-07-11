@@ -1,7 +1,7 @@
 import 'package:din/authentication/log_in_screen.dart';
+import 'package:din/authentication/repos/authentication_repo.dart';
 import 'package:din/authentication/sign_up_screen.dart';
 import 'package:din/common/widgets/main_navigation_screen.dart';
-import 'package:din/repos/authentication_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

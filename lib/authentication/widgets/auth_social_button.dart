@@ -21,13 +21,13 @@ class AuthSocialButton extends StatelessWidget {
       child: FractionallySizedBox(
         widthFactor: 1,
         child: Container(
-          padding: const EdgeInsets.all(Sizes.size14),
+          padding: const EdgeInsets.all(Sizes.size18),
           decoration: BoxDecoration(
             border: Border.all(
               width: 0.5,
               color: Colors.grey.shade400,
             ),
-            borderRadius: BorderRadius.circular(Sizes.size3),
+            borderRadius: BorderRadius.circular(Sizes.size4),
           ),
           child: Stack(
             alignment: Alignment.center,
