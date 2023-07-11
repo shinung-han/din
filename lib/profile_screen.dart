@@ -1,23 +1,17 @@
-import 'package:din/authentication/log_in_screen.dart';
+import 'package:din/repos/authentication_repo.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  void _onLogOutTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
-  }
-
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,28 +22,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               title: const Text('Log out'),
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text('로그아웃 하시겠습니까?'),
-                    // backgroundColor: Colors.teal,
-                    // duration: const Duration(milliseconds: 1000),
-                    behavior: SnackBarBehavior.floating,
-                    action: SnackBarAction(
-                      label: 'Undo',
-                      textColor: Colors.white,
-                      onPressed: () => print('Pressed'),
-                    ),
-                    shape: const RoundedRectangleBorder(
-                        // borderRadius: BorderRadius.circular(20),
-                        // side: const BorderSide(
-                        //   color: Colors.red,
-                        //   width: 2,
-                        // ),
+                showCupertinoDialog(
+                  context: context,
+                  builder: (context) => CupertinoAlertDialog(
+                    title: const Text('Are you sure?'),
+                    // content: const Text("Please dont go"),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: const Text(
+                          'No',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
                         ),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        child: const Text(
+                          'Yes',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        onPressed: () {
+                          ref.read(authRepo).signOut();
+                          context.go('/');
+                        },
+                      ),
+                    ],
                   ),
                 );
               },
             ),
+            const AboutListTile(),
           ],
         ),
       ),
