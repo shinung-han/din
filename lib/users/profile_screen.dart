@@ -15,6 +15,8 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  bool _isEdit = false;
+
   void _onLogoutTap() {
     showCupertinoDialog(
       context: context,
@@ -64,9 +66,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  _isEdit = !_isEdit;
+                });
+              },
               child: Container(
-                width: 60,
+                width: 65,
                 height: 36,
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -74,10 +80,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     color: Colors.grey.shade300,
                   ),
                   borderRadius: BorderRadius.circular(4),
+                  color: _isEdit ? Colors.black : Colors.white,
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    'Edit',
+                    _isEdit ? 'Done' : 'Edit',
+                    style: TextStyle(
+                      color: _isEdit ? Colors.white : Colors.black,
+                    ),
                   ),
                 ),
               ),
@@ -91,11 +101,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           child: Column(
             children: [
               Gaps.v40,
-              const CircleAvatar(
-                radius: 70,
-                backgroundImage: AssetImage('assets/images/profile.jpeg'),
-                // child: Text('신웅'),
-              ),
+              if (!_isEdit)
+                const CircleAvatar(
+                  radius: 70,
+                  backgroundImage: AssetImage('assets/images/profile.jpeg'),
+                ),
+              if (_isEdit)
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.grey.shade400,
+                      backgroundImage: const AssetImage(
+                        'assets/images/profile.jpeg',
+                      ),
+                      // child: Text('신웅'),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        print('change profile image');
+                      },
+                      child: CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Colors.grey.shade400.withOpacity(0.8),
+                        child: const Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.camera,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               Gaps.v12,
               const Text(
                 'Shinung Han',

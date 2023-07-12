@@ -1,9 +1,9 @@
 import 'package:din/authentication/log_in_form_screen.dart';
 import 'package:din/authentication/sign_up_screen.dart';
 import 'package:din/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/authentication/widgets/auth_social_button.dart';
 import 'package:din/authentication/widgets/auth_header.dart';
 import 'package:din/authentication/widgets/auth_policy.dart';
+import 'package:din/authentication/widgets/auth_social_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,36 +40,39 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              const AuthHeader(
-                title: 'Log In for DIN',
-                subTitle:
-                    'Manage your account, check notifications, comment on videos, and more.',
-              ),
-              AuthSocialButton(
-                company: 'Use Email and Password',
-                icon: FontAwesomeIcons.user,
-                onTap: _onUseEmailLoginTap,
-              ),
-              Gaps.v10,
-              const AuthSocialButton(
-                company: 'Continue with Google',
-                icon: FontAwesomeIcons.google,
-              ),
-              Gaps.v10,
-              const AuthSocialButton(
-                company: 'Continue with Apple',
-                icon: FontAwesomeIcons.apple,
-              ),
-              Gaps.v10,
-              const AuthSocialButton(
-                company: 'Continue with Facebook',
-                icon: FontAwesomeIcons.facebook,
-              ),
-              const Spacer(),
-              const AuthPolicy(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const AuthHeader(
+                  title: 'Log In for DIN',
+                  subTitle:
+                      'Manage your account, check notifications, comment on videos, and more.',
+                ),
+                AuthSocialButton(
+                  company: 'Use Email and Password',
+                  icon: FontAwesomeIcons.user,
+                  onTap: _onUseEmailLoginTap,
+                ),
+                Gaps.v10,
+                const AuthSocialButton(
+                  company: 'Continue with Google',
+                  icon: FontAwesomeIcons.google,
+                ),
+                Gaps.v10,
+                const AuthSocialButton(
+                  company: 'Continue with Apple',
+                  icon: FontAwesomeIcons.apple,
+                ),
+                Gaps.v10,
+                const AuthSocialButton(
+                  company: 'Continue with Facebook',
+                  icon: FontAwesomeIcons.facebook,
+                ),
+                // const Spacer(),
+                Gaps.v120,
+                const AuthPolicy(),
+              ],
+            ),
           ),
         ),
       ),

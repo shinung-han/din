@@ -49,6 +49,8 @@ dependencies:
   cloud_firestore: ^4.8.2
   firebase_storage: ^11.2.4
 
+  flutter_keyboard_visibility: ^5.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -8,6 +8,7 @@ import 'package:din/constants/sizes.dart';
 import 'package:din/utils.dart';
 import 'package:din/authentication/view_models/signup_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -176,9 +177,15 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                           buttonText: 'Sign Up',
                         ),
                         Gaps.v14,
-                        AuthSocialButton(
-                          company: 'Cancel',
-                          onTap: _onCancelTap,
+                        KeyboardVisibilityBuilder(
+                          builder: (context, isKeyboardVisible) {
+                            return KeyboardDismissOnTap(
+                              child: AuthSocialButton(
+                                company: 'Cancel',
+                                onTap: _onCancelTap,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
