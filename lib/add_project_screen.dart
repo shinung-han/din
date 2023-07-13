@@ -89,6 +89,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       bottomNavigationBar: const BottomAppBar(
         child: CommonButton(
           text: 'Next',
+          bgColor: Colors.black,
+          color: Colors.white,
         ),
       ),
     );

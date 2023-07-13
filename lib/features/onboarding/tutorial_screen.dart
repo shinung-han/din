@@ -2,6 +2,7 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class TutorialScreen extends StatefulWidget {
   static const String routeName = 'tutorial';
@@ -13,19 +14,31 @@ class TutorialScreen extends StatefulWidget {
   State<TutorialScreen> createState() => _TutorialScreenState();
 }
 
-class _TutorialScreenState extends State<TutorialScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController = TabController(
-    length: 4,
-    vsync: this,
-  )..addListener(() {
-      setState(() {
-        _tabController = _tabController;
-      });
-    });
+class _TutorialScreenState extends State<TutorialScreen> {
+  int _currentPage = 0;
+
+  late final PageController _pageController = PageController(
+    initialPage: _currentPage,
+  )..addListener(
+      () {
+        int nextPage = _pageController.page!.round();
+        if (_currentPage != nextPage) {
+          setState(() {
+            _currentPage = nextPage;
+          });
+        }
+      },
+    );
+
+  void _handlePageChange(index) {
+    _pageController.jumpToPage(index);
+  }
 
   void _onNextTap() {
-    _tabController.index++;
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   void _onEnterTheApp() {
@@ -38,8 +51,8 @@ class _TutorialScreenState extends State<TutorialScreen>
       length: 4,
       child: Scaffold(
         body: SafeArea(
-          child: TabBarView(
-            controller: _tabController,
+          child: PageView(
+            controller: _pageController,
             children: const [
               Padding(
                 padding: EdgeInsets.all(40),
@@ -123,22 +136,28 @@ class _TutorialScreenState extends State<TutorialScreen>
         bottomNavigationBar: BottomAppBar(
           color: Colors.white,
           elevation: 0,
-          height: 130,
+          height: 140,
           child: Column(
             children: [
-              TabPageSelector(
-                controller: _tabController,
+              SmoothPageIndicator(
+                controller: _pageController,
+                count: 4,
+                effect: const ExpandingDotsEffect(
+                  activeDotColor: Colors.black,
+                  dotHeight: 12,
+                  dotWidth: 12,
+                ),
+                onDotClicked: (index) => _handlePageChange(index),
               ),
-              Gaps.v14,
+              Gaps.v20,
               AnimatedOpacity(
                 opacity: 1,
                 duration: const Duration(milliseconds: 200),
                 child: CommonButton(
-                  text: _tabController.index == 3 ? 'Enter the App' : 'Next',
+                  text: _currentPage == 3 ? 'Enter the App' : 'Next',
                   color: Colors.white,
                   bgColor: Colors.black,
-                  onTap:
-                      _tabController.index == 3 ? _onEnterTheApp : _onNextTap,
+                  onTap: _currentPage == 3 ? _onEnterTheApp : _onNextTap,
                 ),
               ),
             ],
