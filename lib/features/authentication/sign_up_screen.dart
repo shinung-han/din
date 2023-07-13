@@ -1,8 +1,8 @@
-import 'package:din/authentication/sign_up_form_screen.dart';
-import 'package:din/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/authentication/widgets/auth_social_button.dart';
-import 'package:din/authentication/widgets/auth_header.dart';
-import 'package:din/authentication/widgets/auth_policy.dart';
+import 'package:din/features/authentication/sign_up_form_screen.dart';
+import 'package:din/features/authentication/widgets/auth_bottom_app_bar.dart';
+import 'package:din/features/authentication/widgets/auth_social_button.dart';
+import 'package:din/features/authentication/widgets/auth_header.dart';
+import 'package:din/features/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:din/authentication/repos/authentication_repo.dart';
+import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

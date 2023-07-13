@@ -1,7 +1,8 @@
-import 'package:din/authentication/log_in_screen.dart';
-import 'package:din/authentication/repos/authentication_repo.dart';
-import 'package:din/authentication/sign_up_screen.dart';
+import 'package:din/features/authentication/log_in_screen.dart';
+import 'package:din/features/authentication/repos/authentication_repo.dart';
+import 'package:din/features/authentication/sign_up_screen.dart';
 import 'package:din/common/widgets/main_navigation_screen.dart';
+import 'package:din/features/onboarding/tutorial_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,7 +10,7 @@ final routerProvider = Provider((ref) {
   // ref.watch(authStateStream);
 
   return GoRouter(
-    initialLocation: LoginScreen.routeURL,
+    initialLocation: TutorialScreen.routeURL,
     redirect: (context, state) {
       final isLoggedIn = ref.read(authRepo).isLoggedIn;
       if (!isLoggedIn) {
@@ -41,6 +42,11 @@ final routerProvider = Provider((ref) {
             tab: tab!,
           );
         },
+      ),
+      GoRoute(
+        path: TutorialScreen.routeURL,
+        name: TutorialScreen.routeName,
+        builder: (context, state) => const TutorialScreen(),
       ),
     ],
   );

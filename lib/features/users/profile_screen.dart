@@ -1,5 +1,5 @@
-import 'package:din/authentication/repos/authentication_repo.dart';
-import 'package:din/authentication/widgets/auth_social_button.dart';
+import 'package:din/common/widgets/common_button.dart';
+import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -150,77 +150,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               Gaps.v40,
-              const AuthSocialButton(
+              const CommonButton(
                 icon: FontAwesomeIcons.bullhorn,
-                company: 'Notice',
+                text: 'Notice',
               ),
               Gaps.v10,
-              AuthSocialButton(
-                icon: FontAwesomeIcons.toggleOn,
-                company: 'Dark mode',
-                onTap: _onLogoutTap,
+              const CommonButton(
+                icon: FontAwesomeIcons.toggleOff,
+                text: 'Dark Mode',
               ),
+
               Gaps.v10,
-              AuthSocialButton(
+              CommonButton(
                 icon: FontAwesomeIcons.arrowRightFromBracket,
-                company: 'Log Out',
+                text: 'Log Out',
+                bgColor: Colors.redAccent,
+                borderColor: Colors.redAccent,
+                color: Colors.white,
                 onTap: _onLogoutTap,
-              ),
-              /* ListTile(
-                minVerticalPadding: 30,
-                leading: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.grey.shade200,
-                    ),
-                    // color: Colors.grey.shade200,
-                  ),
-                  child: const Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.arrowRightFromBracket,
-                      size: 16,
-                    ),
-                  ),
-                ),
-                title: const Text('Log out'),
-                onTap: () {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (context) => CupertinoAlertDialog(
-                      title: const Text('Are you sure?'),
-                      // content: const Text("Please dont go"),
-                      actions: [
-                        CupertinoDialogAction(
-                          child: const Text(
-                            'No',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        CupertinoDialogAction(
-                          isDestructiveAction: true,
-                          child: const Text(
-                            'Yes',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                          onPressed: () {
-                            ref.read(authRepo).signOut();
-                            context.go('/');
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ), */
+              )
               // const AboutListTile(),
             ],
           ),
