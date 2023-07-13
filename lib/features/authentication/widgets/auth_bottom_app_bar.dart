@@ -14,7 +14,8 @@ class AuthBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Colors.grey.shade50.withOpacity(0.1),
+      color: Colors.grey.shade100,
+      elevation: 0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

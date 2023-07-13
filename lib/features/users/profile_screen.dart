@@ -17,6 +17,14 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _isEdit = false;
 
+  bool _isDarkMode = false;
+
+  void _onDarkAndLightModeTap() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
+
   void _onLogoutTap() {
     showCupertinoDialog(
       context: context,
@@ -154,9 +162,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 text: 'Notice',
               ),
               Gaps.v10,
-              const CommonButton(
+              CommonButton(
                 icon: FontAwesomeIcons.toggleOff,
-                text: 'Dark Mode',
+                text: _isDarkMode ? 'Dark Mode' : 'Light Mode',
+                onTap: _onDarkAndLightModeTap,
               ),
               Gaps.v10,
               CommonButton(

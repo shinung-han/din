@@ -32,6 +32,11 @@ class DinApp extends ConsumerWidget {
       theme: ThemeData(
         fontFamily: 'NotoSans',
         scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
         useMaterial3: true,
       ),
       // home: const LoginScreen(),

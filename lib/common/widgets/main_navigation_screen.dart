@@ -1,3 +1,4 @@
+import 'package:din/features/projects/project_screen.dart';
 import 'package:din/features/users/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,7 +28,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   late int _currentIndex = _tabs.indexOf(widget.tab!);
 
   final List<Widget> _pages = [
-    const Screen1(),
+    const ProjectScreen(),
     const Screen2(),
     const ProfileScreen(),
   ];

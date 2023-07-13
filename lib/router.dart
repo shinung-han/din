@@ -10,7 +10,8 @@ final routerProvider = Provider((ref) {
   // ref.watch(authStateStream);
 
   return GoRouter(
-    initialLocation: TutorialScreen.routeURL,
+    // initialLocation: LoginScreen.routeURL,
+    initialLocation: '/home',
     redirect: (context, state) {
       final isLoggedIn = ref.read(authRepo).isLoggedIn;
       if (!isLoggedIn) {
