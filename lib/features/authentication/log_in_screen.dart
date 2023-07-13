@@ -49,23 +49,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Manage your account, check notifications, comment on videos, and more.',
                 ),
                 AuthSocialButton(
-                  company: 'Use Email and Password',
+                  company: '이메일과 비밀번호 사용하기',
                   icon: FontAwesomeIcons.user,
                   onTap: _onUseEmailLoginTap,
                 ),
                 Gaps.v10,
                 const AuthSocialButton(
-                  company: 'Continue with Google',
+                  company: 'Google로 시작하기',
                   icon: FontAwesomeIcons.google,
                 ),
                 Gaps.v10,
                 const AuthSocialButton(
-                  company: 'Continue with Apple',
+                  company: 'Apple로 시작하기',
                   icon: FontAwesomeIcons.apple,
                 ),
                 Gaps.v10,
                 const AuthSocialButton(
-                  company: 'Continue with Facebook',
+                  company: 'Facebook으로 시작하기',
                   icon: FontAwesomeIcons.facebook,
                 ),
                 // const Spacer(),
@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       bottomNavigationBar: AuthBottomAppBar(
-        tapText: 'Sign Up',
+        tapText: '회원가입',
         onTap: _onSignUpTap,
       ),
     );

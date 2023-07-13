@@ -142,7 +142,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Gaps.v4,
               Text(
                 'hsuj86@gmail.com',
                 style: TextStyle(
@@ -159,7 +158,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 icon: FontAwesomeIcons.toggleOff,
                 text: 'Dark Mode',
               ),
-
               Gaps.v10,
               CommonButton(
                 icon: FontAwesomeIcons.arrowRightFromBracket,
@@ -168,7 +166,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 borderColor: Colors.redAccent,
                 color: Colors.white,
                 onTap: _onLogoutTap,
-              )
+              ),
               // const AboutListTile(),
             ],
           ),

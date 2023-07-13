@@ -30,6 +30,7 @@ class DinApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'DIN',
       theme: ThemeData(
+        fontFamily: 'NotoSans',
         scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
       ),
