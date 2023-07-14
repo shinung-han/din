@@ -1,7 +1,10 @@
 import 'package:din/add_project_screen.dart';
+import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/features/authentication/widgets/auth_header.dart';
+import 'package:din/features/onboarding/tutorial_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
@@ -11,7 +14,7 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
-  void _onAddProjectTap() {
+  void _onCreateProject() {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -20,9 +23,48 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
+  void _onViewTutorial() {
+    context.go(TutorialScreen.routeURL);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Gaps.v40,
+                const AuthHeader(
+                  title: 'There is no Project',
+                  subTitle:
+                      'Create your own fantastic project to become a better version of yourself than yesterday.',
+                ),
+                Gaps.v80,
+                CommonButton(
+                  text: 'Create a Project',
+                  bgColor: Colors.black,
+                  color: Colors.white,
+                  // icon: FontAwesomeIcons.list,
+                  onTap: _onCreateProject,
+                ),
+                Gaps.v10,
+                CommonButton(
+                  text: 'View Tutorial',
+                  onTap: _onViewTutorial,
+                  // icon: FontAwesomeIcons.star,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    /* return SafeArea(
       child: Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,6 +103,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
           ],
         ),
       ),
-    );
+    ); */
   }
 }

@@ -63,7 +63,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         title: const Text(
           'Profile',
           style: TextStyle(
@@ -144,35 +144,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               Gaps.v12,
               const Text(
-                'Shinung Han',
+                'Reach 🚀',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              Gaps.v4,
               Text(
                 'hsuj86@gmail.com',
                 style: TextStyle(
-                  color: Colors.grey.shade700,
+                  color: Colors.grey.shade600,
                 ),
               ),
               Gaps.v40,
               const CommonButton(
-                icon: FontAwesomeIcons.bullhorn,
+                // icon: FontAwesomeIcons.bullhorn,
                 text: 'Notice',
               ),
               Gaps.v10,
               CommonButton(
-                icon: FontAwesomeIcons.toggleOff,
+                // icon: FontAwesomeIcons.toggleOff,
                 text: _isDarkMode ? 'Dark Mode' : 'Light Mode',
                 onTap: _onDarkAndLightModeTap,
               ),
               Gaps.v10,
               CommonButton(
-                icon: FontAwesomeIcons.arrowRightFromBracket,
+                // icon: FontAwesomeIcons.arrowRightFromBracket,
                 text: 'Log Out',
-                bgColor: Colors.redAccent,
-                borderColor: Colors.redAccent,
+                // bgColor: Colors.redAccent,
+                bgColor: Colors.black,
+                // borderColor: Colors.redAccent,
                 color: Colors.white,
                 onTap: _onLogoutTap,
               ),

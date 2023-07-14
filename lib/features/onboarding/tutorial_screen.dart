@@ -136,7 +136,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         bottomNavigationBar: BottomAppBar(
           color: Colors.white,
           elevation: 0,
-          height: 140,
+          height: 122,
           child: Column(
             children: [
               SmoothPageIndicator(
@@ -149,7 +149,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                 ),
                 onDotClicked: (index) => _handlePageChange(index),
               ),
-              Gaps.v20,
+              Gaps.v24,
               AnimatedOpacity(
                 opacity: 1,
                 duration: const Duration(milliseconds: 200),
