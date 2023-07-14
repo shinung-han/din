@@ -1,8 +1,9 @@
 import 'package:din/cards_screen.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
-import 'package:din/constants/sizes.dart';
+import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class AddProjectScreen extends StatefulWidget {
@@ -70,52 +71,71 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Create Project',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+          // title: const Text(
+          //   'Create Project',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
           ),
-        ),
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(Sizes.size20),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10,
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonButton(
-              text: 'Set a Date',
-              onTap: _pickDateRange,
+            const AuthHeader(
+              title: 'Set the Date',
+              subTitle:
+                  'Create your own fantastic project to become a better version of yourself than yesterday.',
             ),
             Gaps.v20,
-            Padding(
-              padding: const EdgeInsets.only(left: Sizes.size8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Start date',
-                    style: textStyle,
-                  ),
-                  Gaps.v4,
-                  Text(start == end ? '-' : DateFormat.yMd().format(start)),
-                  Gaps.v14,
-                  const Text(
-                    'End date',
-                    style: textStyle,
-                  ),
-                  Gaps.v4,
-                  Text(start == end ? '-' : DateFormat.yMd().format(end)),
-                  Gaps.v14,
-                  const Text(
-                    'Duration',
-                    style: textStyle,
-                  ),
-                  Gaps.v4,
-                  Text(
-                      start == end ? '-' : 'For ${difference.inDays + 1} days'),
-                ],
-              ),
+            CommonButton(
+              text: 'Calendar',
+              onTap: _pickDateRange,
+              icon: FontAwesomeIcons.calendarCheck,
+            ),
+            Gaps.v24,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    const Text(
+                      'Start date',
+                      style: textStyle,
+                    ),
+                    Gaps.v4,
+                    Text(start == end ? '-' : DateFormat.yMd().format(start)),
+                  ],
+                ),
+                Gaps.h14,
+                Column(
+                  children: [
+                    const Text(
+                      'End date',
+                      style: textStyle,
+                    ),
+                    Gaps.v4,
+                    Text(start == end ? '-' : DateFormat.yMd().format(end)),
+                  ],
+                ),
+                Gaps.h14,
+                Column(
+                  children: [
+                    const Text(
+                      'Duration',
+                      style: textStyle,
+                    ),
+                    Gaps.v4,
+                    Text(start == end
+                        ? '-'
+                        : 'For ${difference.inDays + 1} days'),
+                  ],
+                ),
+              ],
             )
           ],
         ),
