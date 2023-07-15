@@ -1,7 +1,8 @@
-import 'package:din/cards_screen.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
+import 'package:din/set_number_of_projects_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -50,7 +51,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const CardsScreen(),
+          builder: (context) => const SetNumberOfProjects(),
         ),
       );
     }
@@ -71,13 +72,13 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          // title: const Text(
-          //   'Create Project',
-          //   style: TextStyle(
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
+        title: const Text(
+          'Create Project',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -98,44 +99,46 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
               icon: FontAwesomeIcons.calendarCheck,
             ),
             Gaps.v24,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    const Text(
-                      'Start date',
-                      style: textStyle,
-                    ),
-                    Gaps.v4,
-                    Text(start == end ? '-' : DateFormat.yMd().format(start)),
-                  ],
-                ),
-                Gaps.h14,
-                Column(
-                  children: [
-                    const Text(
-                      'End date',
-                      style: textStyle,
-                    ),
-                    Gaps.v4,
-                    Text(start == end ? '-' : DateFormat.yMd().format(end)),
-                  ],
-                ),
-                Gaps.h14,
-                Column(
-                  children: [
-                    const Text(
-                      'Duration',
-                      style: textStyle,
-                    ),
-                    Gaps.v4,
-                    Text(start == end
-                        ? '-'
-                        : 'For ${difference.inDays + 1} days'),
-                  ],
-                ),
-              ],
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        'Start date',
+                        style: textStyle,
+                      ),
+                      Gaps.v4,
+                      Text(start == end ? '-' : DateFormat.yMd().format(start)),
+                    ],
+                  ),
+                  verticalDivider(),
+                  Column(
+                    children: [
+                      const Text(
+                        'End date',
+                        style: textStyle,
+                      ),
+                      Gaps.v4,
+                      Text(start == end ? '-' : DateFormat.yMd().format(end)),
+                    ],
+                  ),
+                  verticalDivider(),
+                  Column(
+                    children: [
+                      const Text(
+                        'Duration',
+                        style: textStyle,
+                      ),
+                      Gaps.v4,
+                      Text(start == end
+                          ? '-'
+                          : 'For ${difference.inDays + 1} days'),
+                    ],
+                  ),
+                ],
+              ),
             )
           ],
         ),
@@ -148,6 +151,16 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           onTap: () => _onSetCardsTap(difference),
         ),
       ),
+    );
+  }
+
+  VerticalDivider verticalDivider() {
+    return VerticalDivider(
+      width: Sizes.size1,
+      indent: Sizes.size8,
+      endIndent: Sizes.size8,
+      color: Colors.grey.shade400,
+      thickness: 0.5,
     );
   }
 }

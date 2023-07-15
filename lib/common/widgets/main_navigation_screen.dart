@@ -1,5 +1,6 @@
 import 'package:din/features/projects/project_screen.dart';
 import 'package:din/features/users/profile_screen.dart';
+import 'package:din/list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +30,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   final List<Widget> _pages = [
     const ProjectScreen(),
-    const Screen2(),
+    const ListScreen(),
     const ProfileScreen(),
   ];
 
