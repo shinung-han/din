@@ -3,6 +3,7 @@ import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/features/authentication/sign_up_screen.dart';
 import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/features/onboarding/tutorial_screen.dart';
+import 'package:din/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,7 +12,8 @@ final routerProvider = Provider((ref) {
 
   return GoRouter(
     // initialLocation: LoginScreen.routeURL,
-    initialLocation: '/home',
+    initialLocation: SplashScreen.routeURL,
+    // initialLocation: '/home',
     redirect: (context, state) {
       final isLoggedIn = ref.read(authRepo).isLoggedIn;
       if (!isLoggedIn) {
@@ -24,6 +26,11 @@ final routerProvider = Provider((ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: SplashScreen.routeURL,
+        name: SplashScreen.routeName,
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: LoginScreen.routeURL,
         name: LoginScreen.routeName,

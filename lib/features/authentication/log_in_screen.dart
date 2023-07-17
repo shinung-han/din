@@ -10,7 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
-  static String routeURL = '/';
+  static String routeURL = '/login';
   static String routeName = 'login';
 
   const LoginScreen({super.key});
