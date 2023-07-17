@@ -29,6 +29,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             seconds: 5,
           ),
         );
+
+        if (!mounted) return;
+
         context.go(LoginScreen.routeURL);
       }
     });

@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,7 +52,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
             onPressed: () {
               ref.read(authRepo).signOut();
-              context.go('/');
+              // TODO LoginScreen으로 경로 수정해야함
+              // [ ] 되는지 테스트해보기
+              // context.go(LoginScreen.routeURL);
+              context.go(SplashScreen.routeURL);
             },
           ),
         ],
