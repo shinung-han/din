@@ -33,6 +33,10 @@ class DinApp extends ConsumerWidget {
         fontFamily: 'NotoSans',
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.black,
+          selectionColor: Colors.grey.shade200,
+        ),
         bottomAppBarTheme: const BottomAppBarTheme(
           color: Colors.white,
           elevation: 0,

@@ -21,14 +21,14 @@ class AuthSubmitButton extends StatelessWidget {
         widthFactor: 1,
         child: Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.all(Sizes.size14),
+          padding: const EdgeInsets.all(Sizes.size18),
           decoration: BoxDecoration(
             border: Border.all(
               width: 0.5,
               color: Colors.grey.shade300,
             ),
             color: disabled ? Colors.black : Colors.white,
-            borderRadius: BorderRadius.circular(Sizes.size3),
+            borderRadius: BorderRadius.circular(Sizes.size5),
           ),
           child: Text(
             buttonText,

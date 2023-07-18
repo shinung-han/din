@@ -6,6 +6,7 @@ class CommonButton extends StatelessWidget {
   final String text;
   final IconData? icon;
   final Color? color, bgColor, borderColor;
+  final FontWeight? fontWeight;
   final Function()? onTap;
 
   const CommonButton({
@@ -15,6 +16,7 @@ class CommonButton extends StatelessWidget {
     this.color,
     this.bgColor,
     this.borderColor,
+    this.fontWeight,
     super.key,
   });
 
@@ -31,7 +33,7 @@ class CommonButton extends StatelessWidget {
               width: 0.5,
               color: borderColor ?? Colors.grey.shade400,
             ),
-            borderRadius: BorderRadius.circular(Sizes.size4),
+            borderRadius: BorderRadius.circular(Sizes.size5),
             color: bgColor,
           ),
           child: Stack(
@@ -51,7 +53,7 @@ class CommonButton extends StatelessWidget {
               Text(
                 text,
                 style: TextStyle(
-                  // fontWeight: FontWeight.w500,
+                  fontWeight: fontWeight ?? FontWeight.normal,
                   color: color ?? Colors.black,
                 ),
               ),

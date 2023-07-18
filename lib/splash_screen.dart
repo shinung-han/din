@@ -22,21 +22,20 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   void initState() {
     super.initState();
 
-    _firebaseAuth.authStateChanges().listen((user) async {
+    _firebaseAuth.authStateChanges().listen((user) {
       if (user != null) {
-        // TODO 기능 구현 다 하면 dealyed 지워야함
-        await Future.delayed(
-          const Duration(
-            seconds: 5,
-          ),
-        );
-
-        // [ ] 불필요한 코드일 수 있음. 아래의 context에서 오류가 나서 넣어놓은 것
         if (!mounted) return;
-
+        context.go('/home');
+      } else {
+        if (!mounted) return;
         context.go(LoginScreen.routeURL);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

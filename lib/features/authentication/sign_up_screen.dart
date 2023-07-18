@@ -1,6 +1,7 @@
+import 'package:din/common/widgets/common_button.dart';
+import 'package:din/features/authentication/log_in_screen.dart';
 import 'package:din/features/authentication/sign_up_form_screen.dart';
 import 'package:din/features/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/features/authentication/widgets/auth_social_button.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/features/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
@@ -29,7 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onLoginTap() {
-    context.pop();
+    context.go(LoginScreen.routeURL);
   }
 
   @override
@@ -38,36 +39,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              const AuthHeader(
-                title: 'Sign Up for DIN',
-                subTitle:
-                    'Create a profile, follow other accounts, make your own videos, and more.',
-              ),
-              AuthSocialButton(
-                company: 'Use email & password',
-                icon: FontAwesomeIcons.user,
-                onTap: _onUseEmailLoginTap,
-              ),
-              Gaps.v10,
-              const AuthSocialButton(
-                company: 'Continue with Google',
-                icon: FontAwesomeIcons.google,
-              ),
-              Gaps.v10,
-              const AuthSocialButton(
-                company: 'Continue with Apple',
-                icon: FontAwesomeIcons.apple,
-              ),
-              Gaps.v10,
-              const AuthSocialButton(
-                company: 'Continue with Facebook',
-                icon: FontAwesomeIcons.facebook,
-              ),
-              const Spacer(),
-              const AuthPolicy(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const AuthHeader(
+                  title: 'Sign Up for DIN',
+                  subTitle:
+                      'Create a profile, follow other accounts, make your own videos, and more.',
+                ),
+                CommonButton(
+                  text: 'Use email & password',
+                  icon: FontAwesomeIcons.user,
+                  onTap: _onUseEmailLoginTap,
+                ),
+                Gaps.v10,
+                const CommonButton(
+                  text: 'Continue with Google',
+                  icon: FontAwesomeIcons.google,
+                ),
+                Gaps.v10,
+                const CommonButton(
+                  text: 'Continue with Apple',
+                  icon: FontAwesomeIcons.apple,
+                ),
+                Gaps.v10,
+                const CommonButton(
+                  text: 'Continue with Facebook',
+                  icon: FontAwesomeIcons.facebook,
+                ),
+                Gaps.v120,
+                const AuthPolicy(),
+              ],
+            ),
           ),
         ),
       ),
