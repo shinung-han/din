@@ -40,39 +40,38 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const AuthHeader(
-                  title: 'Log In for DIN',
-                  subTitle:
-                      'Manage your account, check notifications, comment on videos, and more.',
-                ),
-                AuthSocialButton(
-                  company: 'Use Email and Password',
-                  icon: FontAwesomeIcons.user,
-                  onTap: _onUseEmailLoginTap,
-                ),
-                Gaps.v10,
-                const AuthSocialButton(
-                  company: 'Continue with Google',
-                  icon: FontAwesomeIcons.google,
-                ),
-                Gaps.v10,
-                const AuthSocialButton(
-                  company: 'Continue with Apple',
-                  icon: FontAwesomeIcons.apple,
-                ),
-                Gaps.v10,
-                const AuthSocialButton(
-                  company: 'Continue with Facebook',
-                  icon: FontAwesomeIcons.facebook,
-                ),
-                // const Spacer(),
-                Gaps.v120,
-                const AuthPolicy(),
-              ],
-            ),
+          child: Column(
+            children: [
+              const AuthHeader(
+                title: 'Log In for DIN',
+                subTitle:
+                    'Manage your account, check notifications, comment on videos, and more.',
+              ),
+              AuthSocialButton(
+                company: 'Use Email and Password',
+                icon: FontAwesomeIcons.user,
+                onTap: _onUseEmailLoginTap,
+              ),
+              Gaps.v10,
+              const AuthSocialButton(
+                company: 'Continue with Google',
+                icon: FontAwesomeIcons.google,
+              ),
+              Gaps.v10,
+              const AuthSocialButton(
+                company: 'Continue with Apple',
+                icon: FontAwesomeIcons.apple,
+              ),
+              Gaps.v10,
+              const AuthSocialButton(
+                company: 'Continue with Facebook',
+                icon: FontAwesomeIcons.facebook,
+              ),
+              // const Spacer(),
+              Gaps.v80,
+              Gaps.v20,
+              const AuthPolicy(),
+            ],
           ),
         ),
       ),

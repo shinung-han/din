@@ -28,6 +28,19 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.black,
+              primaryContainer: Colors.white,
+              secondary: Colors.grey.shade100,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (newDateRange == null) return null;
