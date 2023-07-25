@@ -2,6 +2,7 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/project_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CardsScreen extends StatefulWidget {
   const CardsScreen({super.key});
@@ -83,6 +84,8 @@ class _CardsScreenState extends State<CardsScreen> {
       ),
       body: Stack(
         children: [
+          // [ ] Blur처리된 Project의 배경화면
+          // TODO 좀 더 고민해보고 결정 예정
           /* AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
             child: Container(
@@ -134,7 +137,7 @@ class _CardsScreenState extends State<CardsScreen> {
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.15),
-                                  blurRadius: 10,
+                                  blurRadius: 8,
                                   spreadRadius: 2,
                                   offset: const Offset(0, 8),
                                 ),
@@ -149,40 +152,75 @@ class _CardsScreenState extends State<CardsScreen> {
                                   ),
                                   child: Hero(
                                     tag: '${index + 1}',
-                                    child: Image(
+                                    child: Container(
                                       width: 350,
                                       height: 350,
-                                      image: AssetImage(
-                                        'assets/images/${index + 1}.jpg',
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.grey.shade400,
+                                            width: 0.5,
+                                          ),
+                                        ),
                                       ),
-                                      fit: BoxFit.cover,
+                                      child: Center(
+                                        child: FaIcon(
+                                          FontAwesomeIcons.image,
+                                          size: 40,
+                                          color: Colors.grey.shade400,
+                                        ),
+                                      ),
+                                      /* child: Image(
+                                        width: 350,
+                                        height: 350,
+                                        image: AssetImage(
+                                          'assets/images/${index + 1}.jpg',
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ), */
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   width: 320,
                                   child: Padding(
-                                    padding: EdgeInsets.all(15),
+                                    padding: const EdgeInsets.all(15),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Set project name',
+                                          "Title",
                                           style: TextStyle(
                                             fontSize: 18,
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey.shade500,
                                           ),
                                         ),
                                         Gaps.v10,
-                                        Text(
-                                            'Hello-! Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!Hello-!')
+                                        SizedBox(
+                                          height: 70,
+                                          child: Text(
+                                            "Description",
+                                            style: TextStyle(
+                                              color: Colors.grey.shade600,
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
                                 ),
                                 Gaps.v10,
-                                Container(
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 40),
+                                  child: CommonButton(
+                                    text: 'Edit',
+                                    // bgColor: Colors.black,
+                                    // color: Colors.white,
+                                  ),
+                                ),
+                                /* Container(
                                   width: 180,
                                   padding: const EdgeInsets.all(18),
                                   decoration: BoxDecoration(
@@ -195,7 +233,7 @@ class _CardsScreenState extends State<CardsScreen> {
                                   child: const Center(
                                     child: Text('Edit'),
                                   ),
-                                ),
+                                ), */
                                 Gaps.v20,
                               ],
                             ),

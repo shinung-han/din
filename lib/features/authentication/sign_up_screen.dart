@@ -75,6 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
       bottomNavigationBar: AuthBottomAppBar(
+        text: "Already have an account?",
         tapText: 'Log In',
         onTap: _onLoginTap,
       ),

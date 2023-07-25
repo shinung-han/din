@@ -29,6 +29,10 @@ class AuthenticationRepository {
       password: password,
     );
   }
+
+  Future<void> googleSignIn(OAuthCredential credential) async {
+    await _firebaseAuth.signInWithCredential(credential);
+  }
 }
 
 final authRepo = Provider((ref) => AuthenticationRepository());

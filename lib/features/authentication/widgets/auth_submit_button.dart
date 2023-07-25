@@ -20,6 +20,7 @@ class AuthSubmitButton extends StatelessWidget {
       child: FractionallySizedBox(
         widthFactor: 1,
         child: Container(
+          height: 65,
           alignment: Alignment.center,
           padding: const EdgeInsets.all(Sizes.size18),
           decoration: BoxDecoration(

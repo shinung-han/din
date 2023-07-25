@@ -189,6 +189,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
           ),
         ),
         bottomNavigationBar: AuthBottomAppBar(
+          text: "Already have an account?",
           tapText: 'Log In',
           onTap: _onLoginTap,
         ),

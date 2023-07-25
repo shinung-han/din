@@ -1,8 +1,8 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/authentication/list_of_goals_screen.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
-import 'package:din/set_number_of_projects_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -64,7 +64,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const SetNumberOfProjects(),
+          builder: (context) => const ListOfGoalsScreen(),
         ),
       );
     }

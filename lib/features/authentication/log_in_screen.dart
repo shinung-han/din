@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/features/authentication/log_in_form_screen.dart';
 import 'package:din/features/authentication/sign_up_screen.dart';
@@ -5,21 +8,35 @@ import 'package:din/features/authentication/widgets/auth_bottom_app_bar.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/features/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatefulWidget {
+enum LoginPlatform {
+  facebook,
+  google,
+  kakao,
+  naver,
+  apple,
+  none, // logout
+}
+
+class LoginScreen extends ConsumerStatefulWidget {
   static String routeURL = '/login';
   static String routeName = 'login';
 
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _onUseEmailLoginTap() {
     Navigator.push(
       context,
@@ -31,6 +48,71 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onSignUpTap() {
     context.go(SignUpScreen.routeURL);
+  }
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> signInWithGoogle() async {
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential authResult =
+          await _firebaseAuth.signInWithCredential(credential);
+      // final User? user = authResult.user;
+
+      // if (user != null) {
+      //   return User(
+      //       id: user.uid,
+      //       name: user.displayName ?? '',
+      //       email: user.email ?? '');
+      // }
+      context.go('/home');
+    } catch (e) {
+      print('Google 로그인 에러: $e');
+    }
+
+    return;
+  }
+
+  final LoginPlatform _loginPlatform = LoginPlatform.none;
+
+  Future<void> _onKakaoLogin() async {
+    print(await KakaoSdk.origin);
+    try {
+      bool isInstalled = await isKakaoTalkInstalled();
+
+      OAuthToken token = isInstalled
+          ? await UserApi.instance.loginWithKakaoTalk()
+          : await UserApi.instance.loginWithKakaoAccount();
+
+      final url = Uri.https('kapi.kakao.com', '/v2/user/me');
+
+      final response = await http.get(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer ${token.accessToken}'
+        },
+      );
+
+      final profileInfo = json.decode(response.body);
+      print(profileInfo.toString());
+
+      // setState(() {
+      //   _loginPlatform = LoginPlatform.kakao;
+      // });
+    } catch (error) {
+      print('카카오톡으로 로그인 실패 $error');
+    }
   }
 
   @override
@@ -54,14 +136,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: _onUseEmailLoginTap,
                 ),
                 Gaps.v10,
-                const CommonButton(
+                CommonButton(
                   text: 'Continue with Google',
                   icon: FontAwesomeIcons.google,
+                  onTap: signInWithGoogle,
                 ),
                 Gaps.v10,
-                const CommonButton(
-                  text: 'Continue with Apple',
+                CommonButton(
+                  text: 'Continue with Kakao',
                   icon: FontAwesomeIcons.apple,
+                  onTap: _onKakaoLogin,
                 ),
                 Gaps.v10,
                 const CommonButton(
@@ -76,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       bottomNavigationBar: AuthBottomAppBar(
+        text: "Are you not a member yet?",
         tapText: 'Sign Up',
         onTap: _onSignUpTap,
       ),

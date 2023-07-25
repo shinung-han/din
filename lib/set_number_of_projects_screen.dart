@@ -64,8 +64,14 @@ class _SetNumberOfProjectsState extends State<SetNumberOfProjects> {
               TextField(
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Enter a number',
+                  labelStyle: TextStyle(color: Colors.grey.shade400),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400)),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
                 ),
                 onChanged: (value) {
                   _onSetNumberOfProjects(value);

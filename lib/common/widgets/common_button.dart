@@ -27,13 +27,18 @@ class CommonButton extends StatelessWidget {
       child: FractionallySizedBox(
         widthFactor: 1,
         child: Container(
-          padding: const EdgeInsets.all(Sizes.size18),
+          height: 70,
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.size18,
+            vertical: Sizes.size16,
+          ),
           decoration: BoxDecoration(
             border: Border.all(
               width: 0.5,
               color: borderColor ?? Colors.grey.shade400,
             ),
-            borderRadius: BorderRadius.circular(Sizes.size5),
+            // borderRadius: BorderRadius.circular(Sizes.size5),
+            borderRadius: BorderRadius.circular(Sizes.size36),
             color: bgColor,
           ),
           child: Stack(

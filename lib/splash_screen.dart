@@ -41,17 +41,30 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: const Color(0xff0352BE),
+      backgroundColor: const Color(0xffF6D702),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'DIN',
-              style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+            Center(
+              child: Text(
+                'DIN',
+                style: TextStyle(
+                  fontSize: 120,
+                  fontWeight: FontWeight.bold,
+                  // color: Colors.white,
+                  // color: Colors.black,
+                  color: Color(0xff003A8C),
+                ),
+              ),
             ),
             Gaps.v40,
-            CircularProgressIndicator(),
+            CircularProgressIndicator(
+              color: Colors.white,
+              // color: Color(0xffEEE201),
+            ),
           ],
         ),
       ),

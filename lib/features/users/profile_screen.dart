@@ -1,3 +1,4 @@
+import 'package:din/change_password_screen.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/constants/gaps.dart';
@@ -16,11 +17,11 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  bool _isEdit = false;
+  final bool _isEdit = false;
 
   bool _isDarkMode = false;
 
-  void _onDarkAndLightModeTap() {
+  void _onModeTap() {
     setState(() {
       _isDarkMode = !_isDarkMode;
     });
@@ -63,6 +64,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  void _onChangePasswordTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ChangePasswordScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,38 +84,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
+        /* actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _isEdit = !_isEdit;
-                });
-              },
-              child: Container(
-                width: 65,
-                height: 36,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.shade300,
-                  ),
-                  borderRadius: BorderRadius.circular(4),
-                  color: _isEdit ? Colors.black : Colors.white,
-                ),
-                child: Center(
-                  child: Text(
-                    _isEdit ? 'Done' : 'Edit',
-                    style: TextStyle(
-                      color: _isEdit ? Colors.white : Colors.black,
-                    ),
-                  ),
-                ),
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              onPressed: _onModeTap,
+              icon: Icon(
+                _isDarkMode ? Icons.dark_mode_sharp : Icons.sunny,
               ),
             ),
           ),
-        ],
+        ], */
       ),
       body: SafeArea(
         child: Padding(
@@ -113,73 +102,71 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           child: Column(
             children: [
               Gaps.v40,
-              if (!_isEdit)
-                const CircleAvatar(
-                  radius: 70,
-                  backgroundImage: AssetImage('assets/images/profile.jpeg'),
-                ),
-              if (_isEdit)
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 70,
-                      backgroundColor: Colors.grey.shade400,
-                      backgroundImage: const AssetImage(
-                        'assets/images/profile.jpeg',
-                      ),
-                      // child: Text('신웅'),
-                    ),
-                    GestureDetector(
+              Stack(
+                children: [
+                  const CircleAvatar(
+                    radius: 70,
+                    backgroundImage: AssetImage('assets/images/profile.jpeg'),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      // TODO 프로필 이미지 변경
                       onTap: () {
-                        print('change profile image');
+                        print('프로필 이미지 변경 로직');
                       },
                       child: CircleAvatar(
-                        radius: 70,
-                        backgroundColor: Colors.grey.shade400.withOpacity(0.8),
-                        child: const Center(
-                          child: FaIcon(
-                            FontAwesomeIcons.camera,
-                            color: Colors.white,
+                        radius: 22,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Colors.grey.shade400,
+                          child: const Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.camera,
+                              size: 18,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              Gaps.v12,
-              const Text(
-                'Reach 🚀',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
+                  ),
+                ],
               ),
-              Gaps.v4,
-              Text(
+              Gaps.v20,
+              const Text(
                 'hsuj86@gmail.com',
                 style: TextStyle(
-                  color: Colors.grey.shade600,
+                  fontSize: 20,
                 ),
               ),
-              Gaps.v40,
-              const CommonButton(
-                // icon: FontAwesomeIcons.bullhorn,
-                text: 'Notice',
+              Gaps.v20,
+              const Divider(
+                thickness: 0.5,
+                color: Colors.grey,
+              ),
+              Gaps.v20,
+              CommonButton(
+                icon: FontAwesomeIcons.lockOpen,
+                text: 'Change Password',
+                onTap: _onChangePasswordTap,
               ),
               Gaps.v10,
               CommonButton(
-                // icon: FontAwesomeIcons.toggleOff,
-                text: _isDarkMode ? 'Dark Mode' : 'Light Mode',
-                onTap: _onDarkAndLightModeTap,
+                icon: _isDarkMode ? Icons.dark_mode_sharp : Icons.sunny,
+                text: _isDarkMode ? 'To Dark Mode' : 'To Light Mode',
+                onTap: _onModeTap,
               ),
               Gaps.v10,
               CommonButton(
-                // icon: FontAwesomeIcons.arrowRightFromBracket,
+                icon: FontAwesomeIcons.arrowRightFromBracket,
                 text: 'Log Out',
-                // bgColor: Colors.redAccent,
                 // bgColor: Colors.black,
-                // borderColor: Colors.redAccent,
                 // color: Colors.white,
+                // bgColor: Colors.redAccent,
+                // borderColor: Colors.redAccent,
                 onTap: _onLogoutTap,
               ),
               // const AboutListTile(),

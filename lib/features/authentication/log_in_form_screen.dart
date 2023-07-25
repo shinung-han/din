@@ -6,6 +6,7 @@ import 'package:din/features/authentication/widgets/auth_submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/view_models/login_view_model.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -59,7 +60,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
 
   void updateButtonState() {
     setState(() {
-      _isButtonEnabled = _emailController.text.isNotEmpty &&
+      _isButtonEnabled = emailValid(_emailController.text) &&
           _passwordController.text.length > 6;
     });
   }
@@ -112,6 +113,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
 
   // [ ] 오류 message들 쉽게 변경
   // [ ] Header 문구 변경
+  // [ ] 비밀번호 찾기 로직 구현
 
   @override
   void dispose() {
@@ -146,13 +148,20 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           cursorHeight: Sizes.size16,
+                          autocorrect: false,
                           onFieldSubmitted: (value) {
                             FocusScope.of(context).requestFocus(_passwordNode);
                           },
                           decoration: InputDecoration(
-                            labelStyle: const TextStyle(color: Colors.grey),
-                            focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey)),
+                            // labelStyle: const TextStyle(color: Colors.grey),
+                            labelStyle: TextStyle(color: Colors.grey.shade400),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey.shade400)),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade400),
+                            ),
                             suffix: Padding(
                               padding:
                                   const EdgeInsets.only(right: Sizes.size10),
@@ -175,17 +184,24 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
                             return null;
                           }, */
                         ),
+                        Gaps.v14,
                         TextFormField(
                           controller: _passwordController,
                           focusNode: _passwordNode,
                           obscureText: _obscureText,
                           cursorHeight: Sizes.size16,
+                          autocorrect: false,
                           onFieldSubmitted: (_) => _onSubmit(),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
-                            labelStyle: const TextStyle(color: Colors.grey),
-                            focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey)),
+                            labelStyle: TextStyle(color: Colors.grey.shade400),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey.shade400)),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade400),
+                            ),
                             labelText: 'Password',
                             suffix: Padding(
                               padding:
@@ -272,6 +288,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
           ),
         ),
         bottomNavigationBar: AuthBottomAppBar(
+          text: "Are you not a member yet?",
           tapText: 'Sign Up',
           onTap: _onSignUpTap,
         ),
