@@ -136,7 +136,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         bottomNavigationBar: BottomAppBar(
           color: Colors.white,
           elevation: 0,
-          height: 122,
+          height: 130,
           child: Column(
             children: [
               SmoothPageIndicator(

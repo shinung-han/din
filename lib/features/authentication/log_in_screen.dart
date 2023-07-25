@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onTap: signInWithGoogle,
                 ),
                 Gaps.v10,
-                CommonButton(
+                /* CommonButton(
                   text: 'Continue with Kakao',
                   icon: FontAwesomeIcons.apple,
                   onTap: _onKakaoLogin,
@@ -170,8 +170,96 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   text: 'Continue with Naver',
                   icon: FontAwesomeIcons.facebook,
                   onTap: _onNaverLoginTap,
+                ), */
+                Gaps.v40,
+                Stack(
+                  children: [
+                    const Divider(
+                      thickness: 0.5,
+                      color: Colors.grey,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        color: Colors.white,
+                        width: 70,
+                        child: Center(
+                          child: Text(
+                            'other',
+                            style: TextStyle(color: Colors.grey.shade400),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Gaps.v120,
+                Gaps.v20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: _onNaverLoginTap,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'assets/images/btnG_icon_circle.png'),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        height: 30,
+                        child: VerticalDivider(
+                          thickness: 0.5,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: signInWithGoogle,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 0.5, color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(30),
+                          image: const DecorationImage(
+                            image: AssetImage('assets/images/google_logo.png'),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        height: 30,
+                        child: VerticalDivider(
+                          thickness: 0.5,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: _onKakaoLogin,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/kakao_logo.png'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Gaps.v20,
                 const AuthPolicy(),
               ],
             ),
