@@ -10,6 +10,7 @@ import 'package:din/features/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -115,6 +116,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  Future<void> _onNaverLoginTap() async {
+    final NaverLoginResult result = await FlutterNaverLogin.logIn();
+
+    if (result.status == NaverLoginStatus.loggedIn) {
+      print('accessToken = ${result.accessToken}');
+      print('id = ${result.account.id}');
+      print('email = ${result.account.email}');
+      print('name = ${result.account.name}');
+
+      // setState(() {
+      //   _loginPlatform = LoginPlatform.naver;
+      // });
+    } else {
+      print(result.errorMessage);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,9 +166,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onTap: _onKakaoLogin,
                 ),
                 Gaps.v10,
-                const CommonButton(
-                  text: 'Continue with Facebook',
+                CommonButton(
+                  text: 'Continue with Naver',
                   icon: FontAwesomeIcons.facebook,
+                  onTap: _onNaverLoginTap,
                 ),
                 Gaps.v120,
                 const AuthPolicy(),

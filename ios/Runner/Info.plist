@@ -59,5 +59,57 @@
 	        </array>
 	    </dict>
 	</array>
+
+	<!-- Naver login -->
+	<!-- other codes -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>din</string>
+			</array>
+		</dict>
+	</array>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>naversearchapp</string>
+		<string>naversearchthirdlogin</string>
+	</array>
+	<key>naverServiceAppUrlScheme</key>
+	<string>din</string>
+	<key>naverConsumerKey</key>
+	<string>JgJrt0KYK0yAOs0NQ5FA</string>
+	<key>naverConsumerSecret</key>
+	<string>Buk14xaA_V</string>
+	<key>naverServiceAppName</key>
+	<string>DIN</string>
+
+	<!-- http allows configurations -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>naver.com</key>
+			<dict>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>naver.net</key>
+			<dict>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>
