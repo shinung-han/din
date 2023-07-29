@@ -8,6 +8,7 @@ class CommonButton extends StatelessWidget {
   final Color? color, bgColor, borderColor;
   final FontWeight? fontWeight;
   final Function()? onTap;
+  final Image? image;
 
   const CommonButton({
     required this.text,
@@ -17,6 +18,7 @@ class CommonButton extends StatelessWidget {
     this.bgColor,
     this.borderColor,
     this.fontWeight,
+    this.image,
     super.key,
   });
 
@@ -44,6 +46,11 @@ class CommonButton extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
+              if (image != null)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: image,
+                ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(

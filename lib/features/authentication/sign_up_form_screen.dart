@@ -1,16 +1,12 @@
-import 'package:din/features/authentication/log_in_screen.dart';
-import 'package:din/features/authentication/widgets/auth_bottom_app_bar.dart';
-import 'package:din/features/authentication/widgets/auth_social_button.dart';
-import 'package:din/features/authentication/widgets/auth_header.dart';
-import 'package:din/features/authentication/widgets/auth_submit_button.dart';
+import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/constants/sizes.dart';
-import 'package:din/utils.dart';
 import 'package:din/features/authentication/view_models/signup_view_model.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 
 class SignUpFormScreen extends ConsumerStatefulWidget {
   const SignUpFormScreen({super.key});
@@ -26,6 +22,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
 
   late final TextEditingController _emailController = TextEditingController()
     ..addListener(() {
+      updateButtonState();
       setState(() {
         formData['email'] = _emailController.text;
       });
@@ -33,62 +30,77 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
 
   late final TextEditingController _passwordController = TextEditingController()
     ..addListener(() {
+      updateButtonState();
       setState(() {
         formData['password'] = _passwordController.text;
       });
     });
 
+  late final TextEditingController _nameController = TextEditingController()
+    ..addListener(() {
+      updateButtonState();
+      setState(() {
+        formData['name'] = _nameController.text;
+      });
+    });
+
+  final FocusNode _passwordNode = FocusNode();
+  final FocusNode _nameNode = FocusNode();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Map<String, dynamic> formData = {};
 
-  void _onLoginTap() {
-    context.goNamed(LoginScreen.routeName);
-  }
-
-  bool obscureText = false;
+  bool _obscureText = false;
 
   void _toggleObscureText() {
     setState(() {
-      obscureText = !obscureText;
+      _obscureText = !_obscureText;
     });
   }
 
   bool isErrorText = false;
 
   void _onSubmit() {
-    ref.read(signUpProvider.notifier).signUp(context);
+    ref.read(signUpProvider.notifier).signUp(
+          formData['email'],
+          formData['password'],
+          formData['name'],
+          context,
+        );
+  }
+
+  void _onDeleteTap(controller) {
+    if (controller == _emailController) {
+      setState(() {
+        _emailController.clear();
+      });
+    } else if (controller == _passwordController) {
+      setState(() {
+        _passwordController.clear();
+      });
+    } else {
+      setState(() {
+        _nameController.clear();
+      });
+    }
+  }
+
+  void updateButtonState() {
+    setState(() {
+      _isButtonEnabled = emailValid(_emailController.text) &&
+          _passwordController.text.length > 6 &&
+          _nameController.text.length > 2;
+    });
   }
 
   bool _isButtonEnabled = false;
-
-  void _validateInputs() {
-    if (_formKey.currentState != null) {
-      if (_formKey.currentState!.validate()) {
-        setState(() {
-          _isButtonEnabled = true;
-        });
-      } else {
-        setState(() {
-          _isButtonEnabled = false;
-        });
-      }
-    }
-
-    ref.read(signUpForm.notifier).state = {
-      'email': formData['email'],
-      'password': formData['password'],
-    };
-  }
-
-  void _onCancelTap() {
-    Navigator.pop(context);
-  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -98,100 +110,160 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
       onTap: _onScaffoldTap,
       child: Scaffold(
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const AuthHeader(
-                    title: 'Sign Up for DIN',
-                    subTitle:
-                        'Create a profile, follow other accounts, make your own videos, and more.',
-                  ),
-                  Form(
-                    key: _formKey,
-                    onChanged: _validateInputs,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          cursorHeight: Sizes.size16,
-                          decoration: const InputDecoration(
-                            labelText: 'Email',
-                          ),
-                          validator: (value) {
-                            if (!emailValid(value)) {
-                              return '이메일 형식을 확인해 주세요.';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: obscureText,
-                          cursorHeight: Sizes.size16,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            suffix: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: GestureDetector(
-                                onTap: _toggleObscureText,
-                                child: FaIcon(
-                                  obscureText
-                                      ? FontAwesomeIcons.eye
-                                      : FontAwesomeIcons.eyeSlash,
-                                  size: 16,
-                                  color: Colors.grey.shade700,
+          child: CustomScrollView(
+            slivers: [
+              const SliverAppBar(),
+              SliverPadding(
+                padding: const EdgeInsets.all(20.0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      const AuthHeader(
+                        title: 'Sign Up for DIN',
+                        subTitle:
+                            'Create a profile, follow other accounts, make your own videos, and more.',
+                      ),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              cursorHeight: Sizes.size16,
+                              autocorrect: false,
+                              onFieldSubmitted: (value) {
+                                FocusScope.of(context)
+                                    .requestFocus(_passwordNode);
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'Email',
+                                labelStyle:
+                                    TextStyle(color: Colors.grey.shade400),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey.shade400)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.grey.shade400),
+                                ),
+                                suffix: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: Sizes.size10),
+                                  child: GestureDetector(
+                                    onTap: () => _onDeleteTap(_emailController),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.xmark,
+                                      size: Sizes.size18,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          validator: (value) {
-                            if (value!.length < 6) {
-                              return '6자 이상 입력해주세요!';
-                            }
-                            return null;
-                          },
-                        ),
-                        if (!isErrorText) Gaps.v40,
-                        if (isErrorText)
-                          Container(
-                            height: 40,
-                            alignment: Alignment.center,
-                            child: Text(
-                              isErrorText ? '아이디 또는 비밀번호를 확인해 주세요' : '',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.red,
+                            Gaps.v16,
+                            TextFormField(
+                              controller: _passwordController,
+                              focusNode: _passwordNode,
+                              obscureText: _obscureText,
+                              cursorHeight: Sizes.size16,
+                              onFieldSubmitted: (value) {
+                                FocusScope.of(context).requestFocus(_nameNode);
+                              },
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                labelStyle:
+                                    TextStyle(color: Colors.grey.shade400),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey.shade400)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.grey.shade400),
+                                ),
+                                labelText: 'Password',
+                                suffix: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: Sizes.size10),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: _toggleObscureText,
+                                        child: FaIcon(
+                                          _obscureText
+                                              ? FontAwesomeIcons.eye
+                                              : FontAwesomeIcons.eyeSlash,
+                                          size: Sizes.size18,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      Gaps.h12,
+                                      GestureDetector(
+                                        onTap: () =>
+                                            _onDeleteTap(_passwordController),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.xmark,
+                                          size: Sizes.size18,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        AuthSubmitButton(
-                          disabled: _isButtonEnabled,
-                          onTap: _onSubmit,
-                          buttonText: 'Sign Up',
+                            Gaps.v16,
+                            TextFormField(
+                              controller: _nameController,
+                              focusNode: _nameNode,
+                              cursorHeight: Sizes.size16,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                labelStyle:
+                                    TextStyle(color: Colors.grey.shade400),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey.shade400)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.grey.shade400),
+                                ),
+                                labelText: 'Name',
+                                suffix: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: Sizes.size10),
+                                  child: GestureDetector(
+                                    onTap: () => _onDeleteTap(_nameController),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.xmark,
+                                      size: Sizes.size18,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        Gaps.v14,
-                        AuthSocialButton(
-                          company: 'Cancel',
-                          onTap: _onCancelTap,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
-        bottomNavigationBar: AuthBottomAppBar(
-          text: "Already have an account?",
-          tapText: 'Log In',
-          onTap: _onLoginTap,
+        bottomNavigationBar: BottomAppBar(
+          child: SubmitButton(
+            disabled: _isButtonEnabled,
+            onTap: _onSubmit,
+            buttonText: 'Sign Up',
+          ),
         ),
       ),
     );

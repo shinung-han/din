@@ -10,8 +10,9 @@ class UserRepository {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // 1. 프로필 생성
-  Future<void> createProfile(UserProfileModel profile) async {
-    await _db.collection("users").doc(profile.uid).set(profile.toJson());
+  Future<void> createProfile(UserProfileModel profile, String? name) async {
+    print("UserRepository : $name");
+    await _db.collection("users").doc(profile.uid).set(profile.toJson(name!));
   }
 
   // 2. 프로필 가져오기

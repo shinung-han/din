@@ -1,12 +1,12 @@
 import 'package:din/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
-class AuthSubmitButton extends StatelessWidget {
+class SubmitButton extends StatelessWidget {
   final bool disabled;
   final Function() onTap;
   final String buttonText;
 
-  const AuthSubmitButton({
+  const SubmitButton({
     required this.disabled,
     required this.onTap,
     required this.buttonText,

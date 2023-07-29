@@ -16,16 +16,21 @@ class SignUpViewModel extends AsyncNotifier<void> {
     _authRepo = ref.read(authRepo);
   }
 
-  Future<void> signUp(BuildContext context) async {
+  Future<void> signUp(
+    String email,
+    String password,
+    String name,
+    BuildContext context,
+  ) async {
     state = const AsyncValue.loading();
-    final form = ref.read(signUpForm);
+    // final form = ref.read(signUpForm);
     final users = ref.read(usersProvider.notifier);
     state = await AsyncValue.guard(() async {
       final userCredential = await _authRepo.signUp(
-        form['email'],
-        form['password'],
+        email,
+        password,
       );
-      await users.createProfile(userCredential);
+      await users.createProfile(userCredential, name);
     });
     if (state.hasError) {
       showFirebaseErrorSnack(context, state.error);
