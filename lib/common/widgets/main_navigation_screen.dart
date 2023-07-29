@@ -1,3 +1,4 @@
+import 'package:din/features/authentication/chart_screen.dart';
 import 'package:din/features/projects/project_screen.dart';
 import 'package:din/features/users/profile_screen.dart';
 import 'package:din/list_screen.dart';
@@ -23,6 +24,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<String> _tabs = [
     'home',
     'list',
+    "chart",
     'profile',
   ];
 
@@ -31,6 +33,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _pages = [
     const ProjectScreen(),
     const ListScreen(),
+    const ChartScreen(),
     const ProfileScreen(),
   ];
 
@@ -51,15 +54,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: SizedBox(
         height: 110,
         child: BottomNavigationBar(
-          backgroundColor: Colors.white,
           currentIndex: _currentIndex,
-          elevation: 1,
+          backgroundColor: Colors.white,
+          elevation: 5,
           onTap: (value) => _onTabTapped(value),
           selectedItemColor: Colors.black,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
+          showUnselectedLabels: true,
           unselectedItemColor: Colors.grey.shade500,
           unselectedFontSize: 13,
           items: [
             BottomNavigationBarItem(
+              backgroundColor: Colors.white,
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: FaIcon(
@@ -69,22 +75,32 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               ),
               label: 'Home',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Padding(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: FaIcon(
-                  FontAwesomeIcons.list,
-                  size: 16,
+                  FontAwesomeIcons.calendarCheck,
+                  size: _currentIndex == 1 ? 18 : 16,
                 ),
               ),
-              label: 'List',
+              label: 'Calendar',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Padding(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
+                child: FaIcon(
+                  FontAwesomeIcons.chartColumn,
+                  size: _currentIndex == 2 ? 18 : 16,
+                ),
+              ),
+              label: 'Chart',
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.only(bottom: 5),
                 child: FaIcon(
                   FontAwesomeIcons.user,
-                  size: 16,
+                  size: _currentIndex == 3 ? 18 : 16,
                 ),
               ),
               label: 'Profile',

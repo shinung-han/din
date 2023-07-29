@@ -44,6 +44,7 @@ class DinApp extends ConsumerWidget {
           color: Colors.white,
           elevation: 0,
         ),
+        splashColor: Colors.transparent,
         useMaterial3: true,
       ),
       // home: const LoginScreen(),

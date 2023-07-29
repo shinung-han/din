@@ -42,7 +42,7 @@ final routerProvider = Provider((ref) {
         builder: (context, state) => const SignUpScreen(),
       ),
       GoRoute(
-        path: '/:tab(home|list|profile)',
+        path: '/:tab(home|list|chart|profile)',
         name: MainNavigationScreen.routeName,
         builder: (context, state) {
           final tab = state.pathParameters['tab'];
