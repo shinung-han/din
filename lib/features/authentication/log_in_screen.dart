@@ -6,6 +6,7 @@ import 'package:din/features/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/features/onboarding/tutorial_screen.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
+import 'package:din/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,8 +56,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<void> signInWithGoogle() async {
-    // GoogleSignIn googleSignIn = GoogleSignIn();
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
@@ -88,7 +88,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context.go('/home');
       }
     } catch (e) {
-      print('Google 로그인 에러: $e');
+      showFirebaseErrorSnack(context, e);
     }
 
     return;
@@ -104,12 +104,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                /* const AuthHeader(
-                  title: 'Log In for DIN',
-                  subTitle:
-                      'Manage your account, check notifications, comment on videos, and more.',
-                ),
-                 */
                 Gaps.v80,
                 Gaps.v60,
                 const Text(
@@ -125,7 +119,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   icon: FontAwesomeIcons.user,
                   onTap: _onUseEmailLoginTap,
                 ),
-
                 Gaps.v16,
                 CommonButton(
                   text: "Sign Up",
@@ -135,13 +128,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Gaps.v16,
                 CommonButton(
                   text: 'Continue with Google',
-                  // icon: FontAwesomeIcons.google,
                   image: Image.asset('assets/images/google_logo.png'),
-                  onTap: signInWithGoogle,
+                  onTap: () => signInWithGoogle(context),
                 ),
-                // Gaps.v16,
-                // Gaps.v20,
-                // const AuthPolicy(),
               ],
             ),
           ),
@@ -150,11 +139,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       bottomNavigationBar: const BottomAppBar(
         child: AuthPolicy(),
       ),
-      /* bottomNavigationBar: AuthBottomAppBar(
-        text: "Are you not a member yet?",
-        tapText: 'Sign Up',
-        onTap: _onSignUpTap,
-      ), */
     );
   }
 }
