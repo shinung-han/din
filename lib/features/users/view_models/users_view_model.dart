@@ -10,8 +10,7 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
   late final UserRepository _usersRepository;
   late final AuthenticationRepository _authenticationRepository;
 
-  @override
-  FutureOr<UserProfileModel> build() async {
+  Future<UserProfileModel> fetchUserProfile() async {
     _usersRepository = ref.read(userRepo);
     _authenticationRepository = ref.read(authRepo);
 
@@ -25,6 +24,29 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
     }
 
     return UserProfileModel.empty();
+  }
+
+  void listenToUserChanges() {
+    FirebaseAuth.instance.userChanges().listen((event) async {
+      if (event == null) {
+        state = AsyncValue.data(UserProfileModel.empty());
+        return;
+      }
+
+      final profile = await _usersRepository.findProfile(event.uid);
+      if (profile != null) {
+        state = AsyncValue.data(UserProfileModel.fromJson(profile));
+      } else {
+        state = AsyncValue.data(UserProfileModel.empty());
+      }
+    });
+  }
+
+  @override
+  FutureOr<UserProfileModel> build() async {
+    await fetchUserProfile();
+    listenToUserChanges();
+    return state.value!;
   }
 
   Future<void> createProfile(UserCredential credential) async {

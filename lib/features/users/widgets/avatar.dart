@@ -18,7 +18,6 @@ class Avatar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(avatarProvider).isLoading;
-    print(hasAvatar);
 
     return isLoading
         ? Container(

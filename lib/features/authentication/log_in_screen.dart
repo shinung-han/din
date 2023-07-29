@@ -78,7 +78,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await _firebaseAuth.signInWithCredential(credential);
 
       final authRepoUid = ref.read(authRepo).user!.uid;
-      print(authRepoUid);
 
       final users = ref.read(usersProvider.notifier);
 
