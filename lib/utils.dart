@@ -15,6 +15,15 @@ void showFirebaseErrorSnack(
   );
 }
 
+void showErrorSnack(BuildContext context, String error) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      showCloseIcon: true,
+      content: Text(error),
+    ),
+  );
+}
+
 bool emailValid(email) {
   return RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")

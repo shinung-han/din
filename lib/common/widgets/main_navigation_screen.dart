@@ -1,5 +1,5 @@
 import 'package:din/features/authentication/chart_screen.dart';
-import 'package:din/features/projects/project_screen.dart';
+import 'package:din/features/projects/create_project_first_screen.dart';
 import 'package:din/features/users/profile_screen.dart';
 import 'package:din/list_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   late int _currentIndex = _tabs.indexOf(widget.tab!);
 
   final List<Widget> _pages = [
-    const ProjectScreen(),
+    const CreateProjectFirstScreen(),
     const ListScreen(),
     const ChartScreen(),
     const ProfileScreen(),

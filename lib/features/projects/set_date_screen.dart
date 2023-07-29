@@ -1,23 +1,24 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
-import 'package:din/features/authentication/list_of_goals_screen.dart';
+import 'package:din/features/projects/list_of_goals_screen.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-class AddProjectScreen extends StatefulWidget {
+class SetDateScreen extends StatefulWidget {
   static const routeName = 'add';
   static const routeURL = '/add';
 
-  const AddProjectScreen({super.key});
+  const SetDateScreen({super.key});
 
   @override
-  State<AddProjectScreen> createState() => _AddProjectScreenState();
+  State<SetDateScreen> createState() => _AddProjectScreenState();
 }
 
-class _AddProjectScreenState extends State<AddProjectScreen> {
+class _AddProjectScreenState extends State<SetDateScreen> {
   DateTimeRange _dateRange = DateTimeRange(
     start: DateTime.now(),
     end: DateTime.now(),
@@ -54,12 +55,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _onSetCardsTap(
       difference) {
     if (difference.inDays == 0) {
-      return ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          showCloseIcon: true,
-          content: Text('Please select a date'),
-        ),
-      );
+      showErrorSnack(context, 'Please select a date');
     } else {
       Navigator.push(
         context,
@@ -157,6 +153,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        height: 90,
         child: CommonButton(
           text: 'Next',
           bgColor: Colors.black,

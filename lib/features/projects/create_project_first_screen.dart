@@ -1,4 +1,4 @@
-import 'package:din/add_project_screen.dart';
+import 'package:din/features/projects/set_date_screen.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
@@ -6,19 +6,19 @@ import 'package:din/features/onboarding/tutorial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ProjectScreen extends StatefulWidget {
-  const ProjectScreen({super.key});
+class CreateProjectFirstScreen extends StatefulWidget {
+  const CreateProjectFirstScreen({super.key});
 
   @override
-  State<ProjectScreen> createState() => _ProjectScreenState();
+  State<CreateProjectFirstScreen> createState() => _ProjectScreenState();
 }
 
-class _ProjectScreenState extends State<ProjectScreen> {
+class _ProjectScreenState extends State<CreateProjectFirstScreen> {
   void _onCreateProject() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const AddProjectScreen(),
+        builder: (context) => const SetDateScreen(),
       ),
     );
   }
@@ -51,7 +51,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   // icon: FontAwesomeIcons.list,
                   onTap: _onCreateProject,
                 ),
-                Gaps.v10,
+                Gaps.v16,
                 CommonButton(
                   text: 'View Tutorial',
                   onTap: _onViewTutorial,
