@@ -62,7 +62,7 @@
 
 	<!-- Naver login -->
 	<!-- other codes -->
-	<key>CFBundleURLTypes</key>
+	<!-- <key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
@@ -72,7 +72,7 @@
 				<string>din</string>
 			</array>
 		</dict>
-	</array>
+	</array> -->
 
 	<key>LSApplicationQueriesSchemes</key>
 	<array>

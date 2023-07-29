@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/features/authentication/log_in_form_screen.dart';
+import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/features/authentication/sign_up_screen.dart';
 import 'package:din/features/authentication/widgets/auth_bottom_app_bar.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/features/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
@@ -53,15 +56,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Future<void> signInWithGoogle() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
     try {
+      // await googleSignIn.signOut();
+      // await googleSignIn.disconnect();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return;
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
+
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -69,15 +76,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       final UserCredential authResult =
           await _firebaseAuth.signInWithCredential(credential);
-      // final User? user = authResult.user;
 
-      // if (user != null) {
-      //   return User(
-      //       id: user.uid,
-      //       name: user.displayName ?? '',
-      //       email: user.email ?? '');
-      // }
-      context.go('/home');
+      final authRepoUid = ref.read(authRepo).user!.uid;
+      print(authRepoUid);
+
+      final users = ref.read(usersProvider.notifier);
+
+      if (authRepoUid == null) {
+        users.createProfile(authResult);
+      } else {
+        context.go('/home');
+      }
     } catch (e) {
       print('Google 로그인 에러: $e');
     }

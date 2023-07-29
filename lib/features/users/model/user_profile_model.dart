@@ -31,13 +31,14 @@ class UserProfileModel {
         link = json["link"],
         hasAvatar = json["hasAvatar"];
 
-  Map<String, String> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       "uid": uid,
       "name": name,
       "email": email,
       "bio": bio,
       "link": link,
+      "hasAvatar": false,
     };
   }
 
