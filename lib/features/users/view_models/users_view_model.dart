@@ -26,6 +26,17 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
     return UserProfileModel.empty();
   }
 
+  List<String> getLoginMethod() {
+    final user = ref.read(authRepo).user;
+    List<String> methods = [];
+    if (user != null) {
+      for (UserInfo userInfo in user.providerData) {
+        methods.add(userInfo.providerId);
+      }
+    }
+    return methods;
+  }
+
   void listenToUserChanges() {
     FirebaseAuth.instance.userChanges().listen((event) async {
       if (event == null) {

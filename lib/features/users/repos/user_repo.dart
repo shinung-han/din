@@ -11,7 +11,6 @@ class UserRepository {
 
   // 1. 프로필 생성
   Future<void> createProfile(UserProfileModel profile, String? name) async {
-    print("UserRepository : $name");
     await _db.collection("users").doc(profile.uid).set(profile.toJson(name!));
   }
 

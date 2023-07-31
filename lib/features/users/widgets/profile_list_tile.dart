@@ -9,6 +9,7 @@ class ProfileListTile extends StatelessWidget {
   final Function()? onPressed;
   final bool isLogo;
   final String? image;
+  final String? loginMethod;
 
   const ProfileListTile({
     required this.title,
@@ -18,6 +19,7 @@ class ProfileListTile extends StatelessWidget {
     this.image,
     this.onPressed,
     this.trailingIcon,
+    this.loginMethod,
     super.key,
   });
 
@@ -50,8 +52,10 @@ class ProfileListTile extends StatelessWidget {
             )
           : IconButton(
               onPressed: onPressed,
-              icon: const Icon(
-                Icons.chevron_right,
+              icon: Icon(
+                loginMethod == 'password'
+                    ? Icons.alternate_email_outlined
+                    : Icons.chevron_right,
                 size: Sizes.size36,
               ),
             ),

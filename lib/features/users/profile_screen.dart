@@ -92,6 +92,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           error: (error, stackTrace) => Center(child: Text(error.toString())),
           data: (data) {
             final isLoading = ref.watch(avatarProvider).isLoading;
+            final loginMethod =
+                ref.read(usersProvider.notifier).getLoginMethod();
 
             return Scaffold(
               appBar: AppBar(
@@ -127,12 +129,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     endIndent: Sizes.size24,
                   ),
                   Gaps.v10,
-                  const ProfileListTile(
+                  ProfileListTile(
                     leadingIcon: Icons.check_circle_outline_rounded,
                     title: "Linked account",
                     subTitle: "Check the connected login method",
-                    isLogo: true,
+                    isLogo: loginMethod[0] == 'google.com' ? true : false,
                     image: 'assets/images/google_logo.png',
+                    loginMethod: loginMethod[0],
                   ),
                   const ProfileListTile(
                     title: "Edit Profile",
@@ -140,12 +143,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leadingIcon: Icons.manage_accounts,
                     isLogo: false,
                   ),
-                  const ProfileListTile(
-                    title: "Password change",
-                    subTitle: 'Change your current password',
-                    leadingIcon: Icons.lock_reset_rounded,
-                    isLogo: false,
-                  ),
+                  if (loginMethod[0] == "password")
+                    const ProfileListTile(
+                      title: "Password change",
+                      subTitle: 'Change your current password',
+                      leadingIcon: Icons.lock_reset_rounded,
+                      isLogo: false,
+                    ),
                   const ProfileListTile(
                     title: "Notice",
                     subTitle: "App improvements and revisions",
