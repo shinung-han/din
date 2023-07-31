@@ -4,6 +4,7 @@ import 'package:din/change_password_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/repos/authentication_repo.dart';
+import 'package:din/features/users/password_change_screen.dart';
 import 'package:din/features/users/view_models/avatar_view_model.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:din/features/users/widgets/avatar.dart';
@@ -85,6 +86,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
+  void _onPasswordChangeTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PasswordChangeScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ref.watch(usersProvider).when(
@@ -144,11 +154,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     isLogo: false,
                   ),
                   if (loginMethod[0] == "password")
-                    const ProfileListTile(
+                    ProfileListTile(
                       title: "Password change",
                       subTitle: 'Change your current password',
                       leadingIcon: Icons.lock_reset_rounded,
                       isLogo: false,
+                      onPressed: _onPasswordChangeTap,
                     ),
                   const ProfileListTile(
                     title: "Notice",

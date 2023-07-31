@@ -20,6 +20,7 @@ void showErrorSnack(BuildContext context, String error) {
     SnackBar(
       showCloseIcon: true,
       content: Text(error),
+      duration: const Duration(milliseconds: 1500),
     ),
   );
 }
