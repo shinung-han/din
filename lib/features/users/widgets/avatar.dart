@@ -21,8 +21,8 @@ class Avatar extends ConsumerWidget {
 
     return isLoading
         ? Container(
-            width: 140,
-            height: 140,
+            width: 130,
+            height: 130,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -37,7 +37,7 @@ class Avatar extends ConsumerWidget {
             ),
           )
         : CircleAvatar(
-            radius: 70,
+            radius: 65,
             foregroundColor: Colors.white,
             backgroundColor: Colors.grey.shade300,
             foregroundImage: hasAvatar
@@ -45,7 +45,7 @@ class Avatar extends ConsumerWidget {
                     "https://firebasestorage.googleapis.com/v0/b/do-it-now-a5725.appspot.com/o/avatars%2F$uid?alt=media&date=${DateTime.now().toString()}")
                 : null,
             child: CircleAvatar(
-              radius: 68,
+              radius: 63,
               foregroundColor: Colors.grey.shade300,
               backgroundColor: Colors.white,
               child: const FaIcon(

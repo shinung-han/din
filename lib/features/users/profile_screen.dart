@@ -1,17 +1,17 @@
 import 'dart:io';
 
 import 'package:din/change_password_screen.dart';
-import 'package:din/common/widgets/common_button.dart';
-import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/constants/sizes.dart';
+import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/features/users/view_models/avatar_view_model.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:din/features/users/widgets/avatar.dart';
+import 'package:din/features/users/widgets/profile_list_tile.dart';
 import 'package:din/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,14 +24,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final bool _isEdit = false;
-
-  bool _isDarkMode = false;
-
-  void _onModeTap() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
-  }
 
   void _onLogoutTap() {
     showCupertinoDialog(
@@ -104,25 +96,93 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             return Scaffold(
               appBar: AppBar(
                 // backgroundColor: Colors.white,
-                title: const Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                title: Text(
+                  data.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                /* actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              onPressed: _onModeTap,
-              icon: Icon(
-                _isDarkMode ? Icons.dark_mode_sharp : Icons.sunny,
               ),
-            ),
-          ),
-        ], */
+              body: Column(
+                children: [
+                  Gaps.v20,
+                  Avatar(
+                    name: data.name,
+                    hasAvatar: data.hasAvatar,
+                    uid: data.uid,
+                  ),
+                  Gaps.v16,
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      data.email,
+                      style: const TextStyle(fontSize: Sizes.size20),
+                    ),
+                  ),
+                  Gaps.v20,
+                  Divider(
+                    thickness: 0.5,
+                    color: Colors.grey.shade400,
+                    indent: Sizes.size24,
+                    endIndent: Sizes.size24,
+                  ),
+                  Gaps.v10,
+                  const ProfileListTile(
+                    leadingIcon: Icons.check_circle_outline_rounded,
+                    title: "Linked account",
+                    subTitle: "Check the connected login method",
+                    isLogo: true,
+                    image: 'assets/images/google_logo.png',
+                  ),
+                  const ProfileListTile(
+                    title: "Edit Profile",
+                    subTitle: 'Change profile image and name',
+                    leadingIcon: Icons.manage_accounts,
+                    isLogo: false,
+                  ),
+                  const ProfileListTile(
+                    title: "Password change",
+                    subTitle: 'Change your current password',
+                    leadingIcon: Icons.lock_reset_rounded,
+                    isLogo: false,
+                  ),
+                  const ProfileListTile(
+                    title: "Notice",
+                    subTitle: "App improvements and revisions",
+                    leadingIcon: Icons.notification_add_outlined,
+                    isLogo: false,
+                  ),
+                  ProfileListTile(
+                    title: "Log out",
+                    subTitle: "You'll be redirected to the login page",
+                    leadingIcon: Icons.logout_rounded,
+                    isLogo: false,
+                    onPressed: _onLogoutTap,
+                  ),
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                    leading: const Icon(
+                      Icons.info_outline_rounded,
+                      size: 30,
+                    ),
+                    title: const Text("App version"),
+                    subtitle: Text(
+                      'Last Updated 30 Jul 2023',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade800,
+                      ),
+                    ),
+                    trailing: const Text(
+                      '1.0.0',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              body: SafeArea(
+              /* body: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -221,7 +281,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ],
                   ),
                 ),
-              ),
+              ), */
             );
           },
         );
