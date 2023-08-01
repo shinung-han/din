@@ -51,10 +51,6 @@ dependencies:
   firebase_storage: ^11.2.4
 
   google_sign_in: ^6.1.4
-  kakao_flutter_sdk_user: ^1.5.0
-  kakao_flutter_sdk: ^1.5.0
-
-  flutter_naver_login: ^1.8.0
 
   http: ^1.1.0
 

@@ -31,7 +31,13 @@ class UserRepository {
     await _db.collection("users").doc(uid).update(data);
   }
 
-  // 3-2. 닉네임 수정
+  // 3-2. 유저 네임 수정
+  Future<void> updateProfile(
+    String uid,
+    Map<String, dynamic>? data,
+  ) async {
+    await _db.collection("users").doc(uid).update(data!);
+  }
 
   // 3-3. 비밀번호 수정
 }

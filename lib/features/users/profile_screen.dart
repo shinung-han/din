@@ -4,6 +4,7 @@ import 'package:din/change_password_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/repos/authentication_repo.dart';
+import 'package:din/features/users/edit_profile_screen.dart';
 import 'package:din/features/users/password_change_screen.dart';
 import 'package:din/features/users/view_models/avatar_view_model.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
@@ -95,6 +96,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  void _onEditProfileTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditProfileScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ref.watch(usersProvider).when(
@@ -118,10 +128,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               body: Column(
                 children: [
                   Gaps.v20,
-                  Avatar(
-                    name: data.name,
-                    hasAvatar: data.hasAvatar,
-                    uid: data.uid,
+                  Hero(
+                    tag: 'avatar',
+                    child: Avatar(
+                      name: data.name,
+                      hasAvatar: data.hasAvatar,
+                      uid: data.uid,
+                    ),
                   ),
                   Gaps.v16,
                   Align(
@@ -147,11 +160,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     image: 'assets/images/google_logo.png',
                     loginMethod: loginMethod[0],
                   ),
-                  const ProfileListTile(
+                  ProfileListTile(
                     title: "Edit Profile",
-                    subTitle: 'Change profile image and name',
+                    subTitle: 'Change profile image and user name',
                     leadingIcon: Icons.manage_accounts,
                     isLogo: false,
+                    onPressed: _onEditProfileTap,
                   ),
                   if (loginMethod[0] == "password")
                     ProfileListTile(

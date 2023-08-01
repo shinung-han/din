@@ -25,40 +25,44 @@ class ProfileListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.only(
-        left: Sizes.size20,
-        right: Sizes.size5,
-      ),
-      leading: Icon(
-        leadingIcon,
-        size: Sizes.size32,
-      ),
-      title: Text(title),
-      subtitle: Text(
-        subTitle,
-        style: TextStyle(
-          fontSize: 13,
-          color: Colors.grey.shade800,
+    return GestureDetector(
+      onTap: onPressed,
+      child: ListTile(
+        contentPadding: EdgeInsets.only(
+          left: Sizes.size20,
+          right: loginMethod == 'password' ? Sizes.size10 : Sizes.size5,
         ),
+        leading: Icon(
+          leadingIcon,
+          size: Sizes.size32,
+        ),
+        title: Text(title),
+        subtitle: Text(
+          subTitle,
+          style: TextStyle(
+            fontSize: 13,
+            color: Colors.grey.shade800,
+          ),
+        ),
+        trailing: isLogo
+            ? Padding(
+                padding: const EdgeInsets.only(right: Sizes.size10),
+                child: Image.asset(
+                  '$image',
+                  scale: Sizes.size16,
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(right: Sizes.size4),
+                child: Icon(
+                  loginMethod == 'password'
+                      ? Icons.alternate_email_outlined
+                      : Icons.chevron_right,
+                  size: Sizes.size32,
+                  color: Colors.grey.shade700,
+                ),
+              ),
       ),
-      trailing: isLogo
-          ? Padding(
-              padding: const EdgeInsets.only(right: Sizes.size10),
-              child: Image.asset(
-                '$image',
-                scale: Sizes.size16,
-              ),
-            )
-          : IconButton(
-              onPressed: onPressed,
-              icon: Icon(
-                loginMethod == 'password'
-                    ? Icons.alternate_email_outlined
-                    : Icons.chevron_right,
-                size: Sizes.size36,
-              ),
-            ),
     );
   }
 }
