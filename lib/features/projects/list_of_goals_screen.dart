@@ -1,8 +1,8 @@
-import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/features/projects/add_goal_screen.dart';
-import 'package:din/features/projects/goal_detail_screen.dart';
+import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
 import 'package:din/features/projects/wrap_up_screen.dart';
 import 'package:din/utils.dart';
@@ -12,6 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../common/widgets/common_button.dart';
 
 class ListOfGoalsScreen extends ConsumerStatefulWidget {
+  static const String routeName = '/goal_list';
+
   const ListOfGoalsScreen({super.key});
 
   @override
@@ -19,82 +21,17 @@ class ListOfGoalsScreen extends ConsumerStatefulWidget {
 }
 
 class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
-  final GlobalKey<AnimatedListState> _key = GlobalKey<AnimatedListState>();
-
-  final List<Map<String, dynamic>> _goalList = [];
-
-  void _onAddGoalTap() async {
-    final result = await Navigator.push(
+  void _onAddGoalTap() {
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const AddGoalScreen(),
       ),
     );
-    if (result == null) return;
-    setState(() {
-      _addGoal(result);
-    });
   }
 
-  final Duration _duration = const Duration(milliseconds: 300);
-
-  void _addGoal(result) {
-    _goalList.add(result);
-    if (_key.currentState != null) {
-      _key.currentState!.insertItem(
-        _goalList.length - 1,
-        duration: _duration,
-      );
-    }
-  }
-
-  void _deleteGoal(int index, String title, String id) {
-    _key.currentState!.removeItem(
-      index,
-      (context, animation) => SizeTransition(
-        sizeFactor: animation,
-        child: GoalListTile(title: title, id: id, index: index),
-      ),
-      duration: _duration,
-    );
-    _goalList.removeAt(index);
-    Navigator.pop(context);
-    // print("index, title, id");
-  }
-
-  void _showBottomSheet(int index, String title, String id) {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Container(
-            height: 230,
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                CommonButton(
-                  text: 'Delete',
-                  bgColor: Colors.black,
-                  color: Colors.white,
-                  onTap: () => _deleteGoal(index, title, id),
-                ),
-                Gaps.v16,
-                CommonButton(
-                  text: 'Cancel',
-                  onTap: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _onSubmit() {
-    if (_goalList.isEmpty) {
+  void _onSubmit(goals) {
+    if (goals.isEmpty) {
       showErrorSnack(context, "Please create goals");
     } else {
       Navigator.push(
@@ -106,24 +43,50 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
     }
   }
 
-  void _onGoalDetailTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const GoalDetailScreen(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    bool isEmpty = _goalList.isEmpty;
+    final bool isEmpty = ref.watch(goalListProvider).isEmpty;
+    final goals = ref.watch(goalListProvider);
 
     return Scaffold(
-      appBar: CommonAppBar(
-        title: 'Create Project',
-        icon: Icons.add_circle_outline_rounded,
-        onPressed: _onAddGoalTap,
+      // appBar: CommonAppBar(
+      //   title: 'Create Project',
+      //   icon: Icons.add_circle_outline_rounded,
+      //   onPressed: _onAddGoalTap,
+      // ),
+      appBar: AppBar(
+        title: const Align(
+          alignment: Alignment.center,
+          child: Padding(
+            padding: EdgeInsets.only(left: Sizes.size24),
+            child: Text(
+              'Create Project',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          if (goals.isNotEmpty)
+            GestureDetector(
+              onTap: _onDeleteGoalsTap,
+              child: const Icon(
+                Icons.remove_circle_outline_rounded,
+                size: 30,
+              ),
+            ),
+          GestureDetector(
+            onTap: _onAddGoalTap,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(
+                Icons.add_circle_outline_rounded,
+                size: 30,
+              ),
+            ),
+          ),
+        ],
       ),
       body: isEmpty
           ? Padding(
@@ -171,33 +134,26 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
                 right: 10,
                 top: 10,
               ),
-              child: AnimatedList(
-                key: _key,
-                initialItemCount: _goalList.length,
-                itemBuilder: (context, index, animation) {
-                  final hasImage = _goalList[index]["hasImage"];
-                  final image = _goalList[index]['image'];
-                  final title = _goalList[index]['title'];
+              child: ListView.builder(
+                itemCount: goals.length,
+                itemBuilder: (context, index) {
+                  final hasImage = goals[index].image != null;
+                  final image = goals[index].image;
+                  final title = goals[index].title;
+                  final id = goals[index].id;
                   // final id = _goalList[index]['id'];
 
-                  return FadeTransition(
-                    key: UniqueKey(),
-                    opacity: animation,
-                    child: SizeTransition(
-                      sizeFactor: animation,
-                      child: Column(
-                        children: [
-                          GoalListTile(
-                            hasImage: hasImage,
-                            pickedImage: image,
-                            title: title,
-                            // id: id,
-                            index: index,
-                          ),
-                          Gaps.v8,
-                        ],
+                  return Column(
+                    children: [
+                      GoalListTile(
+                        hasImage: hasImage,
+                        pickedImage: image,
+                        title: title,
+                        id: id,
+                        index: index,
                       ),
-                    ),
+                      Gaps.v8,
+                    ],
                   );
                 },
               ),
@@ -208,37 +164,62 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
           text: 'Next',
           bgColor: Colors.black,
           color: Colors.white,
-          onTap: _onSubmit,
+          onTap: () => _onSubmit(goals),
           icon: Icons.arrow_forward_ios_rounded,
         ),
       ),
     );
   }
 
-  // Card _makeCard(int index, String title, String id) {
-  //   return Card(
-  //     color: Colors.white,
-  //     elevation: 0.1,
-  //     child: ListTile(
-  //       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  //       leading: CircleAvatar(
-  //         radius: 30,
-  //         backgroundImage: AssetImage(
-  //           'assets/images/${index + 1}.jpg',
-  //         ),
-  //         // child: Text('Hello'),
-  //       ),
-  //       /* leading: const Icon(
-  //               Icons.account_circle_rounded,
-  //               size: 40,
-  //             ), */
-  //       title: Text(title),
-  //       subtitle: Text(id),
-  //       trailing: GestureDetector(
-  //         onTap: () => _showBottomSheet(index, title, id),
-  //         child: const FaIcon(FontAwesomeIcons.ellipsis),
-  //       ),
-  //     ),
-  //   );
-  // }
+  void _onDeleteGoalsTap() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: Sizes.size20,
+                  left: Sizes.size20,
+                  right: Sizes.size20,
+                ),
+                child: Column(
+                  children: [
+                    Gaps.v20,
+                    const SizedBox(
+                      height: 50,
+                      child: Text(
+                        "Are you sure you want to delete all goals?",
+                        style: TextStyle(
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                    Gaps.v20,
+                    CommonButton(
+                      icon: Icons.remove_circle_outline_rounded,
+                      text: 'Yes',
+                      onTap: () => ref
+                          .read(goalListProvider.notifier)
+                          .deleteAllGoals(context),
+                    ),
+                    Gaps.v12,
+                    CommonButton(
+                      text: 'Cancel',
+                      bgColor: Colors.black,
+                      color: Colors.white,
+                      icon: Icons.arrow_back_ios_new_rounded,
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    Gaps.v12,
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

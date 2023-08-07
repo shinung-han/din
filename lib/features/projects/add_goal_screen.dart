@@ -4,30 +4,34 @@ import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/models/goal_model.dart';
+import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddGoalScreen extends StatefulWidget {
+class AddGoalScreen extends ConsumerStatefulWidget {
   const AddGoalScreen({super.key});
 
   @override
-  State<AddGoalScreen> createState() => _ListSettingScreenState();
+  ConsumerState<AddGoalScreen> createState() => _ListSettingScreenState();
 }
 
-class _ListSettingScreenState extends State<AddGoalScreen> {
+class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
   Map<String, dynamic> formData = {};
 
   final ImagePicker _imagePicker = ImagePicker();
+
+  File? _imageFile;
 
   Future<void> _onSelectImage() async {
     final pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
-      final File imageFile = File(pickedFile.path);
       setState(() {
-        formData['image'] = imageFile;
+        _imageFile = File(pickedFile.path);
       });
     }
   }
@@ -37,10 +41,6 @@ class _ListSettingScreenState extends State<AddGoalScreen> {
   late final TextEditingController titleController = TextEditingController()
     ..addListener(() {
       updateButtonState();
-      setState(() {
-        formData['title'] = titleController.text;
-        formData['id'] = DateTime.now().millisecondsSinceEpoch.toString();
-      });
     });
 
   void _onDeleteTap() {
@@ -58,25 +58,32 @@ class _ListSettingScreenState extends State<AddGoalScreen> {
   bool isButtonEnabled = false;
 
   void _onSubmit() {
-    if (formData['image'] == null) {
-      setState(() {
-        formData["image"] = null;
-        formData["hasImage"] = false;
-      });
-      Navigator.pop(context, formData);
+    final id = DateTime.now().millisecondsSinceEpoch;
+    final title = titleController.text;
+
+    if (_imageFile == null) {
+      ref.read(goalListProvider.notifier).addGoal(
+            GoalModel(
+              id: id,
+              title: title,
+              image: null,
+            ),
+          );
+      Navigator.pop(context);
     } else {
-      setState(() {
-        formData["hasImage"] = true;
-      });
-      // print(formData['image'].runtimeType);
-      Navigator.pop(context, formData);
+      ref.read(goalListProvider.notifier).addGoal(
+            GoalModel(
+              id: id,
+              title: title,
+              image: _imageFile,
+            ),
+          );
+      Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // print("addGoalScreen: ${formData['image']}");
-
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -93,7 +100,7 @@ class _ListSettingScreenState extends State<AddGoalScreen> {
               key: globalKey,
               child: Column(
                 children: [
-                  formData['image'] == null
+                  _imageFile == null
                       ? Container(
                           width: size.width,
                           height: size.width,
@@ -151,7 +158,7 @@ class _ListSettingScreenState extends State<AddGoalScreen> {
                             borderRadius: BorderRadius.circular(5),
                             image: DecorationImage(
                               image: FileImage(
-                                formData['image'],
+                                _imageFile!,
                               ),
                               fit: BoxFit.cover,
                             ),

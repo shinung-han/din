@@ -4,45 +4,36 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/edit_title_screen.dart';
+import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GoalListTile extends StatefulWidget {
+class GoalListTile extends ConsumerStatefulWidget {
   final bool? hasImage;
   final File? pickedImage;
   final String title;
-  final String? id;
+  final int id;
   final int index;
 
   const GoalListTile({
     this.hasImage,
     this.pickedImage,
     required this.title,
-    this.id,
+    required this.id,
     required this.index,
     super.key,
   });
 
   @override
-  State<GoalListTile> createState() => _GoalCardState();
+  ConsumerState<GoalListTile> createState() => _GoalCardState();
 }
 
-class _GoalCardState extends State<GoalListTile> {
+class _GoalCardState extends ConsumerState<GoalListTile> {
   @override
   Widget build(BuildContext context) {
-    // final image = 'assets/images/${widget.index + 1}.jpg';
-
     return GestureDetector(
-      onTap: () => {
-        _showFloatingCard(
-          context,
-          widget.pickedImage,
-          widget.title,
-          widget.hasImage,
-        )
-      },
+      onTap: _showFloatingCard,
       child: Container(
-        // color: Colors.white,
-        // elevation: 0.1,
         decoration: BoxDecoration(
             border: Border.all(
               width: 0.5,
@@ -58,10 +49,6 @@ class _GoalCardState extends State<GoalListTile> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   width: 0.5,
-                        //   color: Colors.grey.shade300,
-                        // ),
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10),
                           bottomLeft: Radius.circular(10),
@@ -121,12 +108,7 @@ class _GoalCardState extends State<GoalListTile> {
     );
   }
 
-  void _showFloatingCard(
-    context,
-    File? image,
-    String title,
-    bool? hasImage,
-  ) {
+  void _showFloatingCard() {
     final size = MediaQuery.of(context).size;
 
     showModalBottomSheet(
@@ -154,17 +136,10 @@ class _GoalCardState extends State<GoalListTile> {
                           size: 30,
                         ),
                       ),
-                      /* IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(
-                          Icons.close_rounded,
-                          size: 30,
-                        ),
-                      ), */
                     ],
                   ),
                   Gaps.v10,
-                  if (image != null)
+                  if (widget.pickedImage != null)
                     Container(
                       width: size.width * 0.87,
                       height: size.width * 0.87,
@@ -176,13 +151,13 @@ class _GoalCardState extends State<GoalListTile> {
                         ),
                         image: DecorationImage(
                           image: FileImage(
-                            image,
+                            widget.pickedImage!,
                           ),
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                  if (image == null)
+                  if (widget.pickedImage == null)
                     Container(
                       width: size.width * 0.87,
                       height: size.width * 0.87,
@@ -205,7 +180,7 @@ class _GoalCardState extends State<GoalListTile> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      title,
+                      widget.title,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -220,6 +195,7 @@ class _GoalCardState extends State<GoalListTile> {
                     icon: Icons.arrow_back_ios_new_rounded,
                     onTap: () => Navigator.pop(context),
                   ),
+                  Gaps.v12,
                 ],
               ),
             ),
@@ -253,12 +229,13 @@ class _GoalCardState extends State<GoalListTile> {
                     CommonButton(
                       text: 'Edit title',
                       icon: Icons.build_outlined,
-                      onTap: () async {
-                        final newTitle = await Navigator.push(
+                      onTap: () {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const EditTitleScreen(
-                              title: 'Test',
+                            builder: (context) => EditTitleScreen(
+                              title: widget.title,
+                              id: widget.id,
                             ),
                           ),
                         );
@@ -268,7 +245,7 @@ class _GoalCardState extends State<GoalListTile> {
                     CommonButton(
                       icon: Icons.remove_circle_outline_rounded,
                       text: 'Delete goal',
-                      onTap: () => _onDeleteGoalTap(),
+                      onTap: _onDeleteGoalTap,
                     ),
                     Gaps.v12,
                     CommonButton(
@@ -278,6 +255,7 @@ class _GoalCardState extends State<GoalListTile> {
                       icon: Icons.arrow_back_ios_new_rounded,
                       onTap: () => Navigator.pop(context),
                     ),
+                    Gaps.v12,
                   ],
                 ),
               ),
@@ -318,7 +296,9 @@ class _GoalCardState extends State<GoalListTile> {
                     CommonButton(
                       icon: Icons.remove_circle_outline_rounded,
                       text: 'Yes',
-                      onTap: () {},
+                      onTap: () => ref
+                          .read(goalListProvider.notifier)
+                          .deleteGoal(context, widget.id),
                     ),
                     Gaps.v12,
                     CommonButton(
@@ -328,6 +308,7 @@ class _GoalCardState extends State<GoalListTile> {
                       icon: Icons.arrow_back_ios_new_rounded,
                       onTap: () => Navigator.pop(context),
                     ),
+                    Gaps.v12,
                   ],
                 ),
               ),

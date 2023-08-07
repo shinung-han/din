@@ -1,4 +1,4 @@
-import 'package:din/features/projects/models/date.dart';
+import 'package:din/features/projects/models/date_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DateViewModel extends StateNotifier<DateModel> {

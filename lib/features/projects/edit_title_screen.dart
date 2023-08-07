@@ -1,22 +1,26 @@
 import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class EditTitleScreen extends StatefulWidget {
+class EditTitleScreen extends ConsumerStatefulWidget {
   final String title;
+  final int id;
 
   const EditTitleScreen({
     required this.title,
+    required this.id,
     super.key,
   });
 
   @override
-  State<EditTitleScreen> createState() => _ModifyTitleScreenState();
+  ConsumerState<EditTitleScreen> createState() => _ModifyTitleScreenState();
 }
 
-class _ModifyTitleScreenState extends State<EditTitleScreen> {
+class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
   void _onScaffoldTap() {
     FocusScope.of(context).unfocus();
   }
@@ -27,12 +31,7 @@ class _ModifyTitleScreenState extends State<EditTitleScreen> {
       TextEditingController(text: widget.title)
         ..addListener(() {
           updateButtonState();
-          setState(() {
-            _newTitle = _titleController.text;
-          });
         });
-
-  String _newTitle = '';
 
   void updateButtonState() {
     setState(() {
@@ -47,11 +46,14 @@ class _ModifyTitleScreenState extends State<EditTitleScreen> {
   }
 
   void _onSubmit() {
-    // ref.read(changePasswordProvider.notifier).passwordUpdate(
-    //       context,
-    //       _newPassword,
-    //     );
-    Navigator.pop(context, _newTitle);
+    ref.read(goalListProvider.notifier).changeGoalTitle(
+          widget.id,
+          _titleController.text,
+        );
+    Navigator.pop(context);
+    Navigator.pop(context);
+    // Navigator.popUntil(
+    //     context, ModalRoute.withName(ListOfGoalsScreen.routeName));
   }
 
   bool isButtonEnabled = false;
