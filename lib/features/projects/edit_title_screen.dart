@@ -52,8 +52,6 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
         );
     Navigator.pop(context);
     Navigator.pop(context);
-    // Navigator.popUntil(
-    //     context, ModalRoute.withName(ListOfGoalsScreen.routeName));
   }
 
   bool isButtonEnabled = false;

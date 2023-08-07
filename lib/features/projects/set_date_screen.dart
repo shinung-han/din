@@ -8,11 +8,12 @@ import 'package:din/features/projects/view_models/date_view_model.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class SetDateScreen extends ConsumerStatefulWidget {
-  static const routeName = 'add';
-  static const routeURL = '/add';
+  static const routeName = 'setDate';
+  static const routeURL = 'set_date';
 
   const SetDateScreen({super.key});
 
@@ -61,12 +62,14 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
     } else {
       ref.read(dateProvider.notifier).setDate(start, end, difference);
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ListOfGoalsScreen(),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const ListOfGoalsScreen(),
+      //   ),
+      // );
+      context
+          .go('/home/${SetDateScreen.routeURL}/${ListOfGoalsScreen.routeURL}');
     }
 
     return null;

@@ -12,7 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../common/widgets/common_button.dart';
 
 class ListOfGoalsScreen extends ConsumerStatefulWidget {
-  static const String routeName = '/goal_list';
+  static String routeURL = 'goal_list';
+  static String routeName = 'goal_list';
 
   const ListOfGoalsScreen({super.key});
 

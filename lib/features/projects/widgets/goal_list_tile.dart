@@ -31,6 +31,10 @@ class GoalListTile extends ConsumerStatefulWidget {
 class _GoalCardState extends ConsumerState<GoalListTile> {
   @override
   Widget build(BuildContext context) {
+    // final goals = ref.watch(goalListProvider);
+    // final title = goals.firstWhere((goal) => goal.id == widget.id).title;
+    // print("newTitle : $title");
+
     return GestureDetector(
       onTap: _showFloatingCard,
       child: Container(
@@ -117,89 +121,97 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return SafeArea(
-          child: SizedBox(
-            height: size.height * 0.75,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Gaps.v14,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+        return Consumer(
+          builder: (context, ref, child) {
+            final goals = ref.watch(goalListProvider);
+            final title =
+                goals.firstWhere((goal) => goal.id == widget.id).title;
+
+            return SafeArea(
+              child: SizedBox(
+                height: size.height * 0.75,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      IconButton(
-                        onPressed: _onSettingPressed,
-                        icon: const Icon(
-                          Icons.settings,
-                          size: 30,
+                      Gaps.v14,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: _onSettingPressed,
+                            icon: const Icon(
+                              Icons.settings,
+                              size: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Gaps.v10,
+                      if (widget.pickedImage != null)
+                        Container(
+                          width: size.width * 0.87,
+                          height: size.width * 0.87,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              width: 0.5,
+                              color: Colors.grey.shade400,
+                            ),
+                            image: DecorationImage(
+                              image: FileImage(
+                                widget.pickedImage!,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      if (widget.pickedImage == null)
+                        Container(
+                          width: size.width * 0.87,
+                          height: size.width * 0.87,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              width: 0.5,
+                              color: Colors.grey.shade400,
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.image_outlined,
+                              size: 60,
+                              color: Colors.grey.shade400,
+                            ),
+                          ),
+                        ),
+                      Gaps.v40,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
+                      const Spacer(),
+                      CommonButton(
+                        text: "Close",
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
+                      ),
+                      Gaps.v12,
                     ],
                   ),
-                  Gaps.v10,
-                  if (widget.pickedImage != null)
-                    Container(
-                      width: size.width * 0.87,
-                      height: size.width * 0.87,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          width: 0.5,
-                          color: Colors.grey.shade400,
-                        ),
-                        image: DecorationImage(
-                          image: FileImage(
-                            widget.pickedImage!,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  if (widget.pickedImage == null)
-                    Container(
-                      width: size.width * 0.87,
-                      height: size.width * 0.87,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          width: 0.5,
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.image_outlined,
-                          size: 60,
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                    ),
-                  Gaps.v40,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  CommonButton(
-                    text: "Close",
-                    bgColor: Colors.black,
-                    color: Colors.white,
-                    icon: Icons.arrow_back_ios_new_rounded,
-                    onTap: () => Navigator.pop(context),
-                  ),
-                  Gaps.v12,
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

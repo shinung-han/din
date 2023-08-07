@@ -3,6 +3,8 @@ import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/features/authentication/sign_up_screen.dart';
 import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/features/onboarding/tutorial_screen.dart';
+import 'package:din/features/projects/list_of_goals_screen.dart';
+import 'package:din/features/projects/set_date_screen.dart';
 import 'package:din/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -50,6 +52,20 @@ final routerProvider = Provider((ref) {
             tab: tab!,
           );
         },
+        routes: [
+          GoRoute(
+            path: SetDateScreen.routeURL,
+            name: SetDateScreen.routeName,
+            builder: (context, state) => const SetDateScreen(),
+            routes: [
+              GoRoute(
+                path: ListOfGoalsScreen.routeURL,
+                name: ListOfGoalsScreen.routeName,
+                builder: (context, state) => const ListOfGoalsScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: TutorialScreen.routeURL,

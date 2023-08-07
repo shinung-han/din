@@ -15,12 +15,13 @@ class CreateProjectFirstScreen extends StatefulWidget {
 
 class _ProjectScreenState extends State<CreateProjectFirstScreen> {
   void _onCreateProject() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SetDateScreen(),
-      ),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => const SetDateScreen(),
+    //   ),
+    // );
+    context.go('/home/${SetDateScreen.routeURL}');
   }
 
   void _onViewTutorial() {
