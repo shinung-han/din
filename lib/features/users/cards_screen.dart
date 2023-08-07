@@ -1,8 +1,8 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
+import 'package:din/constants/sizes.dart';
 import 'package:din/project_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CardsScreen extends StatefulWidget {
   const CardsScreen({super.key});
@@ -42,20 +42,6 @@ class _CardsScreenState extends State<CardsScreen> {
   }
 
   void _onProjectDetailTap(int index) {
-    /* Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return FadeTransition(
-            opacity: animation,
-            child: ProjectDetailScreen(
-              index: index,
-            ),
-          );
-        },
-      ),
-    ); */
-
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -76,11 +62,19 @@ class _CardsScreenState extends State<CardsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Create Project',
+          'D+23',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+              onPressed: _onSettingPressed,
+              icon: const Icon(
+                Icons.settings,
+                size: 28,
+              ))
+        ],
       ),
       body: Stack(
         children: [
@@ -133,7 +127,7 @@ class _CardsScreenState extends State<CardsScreen> {
                                 width: 0.5,
                                 color: Colors.grey.shade400,
                               ),
-                              borderRadius: BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(28),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.15),
@@ -147,8 +141,8 @@ class _CardsScreenState extends State<CardsScreen> {
                               children: [
                                 ClipRRect(
                                   borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5),
+                                    topLeft: Radius.circular(28),
+                                    topRight: Radius.circular(28),
                                   ),
                                   child: Hero(
                                     tag: '${index + 1}',
@@ -163,21 +157,21 @@ class _CardsScreenState extends State<CardsScreen> {
                                           ),
                                         ),
                                       ),
-                                      child: Center(
+                                      /* child: Center(
                                         child: FaIcon(
                                           FontAwesomeIcons.image,
                                           size: 40,
                                           color: Colors.grey.shade400,
                                         ),
-                                      ),
-                                      /* child: Image(
+                                      ), */
+                                      child: Image(
                                         width: 350,
                                         height: 350,
                                         image: AssetImage(
                                           'assets/images/${index + 1}.jpg',
                                         ),
                                         fit: BoxFit.cover,
-                                      ), */
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -213,28 +207,18 @@ class _CardsScreenState extends State<CardsScreen> {
                                 ),
                                 Gaps.v10,
                                 const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 40),
-                                  child: CommonButton(
-                                    text: 'Edit',
-                                    // bgColor: Colors.black,
-                                    // color: Colors.white,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: SizedBox(
+                                    height: 60,
+                                    child: CommonButton(
+                                      text: 'Complete',
+                                      // icon: Icons.check_rounded,
+                                      bgColor: Colors.black,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                                /* Container(
-                                  width: 180,
-                                  padding: const EdgeInsets.all(18),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: const Center(
-                                    child: Text('Edit'),
-                                  ),
-                                ), */
-                                Gaps.v20,
+                                Gaps.v16,
                               ],
                             ),
                           ),
@@ -242,21 +226,119 @@ class _CardsScreenState extends State<CardsScreen> {
                       );
                     },
                   ),
-                  Gaps.v20,
+                  Gaps.v32,
                 ],
               );
             },
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
+      /* bottomNavigationBar: BottomAppBar(
         child: CommonButton(
           text: 'Complete',
           bgColor: Colors.black,
           color: Colors.white,
           onTap: _onCompleteTap,
         ),
-      ),
+      ), */
+    );
+  }
+
+  void _onSettingPressed() {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 28,
+                  left: 20,
+                  right: 20,
+                ),
+                child: Column(
+                  children: [
+                    const CommonButton(
+                      text: 'Edit goal',
+                      icon: Icons.build_outlined,
+                    ),
+                    Gaps.v12,
+                    const CommonButton(
+                      text: 'End date change',
+                      icon: Icons.edit_calendar_outlined,
+                    ),
+                    Gaps.v12,
+                    CommonButton(
+                      icon: Icons.remove_circle_outline_rounded,
+                      text: 'Delete Project',
+                      onTap: _onDeleteProjectTap,
+                    ),
+                    Gaps.v12,
+                    CommonButton(
+                      text: 'Cancel',
+                      bgColor: Colors.black,
+                      color: Colors.white,
+                      icon: Icons.arrow_back_ios_new_rounded,
+                      onTap: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onDeleteProjectTap() {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: Sizes.size20,
+                  left: Sizes.size20,
+                  right: Sizes.size20,
+                ),
+                child: Column(
+                  children: [
+                    Gaps.v20,
+                    const SizedBox(
+                      height: 50,
+                      child: Text(
+                        "Are you sure you want to delete the project?",
+                        style: TextStyle(
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                    Gaps.v20,
+                    const CommonButton(
+                      icon: Icons.remove_circle_outline_rounded,
+                      text: 'Yes',
+                    ),
+                    Gaps.v12,
+                    CommonButton(
+                      text: 'Cancel',
+                      bgColor: Colors.black,
+                      color: Colors.white,
+                      icon: Icons.arrow_back_ios_new_rounded,
+                      onTap: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

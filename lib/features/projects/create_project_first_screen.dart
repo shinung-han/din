@@ -37,25 +37,25 @@ class _ProjectScreenState extends State<CreateProjectFirstScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Gaps.v40,
+                Gaps.v48,
                 const AuthHeader(
                   title: 'There is no Project',
                   subTitle:
                       'Create your own fantastic project to become a better version of yourself than yesterday.',
                 ),
-                Gaps.v80,
+                Gaps.v20,
                 CommonButton(
                   text: 'Create a Project',
                   bgColor: Colors.black,
                   color: Colors.white,
-                  // icon: FontAwesomeIcons.list,
+                  icon: Icons.add_location_alt_outlined,
                   onTap: _onCreateProject,
                 ),
                 Gaps.v16,
                 CommonButton(
                   text: 'View Tutorial',
                   onTap: _onViewTutorial,
-                  // icon: FontAwesomeIcons.star,
+                  icon: Icons.navigation_outlined,
                 ),
               ],
             ),
@@ -63,46 +63,5 @@ class _ProjectScreenState extends State<CreateProjectFirstScreen> {
         ),
       ),
     );
-
-    /* return SafeArea(
-      child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              // width: 130,
-              // height: 130,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 5,
-                  color: Colors.grey,
-                ),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: GestureDetector(
-                  onTap: _onAddProjectTap,
-                  child: const FaIcon(
-                    FontAwesomeIcons.plus,
-                    size: 60,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-            Gaps.v16,
-            const Text(
-              'Make your Project',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ); */
   }
 }

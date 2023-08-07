@@ -1,3 +1,4 @@
+import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
@@ -5,7 +6,6 @@ import 'package:din/features/projects/list_of_goals_screen.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class SetDateScreen extends StatefulWidget {
@@ -80,14 +80,7 @@ class _AddProjectScreenState extends State<SetDateScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Create Project',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: const CommonAppBar(title: 'Create Project'),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -105,7 +98,7 @@ class _AddProjectScreenState extends State<SetDateScreen> {
             CommonButton(
               text: 'Calendar',
               onTap: _pickDateRange,
-              icon: FontAwesomeIcons.calendarCheck,
+              icon: Icons.edit_calendar_rounded,
             ),
             Gaps.v24,
             IntrinsicHeight(
@@ -159,6 +152,7 @@ class _AddProjectScreenState extends State<SetDateScreen> {
           bgColor: Colors.black,
           color: Colors.white,
           onTap: () => _onSetCardsTap(difference),
+          icon: Icons.arrow_forward_ios_rounded,
         ),
       ),
     );
