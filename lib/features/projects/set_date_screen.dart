@@ -4,21 +4,23 @@ import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/list_of_goals_screen.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
+import 'package:din/features/projects/view_models/date_view_model.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class SetDateScreen extends StatefulWidget {
+class SetDateScreen extends ConsumerStatefulWidget {
   static const routeName = 'add';
   static const routeURL = '/add';
 
   const SetDateScreen({super.key});
 
   @override
-  State<SetDateScreen> createState() => _AddProjectScreenState();
+  ConsumerState<SetDateScreen> createState() => _AddProjectScreenState();
 }
 
-class _AddProjectScreenState extends State<SetDateScreen> {
+class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
   DateTimeRange _dateRange = DateTimeRange(
     start: DateTime.now(),
     end: DateTime.now(),
@@ -53,10 +55,12 @@ class _AddProjectScreenState extends State<SetDateScreen> {
   }
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _onSetCardsTap(
-      difference) {
-    if (difference.inDays == 0) {
+      start, end, difference) {
+    if (difference == 0) {
       showErrorSnack(context, 'Please select a date');
     } else {
+      ref.read(dateProvider.notifier).setDate(start, end, difference);
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -72,7 +76,7 @@ class _AddProjectScreenState extends State<SetDateScreen> {
   Widget build(BuildContext context) {
     final start = _dateRange.start;
     final end = _dateRange.end;
-    final difference = _dateRange.duration;
+    final difference = _dateRange.duration.inDays;
 
     const textStyle = TextStyle(
       fontSize: 18,
@@ -130,13 +134,11 @@ class _AddProjectScreenState extends State<SetDateScreen> {
                   Column(
                     children: [
                       const Text(
-                        'Duration',
+                        'Period',
                         style: textStyle,
                       ),
                       Gaps.v4,
-                      Text(start == end
-                          ? '-'
-                          : 'For ${difference.inDays + 1} days'),
+                      Text(start == end ? '-' : 'For ${difference + 1} days'),
                     ],
                   ),
                 ],
@@ -151,7 +153,7 @@ class _AddProjectScreenState extends State<SetDateScreen> {
           text: 'Next',
           bgColor: Colors.black,
           color: Colors.white,
-          onTap: () => _onSetCardsTap(difference),
+          onTap: () => _onSetCardsTap(start, end, difference),
           icon: Icons.arrow_forward_ios_rounded,
         ),
       ),

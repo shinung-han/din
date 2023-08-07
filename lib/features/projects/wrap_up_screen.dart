@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/view_models/date_view_model.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,8 @@ class WrapUpScreen extends ConsumerStatefulWidget {
 class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
   @override
   Widget build(BuildContext context) {
+    final date = ref.read(dateProvider);
+
     const textStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w500,
@@ -78,7 +81,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                                     style: textStyle,
                                   ),
                                   Gaps.v4,
-                                  Text(DateFormat.yMd().format(DateTime.now())),
+                                  Text(DateFormat.yMd().format(date.startDate)),
                                 ],
                               ),
                               verticalDivider(),
@@ -89,18 +92,18 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                                     style: textStyle,
                                   ),
                                   Gaps.v4,
-                                  Text(DateFormat.yMd().format(DateTime.now())),
+                                  Text(DateFormat.yMd().format(date.endDate)),
                                 ],
                               ),
                               verticalDivider(),
-                              const Column(
+                              Column(
                                 children: [
-                                  Text(
-                                    'Duration',
+                                  const Text(
+                                    'Period',
                                     style: textStyle,
                                   ),
                                   Gaps.v4,
-                                  Text('For ${20 + 1} days'),
+                                  Text('For ${date.period + 1} days'),
                                 ],
                               ),
                             ],
