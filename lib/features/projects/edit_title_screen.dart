@@ -61,7 +61,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
-        appBar: const CommonAppBar(title: "Modify title"),
+        appBar: const CommonAppBar(title: "Edit title"),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(Sizes.size20),

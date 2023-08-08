@@ -4,6 +4,7 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/edit_title_screen.dart';
+import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,10 +32,6 @@ class GoalListTile extends ConsumerStatefulWidget {
 class _GoalCardState extends ConsumerState<GoalListTile> {
   @override
   Widget build(BuildContext context) {
-    // final goals = ref.watch(goalListProvider);
-    // final title = goals.firstWhere((goal) => goal.id == widget.id).title;
-    // print("newTitle : $title");
-
     return GestureDetector(
       onTap: _showFloatingCard,
       child: Container(
@@ -124,8 +121,11 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
         return Consumer(
           builder: (context, ref, child) {
             final goals = ref.watch(goalListProvider);
-            final title =
-                goals.firstWhere((goal) => goal.id == widget.id).title;
+            final title = goals
+                .firstWhere((goal) => goal.id == widget.id,
+                    orElse: () =>
+                        GoalModel(id: -1, title: 'Default Title', image: null))
+                .title;
 
             return SafeArea(
               child: SizedBox(

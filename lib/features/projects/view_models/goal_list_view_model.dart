@@ -1,3 +1,4 @@
+import 'package:din/features/projects/list_of_goals_screen.dart';
 import 'package:din/features/projects/models/goal_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,9 +12,8 @@ class GoalListViewModel extends StateNotifier<List<GoalModel>> {
 
   void deleteGoal(BuildContext context, int id) {
     state = state.where((goal) => goal.id != id).toList();
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.pop(context);
+    Navigator.popUntil(
+        context, ModalRoute.withName(ListOfGoalsScreen.routeURL));
   }
 
   void deleteAllGoals(BuildContext context) {
