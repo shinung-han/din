@@ -4,10 +4,12 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/edit_title_screen.dart';
+import 'package:din/features/projects/list_of_goals_screen.dart';
 import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class GoalListTile extends ConsumerStatefulWidget {
   final bool? hasImage;
@@ -30,6 +32,41 @@ class GoalListTile extends ConsumerStatefulWidget {
 }
 
 class _GoalCardState extends ConsumerState<GoalListTile> {
+  Future<void> _onChangeImageTap(int goalId) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      final File imageFile = File(pickedFile.path);
+      ref.read(goalListProvider.notifier).updateGoalImage(goalId, imageFile);
+
+      if (!mounted) return;
+      Navigator.pop(context);
+    }
+  }
+
+  void _onEditTitleTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTitleScreen(
+          title: widget.title,
+          id: widget.id,
+        ),
+      ),
+    );
+  }
+
+  void _onDeleteGoalTap() {
+    ref.read(goalListProvider.notifier).deleteGoal(widget.id);
+    Navigator.popUntil(
+      context,
+      ModalRoute.withName(ListOfGoalsScreen.routeURL),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -131,7 +168,7 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
               child: SizedBox(
                 height: size.height * 0.75,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: Sizes.size16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -198,12 +235,15 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
                         ),
                       ),
                       const Spacer(),
-                      CommonButton(
-                        text: "Close",
-                        bgColor: Colors.black,
-                        color: Colors.white,
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context),
+                      SizedBox(
+                        height: 66,
+                        child: CommonButton(
+                          text: "Close",
+                          bgColor: Colors.black,
+                          color: Colors.white,
+                          icon: Icons.arrow_back_ios_new_rounded,
+                          onTap: () => Navigator.pop(context),
+                        ),
                       ),
                       Gaps.v12,
                     ],
@@ -220,6 +260,7 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
   void _onSettingPressed() {
     showModalBottomSheet(
       backgroundColor: Colors.white,
+      elevation: 0,
       context: context,
       builder: (context) {
         return Wrap(
@@ -227,45 +268,48 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 28,
-                  left: 20,
-                  right: 20,
+                  top: Sizes.size32,
+                  left: Sizes.size16,
+                  right: Sizes.size16,
                 ),
                 child: Column(
                   children: [
-                    const CommonButton(
-                      text: 'Edit image',
-                      icon: Icons.image_search_rounded,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Edit image',
+                        icon: Icons.image_search_rounded,
+                        onTap: () => _onChangeImageTap(widget.id),
+                      ),
                     ),
-                    Gaps.v12,
-                    CommonButton(
-                      text: 'Edit title',
-                      icon: Icons.build_outlined,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditTitleScreen(
-                              title: widget.title,
-                              id: widget.id,
-                            ),
-                          ),
-                        );
-                      },
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Edit title',
+                        icon: Icons.build_outlined,
+                        onTap: _onEditTitleTap,
+                      ),
                     ),
-                    Gaps.v12,
-                    CommonButton(
-                      icon: Icons.remove_circle_outline_rounded,
-                      text: 'Delete goal',
-                      onTap: _onDeleteGoalTap,
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        icon: Icons.remove_circle_outline_rounded,
+                        text: 'Delete goal',
+                        onTap: _showFloatingDeleteModal,
+                      ),
                     ),
-                    Gaps.v12,
-                    CommonButton(
-                      text: 'Cancel',
-                      bgColor: Colors.black,
-                      color: Colors.white,
-                      icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => Navigator.pop(context),
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Cancel',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
+                      ),
                     ),
                     Gaps.v12,
                   ],
@@ -278,9 +322,10 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
     );
   }
 
-  void _onDeleteGoalTap() {
+  void _showFloatingDeleteModal() {
     showModalBottomSheet(
       backgroundColor: Colors.white,
+      elevation: 0,
       context: context,
       builder: (context) {
         return Wrap(
@@ -289,8 +334,8 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: Sizes.size20,
-                  left: Sizes.size20,
-                  right: Sizes.size20,
+                  left: Sizes.size16,
+                  right: Sizes.size16,
                 ),
                 child: Column(
                   children: [
@@ -305,20 +350,24 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
                       ),
                     ),
                     Gaps.v20,
-                    CommonButton(
-                      icon: Icons.remove_circle_outline_rounded,
-                      text: 'Yes',
-                      onTap: () => ref
-                          .read(goalListProvider.notifier)
-                          .deleteGoal(context, widget.id),
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        icon: Icons.remove_circle_outline_rounded,
+                        text: 'Yes',
+                        onTap: _onDeleteGoalTap,
+                      ),
                     ),
-                    Gaps.v12,
-                    CommonButton(
-                      text: 'Cancel',
-                      bgColor: Colors.black,
-                      color: Colors.white,
-                      icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => Navigator.pop(context),
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Cancel',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
+                      ),
                     ),
                     Gaps.v12,
                   ],

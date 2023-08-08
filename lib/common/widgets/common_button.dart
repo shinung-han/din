@@ -1,6 +1,5 @@
 import 'package:din/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CommonButton extends StatelessWidget {
   final String text;
@@ -54,9 +53,9 @@ class CommonButton extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.only(left: Sizes.size8),
-                  child: FaIcon(
+                  child: Icon(
                     icon,
-                    size: Sizes.size20,
+                    size: 22,
                     color: color ?? Colors.black,
                   ),
                 ),

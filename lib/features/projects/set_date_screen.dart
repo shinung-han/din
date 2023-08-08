@@ -62,12 +62,6 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
     } else {
       ref.read(dateProvider.notifier).setDate(start, end, difference);
 
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => const ListOfGoalsScreen(),
-      //   ),
-      // );
       context
           .go('/home/${SetDateScreen.routeURL}/${ListOfGoalsScreen.routeURL}');
     }

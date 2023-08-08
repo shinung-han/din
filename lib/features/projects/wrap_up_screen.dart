@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/models/date_model.dart';
 import 'package:din/features/projects/view_models/date_view_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
@@ -21,18 +22,17 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
     final date = ref.watch(dateProvider);
     final goals = ref.watch(goalListProvider);
 
-    const textStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-    );
-
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             const SliverAppBar(
-              title: Text('Wrap up'),
-              // pinned: true,
+              title: Text(
+                'Wrap up',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             SliverPadding(
               padding: const EdgeInsets.all(Sizes.size20),
@@ -40,96 +40,11 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                 delegate: SliverChildListDelegate(
                   [
                     Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Gaps.v40,
-                        const Text(
-                          "Are you ready?",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                        const Text(
-                          "Create your own fantastic project to become a better version of yourself than yesterday.",
-                          textAlign: TextAlign.center,
-                        ),
-                        Gaps.v40,
-                        // Divider(
-                        //   color: Colors.grey.shade400,
-                        //   indent: 10,
-                        //   endIndent: 10,
-                        //   thickness: 0.5,
-                        // ),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Date information',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        Gaps.v20,
-                        IntrinsicHeight(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                children: [
-                                  const Text(
-                                    'Start date',
-                                    style: textStyle,
-                                  ),
-                                  Gaps.v4,
-                                  Text(DateFormat.yMd().format(date.startDate)),
-                                ],
-                              ),
-                              verticalDivider(),
-                              Column(
-                                children: [
-                                  const Text(
-                                    'End date',
-                                    style: textStyle,
-                                  ),
-                                  Gaps.v4,
-                                  Text(DateFormat.yMd().format(date.endDate)),
-                                ],
-                              ),
-                              verticalDivider(),
-                              Column(
-                                children: [
-                                  const Text(
-                                    'Period',
-                                    style: textStyle,
-                                  ),
-                                  Gaps.v4,
-                                  Text('For ${date.period + 1} days'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Gaps.v20,
-                        // Divider(
-                        //   color: Colors.grey.shade400,
-                        //   indent: 10,
-                        //   endIndent: 10,
-                        //   thickness: 0.5,
-                        // ),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Goal list',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        Gaps.v20,
-                        // if (goals.isNotEmpty)
+                        header(),
+                        title('Date information', 200),
+                        dateInformation(date),
+                        title('Goal list', 120),
                         SingleChildScrollView(
                           child: Column(
                             children: goals.map((goal) {
@@ -152,7 +67,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                               );
                             }).toList(),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ],
@@ -169,8 +84,110 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
           bgColor: Colors.black,
           color: Colors.white,
           onTap: () {},
-          icon: Icons.arrow_forward_ios_rounded,
+          icon: Icons.task_alt_rounded,
         ),
+      ),
+    );
+  }
+
+  Widget header() {
+    return const Column(
+      children: [
+        Text(
+          "Are you ready?",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+          ),
+        ),
+        Text(
+          "Create your own fantastic project to become a better version of yourself than yesterday.",
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget title(String title, double width) {
+    return Column(
+      children: [
+        Gaps.v40,
+        Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Divider(
+                color: Colors.grey.shade400,
+                indent: 10,
+                endIndent: 10,
+                thickness: 0.5,
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: width,
+                color: Colors.white,
+                alignment: Alignment.center,
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Gaps.v16,
+      ],
+    );
+  }
+
+  IntrinsicHeight dateInformation(DateModel date) {
+    const textStyle = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+    );
+
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Column(
+            children: [
+              const Text(
+                'Start date',
+                style: textStyle,
+              ),
+              Gaps.v4,
+              Text(DateFormat.yMd().format(date.startDate)),
+            ],
+          ),
+          verticalDivider(),
+          Column(
+            children: [
+              const Text(
+                'End date',
+                style: textStyle,
+              ),
+              Gaps.v4,
+              Text(DateFormat.yMd().format(date.endDate)),
+            ],
+          ),
+          verticalDivider(),
+          Column(
+            children: [
+              const Text(
+                'Period',
+                style: textStyle,
+              ),
+              Gaps.v4,
+              Text('For ${date.period + 1} days'),
+            ],
+          ),
+        ],
       ),
     );
   }

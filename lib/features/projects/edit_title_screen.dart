@@ -108,6 +108,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
             disabled: isButtonEnabled,
             onTap: _onSubmit,
             buttonText: 'Edit',
+            icon: Icons.edit_outlined,
           ),
         ),
       ),

@@ -50,11 +50,6 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
     final goals = ref.watch(goalListProvider);
 
     return Scaffold(
-      // appBar: CommonAppBar(
-      //   title: 'Create Project',
-      //   icon: Icons.add_circle_outline_rounded,
-      //   onPressed: _onAddGoalTap,
-      // ),
       appBar: AppBar(
         title: const Align(
           alignment: Alignment.center,
@@ -142,7 +137,6 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
                   final image = goals[index].image;
                   final title = goals[index].title;
                   final id = goals[index].id;
-                  // final id = _goalList[index]['id'];
 
                   return Column(
                     children: [
@@ -174,6 +168,8 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
 
   void _onDeleteGoalsTap() {
     showModalBottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
       context: context,
       builder: (context) {
         return Wrap(
@@ -182,8 +178,8 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: Sizes.size20,
-                  left: Sizes.size20,
-                  right: Sizes.size20,
+                  left: Sizes.size16,
+                  right: Sizes.size16,
                 ),
                 child: Column(
                   children: [
@@ -198,20 +194,26 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
                       ),
                     ),
                     Gaps.v20,
-                    CommonButton(
-                      icon: Icons.remove_circle_outline_rounded,
-                      text: 'Yes',
-                      onTap: () => ref
-                          .read(goalListProvider.notifier)
-                          .deleteAllGoals(context),
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        icon: Icons.remove_circle_outline_rounded,
+                        text: 'Yes',
+                        onTap: () => ref
+                            .read(goalListProvider.notifier)
+                            .deleteAllGoals(context),
+                      ),
                     ),
-                    Gaps.v12,
-                    CommonButton(
-                      text: 'Cancel',
-                      bgColor: Colors.black,
-                      color: Colors.white,
-                      icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => Navigator.pop(context),
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Cancel',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
+                      ),
                     ),
                     Gaps.v12,
                   ],

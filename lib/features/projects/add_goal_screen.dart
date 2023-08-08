@@ -205,6 +205,7 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
           buttonText: 'Create',
           disabled: isButtonEnabled,
           onTap: _onSubmit,
+          icon: Icons.add_circle_outline_rounded,
         ),
       ),
     );

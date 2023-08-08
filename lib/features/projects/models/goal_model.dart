@@ -3,7 +3,7 @@ import 'dart:io';
 class GoalModel {
   final int id;
   String title;
-  final File? image;
+  File? image;
 
   GoalModel({
     required this.id,
@@ -13,5 +13,9 @@ class GoalModel {
 
   void changeTitle(String newTitle) {
     title = newTitle;
+  }
+
+  void updateImage(File newImage) {
+    image = newImage;
   }
 }
