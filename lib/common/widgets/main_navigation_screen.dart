@@ -1,4 +1,4 @@
-import 'package:din/features/users/cards_screen.dart';
+import 'package:din/features/projects/cards_screen.dart';
 import 'package:din/features/projects/create_project_first_screen.dart';
 import 'package:din/features/users/profile_screen.dart';
 import 'package:din/list_screen.dart';

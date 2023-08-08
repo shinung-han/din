@@ -1,17 +1,19 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/project_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CardsScreen extends StatefulWidget {
+class CardsScreen extends ConsumerStatefulWidget {
   const CardsScreen({super.key});
 
   @override
-  State<CardsScreen> createState() => _CardsScreenState();
+  ConsumerState<CardsScreen> createState() => _CardsScreenState();
 }
 
-class _CardsScreenState extends State<CardsScreen> {
+class _CardsScreenState extends ConsumerState<CardsScreen> {
   late final PageController _pageController = PageController(
     viewportFraction: 0.8,
   )..addListener(() {
@@ -51,6 +53,16 @@ class _CardsScreenState extends State<CardsScreen> {
     );
   }
 
+  void _onDeleteProject(user) {
+    ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
+    // Navigator.popUntil(
+    //   context,
+    //   ModalRoute.withName(ListOfGoalsScreen.routeURL),
+    // );
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -69,11 +81,12 @@ class _CardsScreenState extends State<CardsScreen> {
         ),
         actions: [
           IconButton(
-              onPressed: _onSettingPressed,
-              icon: const Icon(
-                Icons.settings,
-                size: 28,
-              ))
+            onPressed: _onSettingPressed,
+            icon: const Icon(
+              Icons.settings,
+              size: 28,
+            ),
+          )
         ],
       ),
       body: Stack(
@@ -233,14 +246,6 @@ class _CardsScreenState extends State<CardsScreen> {
           ),
         ],
       ),
-      /* bottomNavigationBar: BottomAppBar(
-        child: CommonButton(
-          text: 'Complete',
-          bgColor: Colors.black,
-          color: Colors.white,
-          onTap: _onCompleteTap,
-        ),
-      ), */
     );
   }
 
@@ -254,35 +259,48 @@ class _CardsScreenState extends State<CardsScreen> {
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 28,
-                  left: 20,
-                  right: 20,
+                  top: Sizes.size32,
+                  left: Sizes.size16,
+                  right: Sizes.size16,
                 ),
                 child: Column(
                   children: [
-                    const CommonButton(
-                      text: 'Edit goal',
-                      icon: Icons.build_outlined,
+                    const SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Edit goal',
+                        icon: Icons.build_outlined,
+                      ),
+                    ),
+                    Gaps.v16,
+                    const SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'End date change',
+                        icon: Icons.edit_calendar_outlined,
+                      ),
+                    ),
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        icon: Icons.remove_circle_outline_rounded,
+                        text: 'Delete Project',
+                        onTap: _onDeleteProjectTap,
+                      ),
+                    ),
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Cancel',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
+                      ),
                     ),
                     Gaps.v12,
-                    const CommonButton(
-                      text: 'End date change',
-                      icon: Icons.edit_calendar_outlined,
-                    ),
-                    Gaps.v12,
-                    CommonButton(
-                      icon: Icons.remove_circle_outline_rounded,
-                      text: 'Delete Project',
-                      onTap: _onDeleteProjectTap,
-                    ),
-                    Gaps.v12,
-                    CommonButton(
-                      text: 'Cancel',
-                      bgColor: Colors.black,
-                      color: Colors.white,
-                      icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => Navigator.pop(context),
-                    ),
                   ],
                 ),
               ),
@@ -294,6 +312,8 @@ class _CardsScreenState extends State<CardsScreen> {
   }
 
   void _onDeleteProjectTap() {
+    final user = ref.watch(projectProvider);
+
     showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,
@@ -304,8 +324,8 @@ class _CardsScreenState extends State<CardsScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: Sizes.size20,
-                  left: Sizes.size20,
-                  right: Sizes.size20,
+                  left: Sizes.size16,
+                  right: Sizes.size16,
                 ),
                 child: Column(
                   children: [
@@ -320,18 +340,26 @@ class _CardsScreenState extends State<CardsScreen> {
                       ),
                     ),
                     Gaps.v20,
-                    const CommonButton(
-                      icon: Icons.remove_circle_outline_rounded,
-                      text: 'Yes',
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        icon: Icons.remove_circle_outline_rounded,
+                        text: 'Yes',
+                        onTap: () => _onDeleteProject(user),
+                      ),
+                    ),
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Cancel',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
+                      ),
                     ),
                     Gaps.v12,
-                    CommonButton(
-                      text: 'Cancel',
-                      bgColor: Colors.black,
-                      color: Colors.white,
-                      icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => Navigator.pop(context),
-                    ),
                   ],
                 ),
               ),

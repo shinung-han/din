@@ -1,4 +1,4 @@
-import 'package:din/features/users/cards_screen.dart';
+import 'package:din/features/projects/cards_screen.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
