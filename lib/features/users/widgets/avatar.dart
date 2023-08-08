@@ -18,6 +18,7 @@ class Avatar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(avatarProvider).isLoading;
+    print(isLoading);
 
     return isLoading
         ? Container(
@@ -36,6 +37,24 @@ class Avatar extends ConsumerWidget {
               color: Colors.white,
             ),
           )
+        // : Container(
+        //     width: 130,
+        //     height: 130,
+        //     decoration: BoxDecoration(
+        //       shape: BoxShape.circle,
+        //       border: Border.all(
+        //         width: 1,
+        //         color: Colors.grey.shade200,
+        //       ),
+        //       color: Colors.grey.shade200,
+        //       image: DecorationImage(
+        //         image: CachedNetworkImageProvider(
+        //           "https://firebasestorage.googleapis.com/v0/b/do-it-now-a5725.appspot.com/o/avatars%2F$uid?alt=media&date=${DateTime.now().toString()}",
+        //         ),
+        //         fit: BoxFit.cover,
+        //       ),
+        //     ),
+        //   );
         : CircleAvatar(
             radius: 65,
             foregroundColor: Colors.white,

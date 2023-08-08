@@ -115,9 +115,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             final loginMethod =
                 ref.read(usersProvider.notifier).getLoginMethod();
 
+            print('test');
+
             return Scaffold(
               appBar: AppBar(
-                // backgroundColor: Colors.white,
                 title: Text(
                   data.name,
                   style: const TextStyle(
@@ -136,6 +137,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       uid: data.uid,
                     ),
                   ),
+                  // Hero(
+                  //   tag: 'avatar',
+                  //   child: Container(
+                  //     width: 130,
+                  //     height: 130,
+                  //     decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       border: Border.all(
+                  //         width: 1,
+                  //         color: Colors.grey.shade200,
+                  //       ),
+                  //       color: Colors.grey.shade200,
+                  //       image: DecorationImage(
+                  //         image: CachedNetworkImageProvider(
+                  //           "https://firebasestorage.googleapis.com/v0/b/do-it-now-a5725.appspot.com/o/avatars%2F${data.uid}?alt=media&date=${DateTime.now().toString()}",
+                  //         ),
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Gaps.v16,
                   Align(
                     alignment: Alignment.center,

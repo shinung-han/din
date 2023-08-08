@@ -62,7 +62,9 @@ dependencies:
 
   table_calendar: ^3.0.9
 
-  lottie: ^2.4.0
+  # lottie: ^2.4.0
+
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

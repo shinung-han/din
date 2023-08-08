@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
@@ -32,12 +33,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   late final TextEditingController _nameController = TextEditingController()
     ..addListener(() {
       updateButtonState();
-      setState(() {
-        _newName = _nameController.text;
-      });
     });
-
-  String _newName = '';
 
   void updateButtonState() {
     setState(() {
@@ -46,7 +42,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   void _onSubmit() {
-    ref.read(editProfileProvider.notifier).profileUpdate(context, _newName);
+    ref
+        .read(editProfileProvider.notifier)
+        .profileUpdate(context, _nameController.text);
   }
 
   void _onDeleteTap(controller) {
@@ -86,8 +84,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             return GestureDetector(
               onTap: _onScaffoldTap,
               child: Scaffold(
-                appBar: AppBar(
-                  title: const Text('Edit Profile'),
+                appBar: CommonAppBar(
+                  title: "Edit Profile",
+                  icon: Icons.image_search_rounded,
+                  onPressed: _onChangeProfileImage,
                 ),
                 body: SafeArea(
                   child: Padding(
@@ -113,49 +113,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                   color: Colors.white,
                                 ),
                               )
-                            : Stack(
-                                children: [
-                                  Hero(
-                                    tag: 'avatar',
-                                    child: Avatar(
-                                      name: data.name,
-                                      hasAvatar: data.hasAvatar,
-                                      uid: data.uid,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: GestureDetector(
-                                      onTap: isLoading
-                                          ? null
-                                          : _onChangeProfileImage,
-                                      child: CircleAvatar(
-                                        radius: 20,
-                                        backgroundColor: Colors.white,
-                                        child: Container(
-                                          width: 35,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.grey.shade400,
-                                            // border: Border.all(
-                                            //   width: 1,
-                                            //   color: Colors.grey.shade500,
-                                            // ),
-                                          ),
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.image_search_rounded,
-                                              size: 20,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                            : Hero(
+                                tag: 'avatar',
+                                child: Avatar(
+                                  name: data.name,
+                                  hasAvatar: data.hasAvatar,
+                                  uid: data.uid,
+                                ),
                               ),
                         Gaps.v20,
                         Form(
