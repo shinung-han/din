@@ -5,6 +5,7 @@ class UserProfileModel {
   final String bio;
   final String link;
   final bool hasAvatar;
+  final bool hasProject;
 
   UserProfileModel({
     required this.uid,
@@ -13,6 +14,7 @@ class UserProfileModel {
     required this.bio,
     required this.link,
     required this.hasAvatar,
+    required this.hasProject,
   });
 
   UserProfileModel.empty()
@@ -21,7 +23,8 @@ class UserProfileModel {
         email = "",
         bio = "",
         link = "",
-        hasAvatar = false;
+        hasAvatar = false,
+        hasProject = false;
 
   UserProfileModel.fromJson(Map<String, dynamic> json)
       : uid = json["uid"],
@@ -29,7 +32,8 @@ class UserProfileModel {
         email = json["email"],
         bio = json["bio"],
         link = json["link"],
-        hasAvatar = json["hasAvatar"];
+        hasAvatar = json["hasAvatar"],
+        hasProject = json["hasProject"];
 
   Map<String, dynamic> toJson(String name) {
     return {
@@ -39,6 +43,7 @@ class UserProfileModel {
       "bio": bio,
       "link": link,
       "hasAvatar": false,
+      "hasProject": false,
     };
   }
 
@@ -49,6 +54,7 @@ class UserProfileModel {
     String? bio,
     String? link,
     bool? hasAvatar,
+    bool? hasProject,
   }) {
     return UserProfileModel(
       uid: uid ?? this.uid,
@@ -57,6 +63,7 @@ class UserProfileModel {
       bio: bio ?? this.bio,
       link: link ?? this.link,
       hasAvatar: hasAvatar ?? this.hasAvatar,
+      hasProject: hasProject ?? this.hasProject,
     );
   }
 }
