@@ -25,6 +25,23 @@ class ProjectViewModel extends StateNotifier<UserProfileModel?> {
     await _projectRepository.updateProjectStatus(state!.uid, value);
     state = state!.copyWith(hasProject: value);
   }
+
+  Future<void> addProject(
+    String userId,
+    DateTime startDate,
+    DateTime endDate,
+    int period,
+    goals,
+  ) async {
+    await _projectRepository.createProjectWithGoals(
+      userId,
+      startDate,
+      endDate,
+      period,
+      goals,
+    );
+    state = state!.copyWith(hasProject: true);
+  }
 }
 
 final projectProvider =

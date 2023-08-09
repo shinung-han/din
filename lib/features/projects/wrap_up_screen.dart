@@ -4,9 +4,11 @@ import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/models/date_model.dart';
 import 'package:din/features/projects/view_models/date_view_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
+import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class WrapUpScreen extends ConsumerStatefulWidget {
@@ -17,10 +19,26 @@ class WrapUpScreen extends ConsumerStatefulWidget {
 }
 
 class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
+  void _onCreateProject(
+    String userId,
+    DateTime startDate,
+    DateTime endDate,
+    int period,
+  ) {
+    final goals = ref.watch(goalListProvider);
+
+    ref
+        .read(projectProvider.notifier)
+        .addProject(userId, startDate, endDate, period, goals);
+
+    context.go('/home');
+  }
+
   @override
   Widget build(BuildContext context) {
     final date = ref.watch(dateProvider);
     final goals = ref.watch(goalListProvider);
+    final user = ref.watch(projectProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -83,7 +101,12 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
           text: "Done",
           bgColor: Colors.black,
           color: Colors.white,
-          onTap: () {},
+          onTap: () => _onCreateProject(
+            user!.uid,
+            date.startDate,
+            date.endDate,
+            date.period + 1,
+          ),
           icon: Icons.task_alt_rounded,
         ),
       ),
