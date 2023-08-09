@@ -42,6 +42,10 @@ class ProjectViewModel extends StateNotifier<UserProfileModel?> {
     );
     state = state!.copyWith(hasProject: true);
   }
+
+  // Future<void> loadStartDate() async {
+  //   state = await _projectRepository.getStartDateFromProject();
+  // }
 }
 
 final projectProvider =

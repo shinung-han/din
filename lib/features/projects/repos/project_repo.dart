@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:din/features/projects/models/date_model.dart';
 import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/users/model/user_profile_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,23 +12,12 @@ class ProjectRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  // Project 가져오기(유무 확인)
-
-  // 2. Project 생성
-  // [ ] hasProject -> true로 업데이트
-  // [ ] project 컬렉션 생성
-  // [ ] 요일별로 리스트 생성해서 넣기
-  // [ ] 이미지 넣기
-  // Future<void> createProject(String uid, Map<String, dynamic> data) async {
-  //   await _db.collection("users").doc(uid).update(data);
-  // }
-
-  // hasProject false -> true로 변경 (with. chatGPT)
+  // hasProject false -> true로
   Future<void> updateProjectStatus(String uid, bool hasProject) async {
     await _db.collection("users").doc(uid).update({"hasProject": hasProject});
   }
 
-  // 유저 정보 가져오기(chat)
+  // hasProject 정보 가져오기
   Future<UserProfileModel?> getUserProfile(String uid) async {
     DocumentSnapshot doc = await _db.collection("users").doc(uid).get();
     if (doc.exists) {
@@ -41,7 +31,6 @@ class ProjectRepository {
       final ref =
           _storage.ref('project/$userId/${imageFile.path.split('/').last}');
       final uploadTask = await ref.putFile(imageFile);
-      // 업로드된 이미지의 URL 얻기
       final imageUrl = await uploadTask.ref.getDownloadURL();
       return imageUrl;
     } catch (e) {
@@ -89,6 +78,34 @@ class ProjectRepository {
       }
       date = date.add(const Duration(days: 1));
     }
+  }
+
+  Future<String?> getProjectDocIdByCondition(String userId) async {
+    QuerySnapshot snapshot =
+        await _db.collection("users").doc(userId).collection("project").get();
+
+    if (snapshot.docs.isNotEmpty) {
+      return snapshot.docs.first.id;
+    }
+    return null;
+  }
+
+  Future<DateModel?> getProjectDate(String userId, String docId) async {
+    DocumentSnapshot doc = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(docId)
+        .get();
+
+    if (doc.exists) {
+      return DateModel(
+        startDate: doc.get("startDate").toDate(),
+        endDate: doc.get("endDate").toDate(),
+        period: doc.get("period"),
+      );
+    }
+    return null;
   }
 }
 

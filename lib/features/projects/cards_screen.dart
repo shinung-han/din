@@ -2,6 +2,7 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
+import 'package:din/features/projects/widgets/app_bar.dart';
 import 'package:din/project_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,14 +24,106 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
       });
     });
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _onCompleteTap() {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        showCloseIcon: true,
-        content: Text('Please select a date'),
-      ),
+  void _onCompleteTap() {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: Sizes.size20,
+                  left: Sizes.size16,
+                  right: Sizes.size16,
+                ),
+                child: Column(
+                  children: [
+                    Gaps.v20,
+                    const SizedBox(
+                      height: Sizes.size32,
+                      child: Text(
+                        "Are you sure you want to delete the goal?",
+                        style: TextStyle(
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                    Gaps.v12,
+                    SizedBox(
+                      height: Sizes.size60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.star_rounded,
+                              size: 40,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.star_rounded,
+                              size: 40,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.star_rounded,
+                              size: 40,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.star_rounded,
+                              size: 40,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.star_border_rounded,
+                              size: 40,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gaps.v32,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        icon: Icons.remove_circle_outline_rounded,
+                        text: 'Yes',
+                        onTap: () {},
+                      ),
+                    ),
+                    Gaps.v16,
+                    SizedBox(
+                      height: 66,
+                      child: CommonButton(
+                        text: 'Cancel',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ),
+                    Gaps.v12,
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
-    // Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   int _currentPage = 0;
@@ -55,10 +148,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   void _onDeleteProject(user) {
     ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
-    // Navigator.popUntil(
-    //   context,
-    //   ModalRoute.withName(ListOfGoalsScreen.routeURL),
-    // );
     Navigator.pop(context);
     Navigator.pop(context);
   }
@@ -71,23 +160,12 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final startDate = ref.watch(projectProvider);
+    // print("startDate : ${startDate!.uid}");
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'D+23',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: _onSettingPressed,
-            icon: const Icon(
-              Icons.settings,
-              size: 28,
-            ),
-          )
-        ],
+      appBar: ProjectAppBar(
+        onPressed: _onSettingPressed,
       ),
       body: Stack(
         children: [
@@ -129,111 +207,102 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                       final difference = (scroll - index).abs();
                       final scale = 1 - (difference * 0.13);
 
-                      return GestureDetector(
-                        onTap: () => _onProjectDetailTap(index + 1),
-                        child: Transform.scale(
-                          scale: scale,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                width: 0.5,
-                                color: Colors.grey.shade400,
-                              ),
-                              borderRadius: BorderRadius.circular(28),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.15),
-                                  blurRadius: 8,
-                                  spreadRadius: 2,
-                                  offset: const Offset(0, 8),
-                                ),
-                              ],
+                      return Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              width: 0.5,
+                              color: Colors.grey.shade400,
                             ),
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(28),
-                                    topRight: Radius.circular(28),
-                                  ),
-                                  child: Hero(
-                                    tag: '${index + 1}',
-                                    child: Container(
+                            borderRadius: BorderRadius.circular(28),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(28),
+                                  topRight: Radius.circular(28),
+                                ),
+                                child: Hero(
+                                  tag: '${index + 1}',
+                                  child: Container(
+                                    width: 350,
+                                    height: 350,
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.grey.shade400,
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Image(
                                       width: 350,
                                       height: 350,
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: Colors.grey.shade400,
-                                            width: 0.5,
-                                          ),
-                                        ),
+                                      image: AssetImage(
+                                        'assets/images/${index + 1}.jpg',
                                       ),
-                                      /* child: Center(
-                                        child: FaIcon(
-                                          FontAwesomeIcons.image,
-                                          size: 40,
-                                          color: Colors.grey.shade400,
-                                        ),
-                                      ), */
-                                      child: Image(
-                                        width: 350,
-                                        height: 350,
-                                        image: AssetImage(
-                                          'assets/images/${index + 1}.jpg',
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 320,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Gaps.v16,
+                                    Text(
+                                      "Title",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Gaps.v20,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          "Title",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.grey.shade500,
-                                          ),
-                                        ),
-                                        Gaps.v10,
-                                        SizedBox(
-                                          height: 70,
-                                          child: Text(
-                                            "Description",
-                                            style: TextStyle(
-                                              color: Colors.grey.shade600,
-                                            ),
-                                          ),
-                                        )
+                                        Icon(Icons.star_rounded),
+                                        Icon(Icons.star_rounded),
+                                        Icon(Icons.star_rounded),
+                                        Icon(Icons.star_rounded),
+                                        Icon(Icons.star_border_rounded),
                                       ],
                                     ),
+                                    Gaps.v16,
+                                  ],
+                                ),
+                              ),
+                              Gaps.v10,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: SizedBox(
+                                  height: 60,
+                                  child: CommonButton(
+                                    text: 'Complete',
+                                    icon: Icons.task_alt_rounded,
+                                    bgColor: Colors.black,
+                                    color: Colors.white,
+                                    onTap: _onCompleteTap,
                                   ),
                                 ),
-                                Gaps.v10,
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: SizedBox(
-                                    height: 60,
-                                    child: CommonButton(
-                                      text: 'Complete',
-                                      // icon: Icons.check_rounded,
-                                      bgColor: Colors.black,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Gaps.v16,
-                              ],
-                            ),
+                              ),
+                              Gaps.v16,
+                            ],
                           ),
                         ),
                       );
@@ -265,19 +334,21 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       height: 66,
                       child: CommonButton(
                         text: 'Edit goal',
                         icon: Icons.build_outlined,
+                        onTap: () {},
                       ),
                     ),
                     Gaps.v16,
-                    const SizedBox(
+                    SizedBox(
                       height: 66,
                       child: CommonButton(
-                        text: 'End date change',
+                        text: 'Edit end date',
                         icon: Icons.edit_calendar_outlined,
+                        onTap: () {},
                       ),
                     ),
                     Gaps.v16,

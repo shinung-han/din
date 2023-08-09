@@ -8,4 +8,9 @@ class DateModel {
     required this.endDate,
     required this.period,
   });
+
+  DateModel.empty()
+      : startDate = DateTime.now(),
+        endDate = DateTime.now(),
+        period = 1;
 }
