@@ -20,9 +20,22 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
       state = await _projectRepository.fetchGoalsOfToday(userId, projectId);
     }
   }
+
+  void updateRating(String goalTitle, double rating) {
+    state = state.map((goal) {
+      if (goal.title == goalTitle) {
+        return goal.copyWith(rating: rating); // copyWith 메서드로 새 객체를 반환합니다.
+      }
+      return goal;
+    }).toList();
+  }
 }
 
 final dbGoalListProvider =
     StateNotifierProvider<DBGoalListViewModel, List<DbGoalModel>>(
   (ref) => DBGoalListViewModel(ref),
 );
+
+// final ratingUpdateProvider = Provider((ref) => ref.watch(ratingProvider));
+
+

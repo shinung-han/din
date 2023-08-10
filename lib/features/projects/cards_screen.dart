@@ -3,9 +3,11 @@ import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
+import 'package:din/features/projects/view_models/rating_view_model.dart';
 import 'package:din/features/projects/widgets/app_bar.dart';
 import 'package:din/project_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CardsScreen extends ConsumerStatefulWidget {
@@ -25,7 +27,9 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
       });
     });
 
-  void _onCompleteTap() {
+  double _rating = 3.0;
+
+  void _onCompleteTap(String userId, String title) {
     showModalBottomSheet(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -41,68 +45,59 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                   right: Sizes.size16,
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Gaps.v20,
                     const SizedBox(
                       height: Sizes.size32,
                       child: Text(
-                        "Are you sure you want to delete the goal?",
+                        "Did you complete your goal?",
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    Gaps.v12,
-                    SizedBox(
-                      height: Sizes.size60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.star_rounded,
-                              size: 40,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.star_rounded,
-                              size: 40,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.star_rounded,
-                              size: 40,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.star_rounded,
-                              size: 40,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.star_border_rounded,
-                              size: 40,
-                            ),
-                          ),
-                        ],
-                      ),
+                    const SizedBox(
+                      height: Sizes.size32,
+                      child: Text("Express your goal satisfaction"),
                     ),
-                    Gaps.v32,
+                    Gaps.v20,
+                    RatingBar.builder(
+                      initialRating: 3,
+                      itemCount: 5,
+                      itemSize: 50,
+                      allowHalfRating: true,
+                      glow: false,
+                      unratedColor: Colors.grey.shade300,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star_rounded,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        setState(() {
+                          _rating = rating;
+                        });
+                      },
+                    ),
+                    Gaps.v36,
                     SizedBox(
                       height: 66,
                       child: CommonButton(
-                        icon: Icons.remove_circle_outline_rounded,
+                        icon: Icons.task_alt_rounded,
                         text: 'Yes',
-                        onTap: () {},
+                        onTap: () {
+                          print(_rating);
+                          ref
+                              .read(ratingProvider.notifier)
+                              .saveRating(userId, title, _rating);
+
+                          ref
+                              .read(dbGoalListProvider.notifier)
+                              .updateRating(title, _rating);
+
+                          Navigator.pop(context);
+                        },
                       ),
                     ),
                     Gaps.v16,
@@ -162,9 +157,14 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(_rating);
     final user = ref.watch(projectProvider);
-    // print(user!.uid);
+    final userId = user!.uid;
+    // print(user.uid);
+
     final goalsList = ref.watch(dbGoalListProvider);
+    ref.watch(ratingProvider);
+    // print(goalsList);
 
     return Scaffold(
       appBar: ProjectAppBar(
@@ -202,6 +202,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
             onPageChanged: _onPageChange,
             itemBuilder: (context, index) {
               final image = goalsList[index].image;
+              final title = goalsList[index].title;
+              final rating = goalsList[index].rating;
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -279,36 +281,23 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                       ),
                                     ),
                                     Gaps.v24,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.star_border_rounded,
-                                          color: Colors.grey.shade300,
-                                          size: 30,
-                                        ),
-                                        Icon(
-                                          Icons.star_border_rounded,
-                                          color: Colors.grey.shade300,
-                                          size: 30,
-                                        ),
-                                        Icon(
-                                          Icons.star_border_rounded,
-                                          color: Colors.grey.shade300,
-                                          size: 30,
-                                        ),
-                                        Icon(
-                                          Icons.star_border_rounded,
-                                          color: Colors.grey.shade300,
-                                          size: 30,
-                                        ),
-                                        Icon(
-                                          Icons.star_border_rounded,
-                                          color: Colors.grey.shade300,
-                                          size: 30,
-                                        ),
-                                      ],
+                                    RatingBar.builder(
+                                      initialRating: rating ?? 0,
+                                      itemCount: 5,
+                                      itemSize: 50,
+                                      ignoreGestures: true,
+                                      allowHalfRating: true,
+                                      glow: false,
+                                      unratedColor: Colors.grey.shade300,
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star_rounded,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        setState(() {
+                                          _rating = rating;
+                                        });
+                                      },
                                     ),
                                     Gaps.v20,
                                   ],
@@ -324,7 +313,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                     icon: Icons.task_alt_rounded,
                                     bgColor: Colors.black,
                                     color: Colors.white,
-                                    onTap: _onCompleteTap,
+                                    onTap: () => _onCompleteTap(userId, title),
                                   ),
                                 ),
                               ),

@@ -80,7 +80,7 @@ class ProjectRepository {
           'date': goalDate,
           'title': goal.title,
           'image': imageUrl ?? "",
-          'rating': "",
+          'rating': 0.0,
         });
       }
       date = date.add(const Duration(days: 1));
@@ -90,6 +90,30 @@ class ProjectRepository {
   Future<String?> getProjectDocIdByCondition(String userId) async {
     QuerySnapshot snapshot =
         await _db.collection("users").doc(userId).collection("project").get();
+
+    if (snapshot.docs.isNotEmpty) {
+      return snapshot.docs.first.id;
+    }
+    return null;
+  }
+
+  Future<String?> getGoalDocIdByCondition(
+    String userId,
+    String projectId,
+    String goalTitle,
+  ) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyyMMdd').format(now);
+
+    QuerySnapshot snapshot = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .collection("goals")
+        .doc(formattedDate)
+        .collection(goalTitle)
+        .get();
 
     if (snapshot.docs.isNotEmpty) {
       return snapshot.docs.first.id;
@@ -174,6 +198,28 @@ class ProjectRepository {
     }
 
     await projectDocRef.delete();
+  }
+
+  Future<void> saveRating(
+    String userId,
+    String projectId,
+    String goalTitle,
+    double rating,
+    String goalId,
+  ) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyyMMdd').format(now);
+
+    _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .collection("goals")
+        .doc(formattedDate)
+        .collection(goalTitle)
+        .doc(goalId)
+        .update({"rating": rating});
   }
 }
 

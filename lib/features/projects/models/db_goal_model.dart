@@ -1,7 +1,7 @@
 class DbGoalModel {
   final String date;
   final String? image;
-  final String? rating;
+  final double? rating;
   final String title;
 
   DbGoalModel({
@@ -14,6 +14,20 @@ class DbGoalModel {
   DbGoalModel.empty()
       : date = '',
         image = '',
-        rating = "",
+        rating = 0.0,
         title = '';
+
+  DbGoalModel copyWith({
+    String? date,
+    String? image,
+    String? title,
+    double? rating,
+  }) {
+    return DbGoalModel(
+      date: date ?? this.date,
+      image: image ?? this.image,
+      title: title ?? this.title,
+      rating: rating ?? this.rating,
+    );
+  }
 }
