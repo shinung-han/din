@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/widgets/app_bar.dart';
 import 'package:din/project_detail.dart';
@@ -160,8 +161,10 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final startDate = ref.watch(projectProvider);
-    // print("startDate : ${startDate!.uid}");
+    final startDate = ref.watch(projectProvider);
+    print("startDate : ${startDate!.uid}");
+    final goalsList = ref.watch(goalListProvider);
+    print("goalsList : $goalsList");
 
     return Scaffold(
       appBar: ProjectAppBar(
@@ -194,10 +197,13 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
           ), */
           PageView.builder(
             controller: _pageController,
-            itemCount: 5,
+            itemCount: goalsList.length,
             scrollDirection: Axis.horizontal,
             onPageChanged: _onPageChange,
             itemBuilder: (context, index) {
+              final image = goalsList[index].image;
+              print(image);
+
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -233,60 +239,82 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                   topLeft: Radius.circular(28),
                                   topRight: Radius.circular(28),
                                 ),
-                                child: Hero(
-                                  tag: '${index + 1}',
-                                  child: Container(
-                                    width: 350,
-                                    height: 350,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color: Colors.grey.shade400,
-                                          width: 0.5,
-                                        ),
+                                child: Container(
+                                  width: 350,
+                                  height: 350,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Colors.grey.shade400,
+                                        width: 0.5,
                                       ),
-                                    ),
-                                    child: Image(
-                                      width: 350,
-                                      height: 350,
-                                      image: AssetImage(
-                                        'assets/images/${index + 1}.jpg',
-                                      ),
-                                      fit: BoxFit.cover,
                                     ),
                                   ),
+                                  child: image == null
+                                      ? Icon(
+                                          Icons.image_outlined,
+                                          color: Colors.grey.shade400,
+                                          size: 70,
+                                        )
+                                      : Image(
+                                          width: 350,
+                                          height: 350,
+                                          image: FileImage(
+                                            image,
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.all(15),
+                              Padding(
+                                padding: const EdgeInsets.all(15),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Gaps.v16,
+                                    Gaps.v20,
                                     Text(
-                                      "Title",
-                                      style: TextStyle(
-                                        fontSize: 18,
+                                      goalsList[index].title,
+                                      style: const TextStyle(
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    Gaps.v20,
+                                    Gaps.v24,
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.star_rounded),
-                                        Icon(Icons.star_rounded),
-                                        Icon(Icons.star_rounded),
-                                        Icon(Icons.star_rounded),
-                                        Icon(Icons.star_border_rounded),
+                                        Icon(
+                                          Icons.star_border_rounded,
+                                          color: Colors.grey.shade300,
+                                          size: 30,
+                                        ),
+                                        Icon(
+                                          Icons.star_border_rounded,
+                                          color: Colors.grey.shade300,
+                                          size: 30,
+                                        ),
+                                        Icon(
+                                          Icons.star_border_rounded,
+                                          color: Colors.grey.shade300,
+                                          size: 30,
+                                        ),
+                                        Icon(
+                                          Icons.star_border_rounded,
+                                          color: Colors.grey.shade300,
+                                          size: 30,
+                                        ),
+                                        Icon(
+                                          Icons.star_border_rounded,
+                                          color: Colors.grey.shade300,
+                                          size: 30,
+                                        ),
                                       ],
                                     ),
-                                    Gaps.v16,
+                                    Gaps.v20,
                                   ],
                                 ),
                               ),
-                              Gaps.v10,
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),

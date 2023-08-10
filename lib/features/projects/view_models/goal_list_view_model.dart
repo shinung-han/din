@@ -34,6 +34,8 @@ class GoalListViewModel extends StateNotifier<List<GoalModel>> {
     goal.updateImage(newImage);
     state = [...state];
   }
+
+  void loadGoalsOfToday(String uid) {}
 }
 
 final goalListProvider =

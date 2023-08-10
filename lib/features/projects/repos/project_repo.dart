@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:din/features/projects/models/date_model.dart';
+import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/users/model/user_profile_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -53,6 +54,7 @@ class ProjectRepository {
       'startDate': startDate,
       'endDate': endDate,
       'period': period,
+      "goalsTitle": goals.map((goal) => goal.title).toList(),
     });
 
     DateTime date = startDate;
@@ -103,9 +105,59 @@ class ProjectRepository {
         startDate: doc.get("startDate").toDate(),
         endDate: doc.get("endDate").toDate(),
         period: doc.get("period"),
+        goalsTitle: doc.get("goalsTitle"),
       );
     }
     return null;
+  }
+
+  Future<List<DbGoalModel>> fetchGoalsOfToday(
+      String userId, String projectId) async {
+    DateTime now = DateTime.now();
+    String foramttedDate = DateFormat('yyyyMMdd').format(now);
+
+    DocumentSnapshot? goalDoc = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .collection("goals")
+        .doc(foramttedDate)
+        .get();
+
+    if (!goalDoc.exists) {
+      throw Exception("해당 날짜의 문서가 없습니다.");
+    }
+
+    DocumentSnapshot subCollectionNames = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .get();
+
+    Map<String, dynamic>? data =
+        subCollectionNames.data() as Map<String, dynamic>?;
+
+    List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
+    print("goalsTitleList : $goalsTitleList");
+
+    List<DbGoalModel> goals = [];
+
+    for (String subCollectionName in goalsTitleList) {
+      QuerySnapshot subCollectionSnapshot =
+          await goalDoc.reference.collection(subCollectionName).get();
+      for (var subDoc in subCollectionSnapshot.docs) {
+        goals.add(
+          DbGoalModel(
+              date: subDoc['date'],
+              image: subDoc['image'],
+              rating: subDoc['rating'],
+              title: subDoc['title']),
+        );
+      }
+    }
+    return goals;
   }
 }
 

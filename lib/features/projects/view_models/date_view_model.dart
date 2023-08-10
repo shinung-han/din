@@ -12,7 +12,11 @@ class DateViewModel extends StateNotifier<DateModel> {
         );
 
   void setDate(DateTime start, DateTime end, int period) {
-    state = DateModel(startDate: start, endDate: end, period: period);
+    state = DateModel(
+      startDate: start,
+      endDate: end,
+      period: period,
+    );
   }
 }
 
