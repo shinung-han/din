@@ -70,6 +70,11 @@ class ProjectRepository {
         await projectDoc
             .collection('goals')
             .doc(goalDate)
+            .set({'data': goalDate});
+
+        await projectDoc
+            .collection('goals')
+            .doc(goalDate)
             .collection(goal.title)
             .add({
           'date': goalDate,
@@ -114,7 +119,7 @@ class ProjectRepository {
   Future<List<DbGoalModel>> fetchGoalsOfToday(
       String userId, String projectId) async {
     DateTime now = DateTime.now();
-    String foramttedDate = DateFormat('yyyyMMdd').format(now);
+    String formattedDate = DateFormat('yyyyMMdd').format(now);
 
     DocumentSnapshot? goalDoc = await _db
         .collection("users")
@@ -122,7 +127,7 @@ class ProjectRepository {
         .collection("project")
         .doc(projectId)
         .collection("goals")
-        .doc(foramttedDate)
+        .doc(formattedDate)
         .get();
 
     if (!goalDoc.exists) {
@@ -140,7 +145,6 @@ class ProjectRepository {
         subCollectionNames.data() as Map<String, dynamic>?;
 
     List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
-    print("goalsTitleList : $goalsTitleList");
 
     List<DbGoalModel> goals = [];
 

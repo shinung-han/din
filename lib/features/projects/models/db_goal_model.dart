@@ -1,7 +1,7 @@
 class DbGoalModel {
   final String date;
   final String? image;
-  final int? rating;
+  final String? rating;
   final String title;
 
   DbGoalModel({
@@ -14,6 +14,6 @@ class DbGoalModel {
   DbGoalModel.empty()
       : date = '',
         image = '',
-        rating = 1,
+        rating = "",
         title = '';
 }

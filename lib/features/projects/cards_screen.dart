@@ -1,7 +1,7 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
-import 'package:din/features/projects/view_models/goal_list_view_model.dart';
+import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/widgets/app_bar.dart';
 import 'package:din/project_detail.dart';
@@ -161,10 +161,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final startDate = ref.watch(projectProvider);
-    print("startDate : ${startDate!.uid}");
-    final goalsList = ref.watch(goalListProvider);
-    print("goalsList : $goalsList");
+    final user = ref.watch(projectProvider);
+    final goalsList = ref.watch(dbGoalListProvider);
 
     return Scaffold(
       appBar: ProjectAppBar(
@@ -202,7 +200,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
             onPageChanged: _onPageChange,
             itemBuilder: (context, index) {
               final image = goalsList[index].image;
-              print(image);
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -250,17 +247,17 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                       ),
                                     ),
                                   ),
-                                  child: image == null
+                                  child: image == ""
                                       ? Icon(
                                           Icons.image_outlined,
-                                          color: Colors.grey.shade400,
+                                          color: Colors.grey.shade300,
                                           size: 70,
                                         )
                                       : Image(
                                           width: 350,
                                           height: 350,
-                                          image: FileImage(
-                                            image,
+                                          image: NetworkImage(
+                                            image!,
                                           ),
                                           fit: BoxFit.cover,
                                         ),
