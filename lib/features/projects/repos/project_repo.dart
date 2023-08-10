@@ -130,9 +130,9 @@ class ProjectRepository {
         .doc(formattedDate)
         .get();
 
-    if (!goalDoc.exists) {
-      throw Exception("해당 날짜의 문서가 없습니다.");
-    }
+    // if (!goalDoc.exists) {
+    //   throw Exception("해당 날짜의 문서가 없습니다.");
+    // }
 
     DocumentSnapshot subCollectionNames = await _db
         .collection("users")
@@ -162,6 +162,18 @@ class ProjectRepository {
       }
     }
     return goals;
+  }
+
+  Future<void> deleteProject(String uid, String projectId) async {
+    DocumentReference projectDocRef =
+        _db.collection("users").doc(uid).collection("project").doc(projectId);
+
+    QuerySnapshot goalsSnapshot = await projectDocRef.collection("goals").get();
+    for (DocumentSnapshot ds in goalsSnapshot.docs) {
+      await ds.reference.delete();
+    }
+
+    await projectDocRef.delete();
   }
 }
 

@@ -42,6 +42,14 @@ class ProjectViewModel extends StateNotifier<UserProfileModel?> {
     );
     state = state!.copyWith(hasProject: true);
   }
+
+  Future<void> deleteProject(String userId) async {
+    String? projectId =
+        await _projectRepository.getProjectDocIdByCondition(userId);
+    if (projectId != null) {
+      await _projectRepository.deleteProject(userId, projectId);
+    }
+  }
 }
 
 final projectProvider =

@@ -149,6 +149,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   void _onDeleteProject(user) {
     ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
+    ref.read(projectProvider.notifier).deleteProject(user.uid);
     Navigator.pop(context);
     Navigator.pop(context);
   }
@@ -162,6 +163,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(projectProvider);
+    // print(user!.uid);
     final goalsList = ref.watch(dbGoalListProvider);
 
     return Scaffold(
