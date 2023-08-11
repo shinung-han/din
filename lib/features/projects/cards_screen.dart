@@ -1,11 +1,11 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/view_models/rating_view_model.dart';
 import 'package:din/features/projects/widgets/app_bar.dart';
-import 'package:din/project_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,123 +29,36 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   double _rating = 3.0;
 
-  void _onCompleteTap(String userId, String title) {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: Sizes.size20,
-                  left: Sizes.size16,
-                  right: Sizes.size16,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Gaps.v20,
-                    const SizedBox(
-                      height: Sizes.size32,
-                      child: Text(
-                        "Did you complete your goal?",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: Sizes.size32,
-                      child: Text("Express your goal satisfaction"),
-                    ),
-                    Gaps.v20,
-                    RatingBar.builder(
-                      initialRating: 3,
-                      itemCount: 5,
-                      itemSize: 50,
-                      allowHalfRating: true,
-                      glow: false,
-                      unratedColor: Colors.grey.shade300,
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star_rounded,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          _rating = rating;
-                        });
-                      },
-                    ),
-                    Gaps.v36,
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        icon: Icons.task_alt_rounded,
-                        text: 'Yes',
-                        onTap: () {
-                          print(_rating);
-                          ref
-                              .read(ratingProvider.notifier)
-                              .saveRating(userId, title, _rating);
-
-                          ref
-                              .read(dbGoalListProvider.notifier)
-                              .updateRating(title, _rating);
-
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    Gaps.v16,
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        text: 'Cancel',
-                        bgColor: Colors.black,
-                        color: Colors.white,
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ),
-                    Gaps.v12,
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  int _currentPage = 0;
+  // int _currentPage = 0;
 
   final ValueNotifier<double> _scroll = ValueNotifier(0.0);
 
-  void _onPageChange(int newPage) {
-    setState(() {
-      _currentPage = newPage;
-    });
-  }
+  // void _onPageChange(int newPage) {
+  //   setState(() {
+  //     _currentPage = newPage;
+  //   });
+  // }
 
-  void _onProjectDetailTap(int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProjectDetailScreen(index: index),
-        fullscreenDialog: true,
-      ),
-    );
-  }
+  // void _onProjectDetailTap(int index) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => ProjectDetailScreen(index: index),
+  //       fullscreenDialog: true,
+  //     ),
+  //   );
+  // }
 
-  void _onDeleteProject(user) {
-    ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
-    ref.read(projectProvider.notifier).deleteProject(user.uid);
-    Navigator.pop(context);
+  // void _onDeleteProject(user) {
+  //   ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
+  //   ref.read(projectProvider.notifier).deleteProject(user.uid);
+  //   Navigator.pop(context);
+  //   Navigator.pop(context);
+  // }
+
+  void _onCompleteGoalTap(String userId, String title, double rating) {
+    ref.read(ratingProvider.notifier).saveRating(userId, title, rating);
+    ref.read(dbGoalListProvider.notifier).updateRating(title, rating);
     Navigator.pop(context);
   }
 
@@ -157,7 +70,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(_rating);
     final user = ref.watch(projectProvider);
     final userId = user!.uid;
     // print(user.uid);
@@ -199,7 +111,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
             controller: _pageController,
             itemCount: goalsList.length,
             scrollDirection: Axis.horizontal,
-            onPageChanged: _onPageChange,
+            // onPageChanged: _onPageChange,
             itemBuilder: (context, index) {
               final image = goalsList[index].image;
               final title = goalsList[index].title;
@@ -272,7 +184,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Gaps.v20,
+                                    Gaps.v16,
                                     Text(
                                       goalsList[index].title,
                                       style: const TextStyle(
@@ -284,7 +196,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                     RatingBar.builder(
                                       initialRating: rating ?? 0,
                                       itemCount: 5,
-                                      itemSize: 50,
+                                      itemSize: 40,
                                       ignoreGestures: true,
                                       allowHalfRating: true,
                                       glow: false,
@@ -293,13 +205,9 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                         Icons.star_rounded,
                                         color: Colors.amber,
                                       ),
-                                      onRatingUpdate: (rating) {
-                                        setState(() {
-                                          _rating = rating;
-                                        });
-                                      },
+                                      onRatingUpdate: (rating) {},
                                     ),
-                                    Gaps.v20,
+                                    Gaps.v16,
                                   ],
                                 ),
                               ),
@@ -308,13 +216,23 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: SizedBox(
                                   height: 60,
-                                  child: CommonButton(
-                                    text: 'Complete',
-                                    icon: Icons.task_alt_rounded,
-                                    bgColor: Colors.black,
-                                    color: Colors.white,
-                                    onTap: () => _onCompleteTap(userId, title),
-                                  ),
+                                  child: rating == 0
+                                      ? CommonButton(
+                                          text: 'Complete',
+                                          icon: Icons.task_alt_rounded,
+                                          bgColor: Colors.black,
+                                          color: Colors.white,
+                                          onTap: () =>
+                                              _onCompleteTap(userId, title),
+                                        )
+                                      : CommonButton(
+                                          text: 'Cancel',
+                                          icon: Icons.highlight_off_rounded,
+                                          bgColor: Colors.white,
+                                          color: Colors.grey.shade400,
+                                          onTap: () => _onCancelCompleteTap(
+                                              userId, title),
+                                        ),
                                 ),
                               ),
                               Gaps.v16,
@@ -353,28 +271,117 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                     SizedBox(
                       height: 66,
                       child: CommonButton(
-                        text: 'Edit goal',
+                        text: 'Edit project',
                         icon: Icons.build_outlined,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditProjectScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
+                    // Gaps.v16,
+                    // SizedBox(
+                    //   height: 66,
+                    //   child: CommonButton(
+                    //     text: 'Edit end date',
+                    //     icon: Icons.edit_calendar_outlined,
+                    //     onTap: () {},
+                    //   ),
+                    // ),
+                    // Gaps.v16,
+                    // SizedBox(
+                    //   height: 66,
+                    //   child: CommonButton(
+                    //     icon: Icons.remove_circle_outline_rounded,
+                    //     text: 'Delete Project',
+                    //     onTap: _onDeleteProjectTap,
+                    //   ),
+                    // ),
                     Gaps.v16,
                     SizedBox(
                       height: 66,
                       child: CommonButton(
-                        text: 'Edit end date',
-                        icon: Icons.edit_calendar_outlined,
-                        onTap: () {},
+                        text: 'Cancel',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context),
                       ),
                     ),
-                    Gaps.v16,
+                    Gaps.v12,
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onCompleteTap(String userId, String title) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: Sizes.size20,
+                  left: Sizes.size16,
+                  right: Sizes.size16,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Gaps.v20,
+                    const SizedBox(
+                      height: Sizes.size32,
+                      child: Text(
+                        "Did you complete your goal?",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: Sizes.size32,
+                      child: Text("Express your goal satisfaction"),
+                    ),
+                    Gaps.v20,
+                    RatingBar.builder(
+                      initialRating: 3,
+                      itemCount: 5,
+                      itemSize: 50,
+                      allowHalfRating: true,
+                      glow: false,
+                      unratedColor: Colors.grey.shade300,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star_rounded,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        setState(() {
+                          _rating = rating;
+                        });
+                      },
+                    ),
+                    Gaps.v36,
                     SizedBox(
                       height: 66,
                       child: CommonButton(
-                        icon: Icons.remove_circle_outline_rounded,
-                        text: 'Delete Project',
-                        onTap: _onDeleteProjectTap,
-                      ),
+                          icon: Icons.task_alt_rounded,
+                          text: 'Yes',
+                          onTap: () =>
+                              _onCompleteGoalTap(userId, title, _rating)),
                     ),
                     Gaps.v16,
                     SizedBox(
@@ -398,8 +405,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     );
   }
 
-  void _onDeleteProjectTap() {
-    final user = ref.watch(projectProvider);
+  void _onCancelCompleteTap(String userId, String title) {
+    // final user = ref.watch(projectProvider);
 
     showModalBottomSheet(
       backgroundColor: Colors.white,
@@ -420,7 +427,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                     const SizedBox(
                       height: 50,
                       child: Text(
-                        "Are you sure you want to delete the project?",
+                        "Are you sure you want to cancel?",
                         style: TextStyle(
                           fontSize: 17,
                         ),
@@ -430,9 +437,9 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                     SizedBox(
                       height: 66,
                       child: CommonButton(
-                        icon: Icons.remove_circle_outline_rounded,
+                        icon: Icons.task_alt_rounded,
                         text: 'Yes',
-                        onTap: () => _onDeleteProject(user),
+                        onTap: () => _onCompleteGoalTap(userId, title, 0.0),
                       ),
                     ),
                     Gaps.v16,
