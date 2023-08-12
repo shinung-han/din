@@ -2,10 +2,12 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
+import 'package:din/features/projects/memo_screen.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/view_models/rating_view_model.dart';
 import 'package:din/features/projects/widgets/app_bar.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +31,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   double _rating = 3.0;
 
-  // int _currentPage = 0;
+  final int _currentPage = 0;
 
   final ValueNotifier<double> _scroll = ValueNotifier(0.0);
 
@@ -79,45 +81,24 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     // print(goalsList);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: ProjectAppBar(
-        onPressed: _onSettingPressed,
+        onPressed: () => showModalBottom(context, settingModalList),
       ),
-      body: Stack(
-        children: [
-          // [ ] Blur처리된 Project의 배경화면
-          // TODO 좀 더 고민해보고 결정 예정
-          /* AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            child: Container(
-              key: ValueKey(_currentPage),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/${_currentPage + 1}.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 20,
-                  sigmaY: 20,
-                ),
-                child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                ),
-              ),
-            ),
-          ), */
-          PageView.builder(
-            controller: _pageController,
-            itemCount: goalsList.length,
-            scrollDirection: Axis.horizontal,
-            // onPageChanged: _onPageChange,
-            itemBuilder: (context, index) {
-              final image = goalsList[index].image;
-              final title = goalsList[index].title;
-              final rating = goalsList[index].rating;
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: goalsList.length,
+        scrollDirection: Axis.horizontal,
+        // onPageChanged: _onPageChange,
+        itemBuilder: (context, index) {
+          final image = goalsList[index].image;
+          final title = goalsList[index].title;
+          final rating = goalsList[index].rating;
+          final memo = goalsList[index].memo;
 
-              return Column(
+          return Center(
+            child: SingleChildScrollView(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ValueListenableBuilder(
@@ -200,7 +181,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                       ignoreGestures: true,
                                       allowHalfRating: true,
                                       glow: false,
-                                      unratedColor: Colors.grey.shade300,
+                                      unratedColor: Colors.grey.shade200,
                                       itemBuilder: (context, _) => const Icon(
                                         Icons.star_rounded,
                                         color: Colors.amber,
@@ -217,21 +198,97 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                 child: SizedBox(
                                   height: 60,
                                   child: rating == 0
-                                      ? CommonButton(
-                                          text: 'Complete',
-                                          icon: Icons.task_alt_rounded,
-                                          bgColor: Colors.black,
-                                          color: Colors.white,
-                                          onTap: () =>
-                                              _onCompleteTap(userId, title),
+                                      ? Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MemoScreen(
+                                                      userId: userId,
+                                                      title: title,
+                                                      memo: memo ?? "",
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 30,
+                                                backgroundColor:
+                                                    Colors.grey.shade400,
+                                                child: const CircleAvatar(
+                                                  radius: 29.5,
+                                                  backgroundColor: Colors.white,
+                                                  child: Icon(
+                                                    Icons.notes_rounded,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Gaps.h10,
+                                            Expanded(
+                                              child: CommonButton(
+                                                text: 'Complete',
+                                                icon: Icons.task_alt_rounded,
+                                                bgColor: Colors.black,
+                                                color: Colors.white,
+                                                onTap: () => _onCompleteTap(
+                                                    userId, title),
+                                              ),
+                                            ),
+                                          ],
                                         )
-                                      : CommonButton(
-                                          text: 'Cancel',
-                                          icon: Icons.highlight_off_rounded,
-                                          bgColor: Colors.white,
-                                          color: Colors.grey.shade400,
-                                          onTap: () => _onCancelCompleteTap(
-                                              userId, title),
+                                      : Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MemoScreen(
+                                                      userId: userId,
+                                                      title: title,
+                                                      memo: memo ?? "",
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 30,
+                                                backgroundColor:
+                                                    Colors.grey.shade400,
+                                                child: const CircleAvatar(
+                                                  radius: 29.5,
+                                                  backgroundColor: Colors.white,
+                                                  child: Icon(
+                                                    Icons.notes_rounded,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Gaps.h10,
+                                            Expanded(
+                                              child: CommonButton(
+                                                text: 'Cancel',
+                                                icon:
+                                                    Icons.highlight_off_rounded,
+                                                bgColor: Colors.white,
+                                                color: Colors.grey.shade400,
+                                                onTap: () =>
+                                                    showModalBottomWithText(
+                                                  context,
+                                                  "Are you sure you want to cancel?",
+                                                  () => _onCompleteGoalTap(
+                                                      userId, title, 0.0),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                 ),
                               ),
@@ -244,84 +301,28 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                   ),
                   Gaps.v32,
                 ],
-              );
-            },
-          ),
-        ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  void _onSettingPressed() {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: Sizes.size32,
-                  left: Sizes.size16,
-                  right: Sizes.size16,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        text: 'Edit project',
-                        icon: Icons.build_outlined,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EditProjectScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    // Gaps.v16,
-                    // SizedBox(
-                    //   height: 66,
-                    //   child: CommonButton(
-                    //     text: 'Edit end date',
-                    //     icon: Icons.edit_calendar_outlined,
-                    //     onTap: () {},
-                    //   ),
-                    // ),
-                    // Gaps.v16,
-                    // SizedBox(
-                    //   height: 66,
-                    //   child: CommonButton(
-                    //     icon: Icons.remove_circle_outline_rounded,
-                    //     text: 'Delete Project',
-                    //     onTap: _onDeleteProjectTap,
-                    //   ),
-                    // ),
-                    Gaps.v16,
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        text: 'Cancel',
-                        bgColor: Colors.black,
-                        color: Colors.white,
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ),
-                    Gaps.v12,
-                  ],
-                ),
-              ),
-            ),
-          ],
+  List<Map<String, dynamic>> settingModalList = [
+    {
+      "text": "Edit project",
+      "icon": Icons.build_outlined,
+      "onTap": (context) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const EditProjectScreen(),
+          ),
         );
-      },
-    );
-  }
+      }
+    },
+  ];
 
   void _onCompleteTap(String userId, String title) {
     showModalBottomSheet(
@@ -341,7 +342,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Gaps.v20,
+                    Gaps.v14,
                     const SizedBox(
                       height: Sizes.size32,
                       child: Text(
@@ -382,65 +383,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                           text: 'Yes',
                           onTap: () =>
                               _onCompleteGoalTap(userId, title, _rating)),
-                    ),
-                    Gaps.v16,
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        text: 'Cancel',
-                        bgColor: Colors.black,
-                        color: Colors.white,
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ),
-                    Gaps.v12,
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _onCancelCompleteTap(String userId, String title) {
-    // final user = ref.watch(projectProvider);
-
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: Sizes.size20,
-                  left: Sizes.size16,
-                  right: Sizes.size16,
-                ),
-                child: Column(
-                  children: [
-                    Gaps.v20,
-                    const SizedBox(
-                      height: 50,
-                      child: Text(
-                        "Are you sure you want to cancel?",
-                        style: TextStyle(
-                          fontSize: 17,
-                        ),
-                      ),
-                    ),
-                    Gaps.v20,
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        icon: Icons.task_alt_rounded,
-                        text: 'Yes',
-                        onTap: () => _onCompleteGoalTap(userId, title, 0.0),
-                      ),
                     ),
                     Gaps.v16,
                     SizedBox(

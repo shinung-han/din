@@ -7,12 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EditTitleScreen extends ConsumerStatefulWidget {
-  final String title;
-  final int id;
+  final String? title;
+  final int? id;
 
   const EditTitleScreen({
-    required this.title,
-    required this.id,
+    this.title,
+    this.id,
     super.key,
   });
 
@@ -47,7 +47,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
 
   void _onSubmit() {
     ref.read(goalListProvider.notifier).changeGoalTitle(
-          widget.id,
+          widget.id!,
           _titleController.text,
         );
     Navigator.pop(context);

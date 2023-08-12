@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
@@ -19,6 +18,10 @@ class AddGoalScreen extends ConsumerStatefulWidget {
 }
 
 class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
+  void _onScaffoldTap() {
+    FocusScope.of(context).unfocus();
+  }
+
   Map<String, dynamic> formData = {};
 
   final ImagePicker _imagePicker = ImagePicker();
@@ -86,126 +89,160 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      appBar: CommonAppBar(
-        title: 'Add Goal',
-        icon: Icons.add_photo_alternate_outlined,
-        onPressed: _onSelectImage,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(Sizes.size20),
-        child: Column(
-          children: [
-            Form(
-              key: globalKey,
-              child: Column(
-                children: [
-                  _imageFile == null
-                      ? Container(
-                          width: size.width,
-                          height: size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.grey.shade400,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.north_east_rounded,
-                                    color: Colors.grey.shade400,
-                                    size: 50,
-                                  ),
-                                  Icon(
-                                    Icons.add_photo_alternate_outlined,
-                                    color: Colors.grey.shade400,
-                                    size: 50,
-                                  ),
-                                ],
-                              ),
-                              Gaps.v10,
-                              Text(
-                                'Tap the icon at the top to select an image',
-                                style: TextStyle(
-                                  color: Colors.grey.shade500,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Gaps.v10,
-                              Text(
-                                'Image can be added and edited later',
-                                style: TextStyle(
-                                  color: Colors.grey.shade500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          width: size.width,
-                          height: size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.grey.shade400,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                            image: DecorationImage(
-                              image: FileImage(
-                                _imageFile!,
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                  Gaps.v16,
-                  TextFormField(
-                    controller: titleController,
-                    keyboardType: TextInputType.emailAddress,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    cursorHeight: Sizes.size16,
-                    autocorrect: false,
-                    maxLength: 20,
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.grey.shade400),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
+    return GestureDetector(
+      onTap: _onScaffoldTap,
+      child: Scaffold(
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: const Text(
+                  "Add Goal",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: Sizes.size5),
+                    child: IconButton(
+                      onPressed: _onSelectImage,
+                      icon: const Icon(
+                        Icons.add_photo_alternate_outlined,
+                        size: 30,
                       ),
-                      suffix: Padding(
-                        padding: const EdgeInsets.only(right: Sizes.size10),
-                        child: GestureDetector(
-                          onTap: _onDeleteTap,
-                          child: FaIcon(
-                            FontAwesomeIcons.xmark,
-                            size: Sizes.size18,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ),
-                      labelText: 'Title',
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+              SliverPadding(
+                padding: const EdgeInsets.all(Sizes.size20),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Form(
+                        key: globalKey,
+                        child: Column(
+                          children: [
+                            _imageFile == null
+                                ? Container(
+                                    width: size.width,
+                                    height: size.width,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Colors.grey.shade400,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.north_east_rounded,
+                                              color: Colors.grey.shade400,
+                                              size: 50,
+                                            ),
+                                            Icon(
+                                              Icons
+                                                  .add_photo_alternate_outlined,
+                                              color: Colors.grey.shade400,
+                                              size: 50,
+                                            ),
+                                          ],
+                                        ),
+                                        Gaps.v20,
+                                        Text(
+                                          'Tap the icon at the top to select an image',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Gaps.v10,
+                                        Text(
+                                          'Image can be added and edited later',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Container(
+                                    width: size.width,
+                                    height: size.width,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Colors.grey.shade400,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                        image: FileImage(
+                                          _imageFile!,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                            Gaps.v16,
+                            TextFormField(
+                              controller: titleController,
+                              keyboardType: TextInputType.emailAddress,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              cursorHeight: Sizes.size16,
+                              autocorrect: false,
+                              maxLength: 20,
+                              decoration: InputDecoration(
+                                labelStyle:
+                                    TextStyle(color: Colors.grey.shade400),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey.shade400)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.grey.shade400),
+                                ),
+                                suffix: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: Sizes.size10),
+                                  child: GestureDetector(
+                                    onTap: _onDeleteTap,
+                                    child: FaIcon(
+                                      FontAwesomeIcons.xmark,
+                                      size: Sizes.size18,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                                labelText: 'Title',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        height: 90,
-        child: SubmitButton(
-          buttonText: 'Create',
-          disabled: isButtonEnabled,
-          onTap: _onSubmit,
-          icon: Icons.add_circle_outline_rounded,
+        bottomNavigationBar: BottomAppBar(
+          height: 90,
+          child: SubmitButton(
+            buttonText: 'Create',
+            disabled: isButtonEnabled,
+            onTap: _onSubmit,
+            icon: Icons.add_circle_outline_rounded,
+          ),
         ),
       ),
     );

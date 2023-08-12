@@ -29,6 +29,15 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
       return goal;
     }).toList();
   }
+
+  void updateMemo(String goalTitle, String memo) {
+    state = state.map((goal) {
+      if (goal.title == goalTitle) {
+        return goal.copyWith(memo: memo); // copyWith 메서드로 새 객체를 반환합니다.
+      }
+      return goal;
+    }).toList();
+  }
 }
 
 final dbGoalListProvider =

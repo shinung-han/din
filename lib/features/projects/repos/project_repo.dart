@@ -80,6 +80,7 @@ class ProjectRepository {
           'date': goalDate,
           'title': goal.title,
           'image': imageUrl ?? "",
+          'memo': "",
           'rating': 0.0,
         });
       }
@@ -180,6 +181,7 @@ class ProjectRepository {
           DbGoalModel(
               date: subDoc['date'],
               image: subDoc['image'],
+              memo: subDoc['memo'],
               rating: subDoc['rating'],
               title: subDoc['title']),
         );
@@ -220,6 +222,28 @@ class ProjectRepository {
         .collection(goalTitle)
         .doc(goalId)
         .update({"rating": rating});
+  }
+
+  Future<void> writeMemo(
+    String userId,
+    String projectId,
+    String goalTitle,
+    String memo,
+    String goalId,
+  ) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyyMMdd').format(now);
+
+    _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .collection("goals")
+        .doc(formattedDate)
+        .collection(goalTitle)
+        .doc(goalId)
+        .update({"memo": memo});
   }
 }
 

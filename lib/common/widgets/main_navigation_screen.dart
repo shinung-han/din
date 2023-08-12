@@ -1,12 +1,14 @@
 import 'package:din/features/projects/cards_screen.dart';
 import 'package:din/features/projects/create_project_first_screen.dart';
+import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/users/profile_screen.dart';
 import 'package:din/list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-class MainNavigationScreen extends StatefulWidget {
+class MainNavigationScreen extends ConsumerStatefulWidget {
   static String routeName = 'mainNavigation';
 
   final String? tab;
@@ -17,10 +19,11 @@ class MainNavigationScreen extends StatefulWidget {
   });
 
   @override
-  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+  ConsumerState<MainNavigationScreen> createState() =>
+      _MainNavigationScreenState();
 }
 
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
+class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
   final List<String> _tabs = [
     'home',
     'list',
@@ -30,12 +33,45 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   late int _currentIndex = _tabs.indexOf(widget.tab!);
 
-  final List<Widget> _pages = [
-    const CreateProjectFirstScreen(),
-    const ListScreen(),
-    const CardsScreen(),
-    const ProfileScreen(),
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [];
+    _loadPagesBasedOnUser();
+  }
+
+  Future<void> _loadPagesBasedOnUser() async {
+    final user = ref.read(projectProvider);
+
+    if (user!.hasProject == false) {
+      await ref.read(projectProvider.notifier).loadUserProfile();
+      final userUpdated = ref.watch(projectProvider);
+
+      _pages = userUpdated!.hasProject
+          ? [
+              const CardsScreen(),
+              const ListScreen(),
+              const CardsScreen(),
+              const ProfileScreen(),
+            ]
+          : [
+              const CreateProjectFirstScreen(),
+              const ListScreen(),
+              const CardsScreen(),
+              const ProfileScreen(),
+            ];
+    } else {
+      _pages = [
+        const CardsScreen(),
+        const ListScreen(),
+        const CardsScreen(),
+        const ProfileScreen(),
+      ];
+    }
+    setState(() {}); // 상태 업데이트
+  }
 
   void _onTabTapped(int index) {
     context.go('/${_tabs[index]}');
@@ -47,10 +83,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Main Navigation Screen'),
-      // ),
-      body: _pages[_currentIndex],
+      body: _pages.isNotEmpty
+          ? _pages[_currentIndex]
+          : const CircularProgressIndicator(),
       bottomNavigationBar: SizedBox(
         height: 110,
         child: BottomNavigationBar(

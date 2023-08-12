@@ -21,7 +21,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: const TextStyle(
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
         ),
       ),
       actions: [
