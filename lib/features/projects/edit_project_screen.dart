@@ -1,6 +1,6 @@
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
-import 'package:din/features/projects/edit_title_screen.dart';
+import 'package:din/features/projects/edit_db_title_screen.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/utils.dart';
@@ -27,8 +27,8 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(projectProvider);
     final goalsList = ref.watch(dbGoalListProvider);
-    print(goalsList);
-    print("user : ${user!.uid}");
+    // print(goalsList);
+    // print("user : ${user!.uid}");
 
     return Scaffold(
       appBar: AppBar(
@@ -108,6 +108,27 @@ class GoalListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> goalModalList = [
+      {
+        "text": "Edit image",
+        "icon": Icons.image_search_rounded,
+        "onTap": () {}
+      },
+      {
+        "text": "Edit title",
+        "icon": Icons.build_outlined,
+        "onTap": (context) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EditDbTitleScreen(),
+              settings: RouteSettings(arguments: {"title": title}),
+            ),
+          );
+        }
+      },
+    ];
+
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
@@ -188,20 +209,3 @@ class GoalListTile extends StatelessWidget {
     );
   }
 }
-
-List<Map<String, dynamic>> goalModalList = [
-  {"text": "Edit image", "icon": Icons.image_search_rounded, "onTap": () {}},
-  {
-    "text": "Edit title",
-    "icon": Icons.build_outlined,
-    "onTap": (context, title) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditTitleScreen(
-              title: title,
-            ),
-          ));
-    }
-  },
-];

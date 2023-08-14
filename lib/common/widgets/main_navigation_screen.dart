@@ -85,7 +85,9 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     return Scaffold(
       body: _pages.isNotEmpty
           ? _pages[_currentIndex]
-          : const CircularProgressIndicator(),
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
       bottomNavigationBar: SizedBox(
         height: 110,
         child: BottomNavigationBar(

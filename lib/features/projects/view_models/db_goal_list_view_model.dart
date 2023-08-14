@@ -17,14 +17,16 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
     String? projectId =
         await _projectRepository.getProjectDocIdByCondition(userId);
     if (projectId != null) {
-      state = await _projectRepository.fetchGoalsOfToday(userId, projectId);
+      final data =
+          await _projectRepository.fetchGoalsOfToday(userId, projectId);
+      state = data;
     }
   }
 
   void updateRating(String goalTitle, double rating) {
     state = state.map((goal) {
       if (goal.title == goalTitle) {
-        return goal.copyWith(rating: rating); // copyWith 메서드로 새 객체를 반환합니다.
+        return goal.copyWith(rating: rating);
       }
       return goal;
     }).toList();
@@ -33,7 +35,16 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
   void updateMemo(String goalTitle, String memo) {
     state = state.map((goal) {
       if (goal.title == goalTitle) {
-        return goal.copyWith(memo: memo); // copyWith 메서드로 새 객체를 반환합니다.
+        return goal.copyWith(memo: memo);
+      }
+      return goal;
+    }).toList();
+  }
+
+  void updateTitle(String oldTitle, String newTitle) {
+    state = state.map((goal) {
+      if (goal.title == oldTitle) {
+        return goal.copyWith(title: newTitle);
       }
       return goal;
     }).toList();
@@ -44,7 +55,3 @@ final dbGoalListProvider =
     StateNotifierProvider<DBGoalListViewModel, List<DbGoalModel>>(
   (ref) => DBGoalListViewModel(ref),
 );
-
-// final ratingUpdateProvider = Provider((ref) => ref.watch(ratingProvider));
-
-

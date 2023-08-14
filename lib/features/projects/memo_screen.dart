@@ -70,7 +70,7 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
               child: IconButton(
                 onPressed: _isChanged ? _onSubmitMemo : null,
                 icon: const Icon(
-                  Icons.edit_note_rounded,
+                  Icons.edit_outlined,
                   size: 30,
                 ),
               ),
@@ -88,7 +88,7 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
               setState(() {});
             },
             decoration: InputDecoration(
-              hintText: "Please write a memo",
+              hintText: "Tap here to write a memo",
               hintStyle: TextStyle(
                 color: Colors.grey.shade400,
                 fontWeight: FontWeight.normal,

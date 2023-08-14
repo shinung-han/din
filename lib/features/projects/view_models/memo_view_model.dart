@@ -25,6 +25,8 @@ class MemoViewModel extends StateNotifier<String> {
         );
         state = memo;
       }
+    } else {
+      throw Exception('Error가 발생했습니다');
     }
   }
 }

@@ -170,6 +170,7 @@ class ProjectRepository {
         subCollectionNames.data() as Map<String, dynamic>?;
 
     List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
+    print("goalsTitleList : $goalsTitleList");
 
     List<DbGoalModel> goals = [];
 
@@ -244,6 +245,48 @@ class ProjectRepository {
         .collection(goalTitle)
         .doc(goalId)
         .update({"memo": memo});
+  }
+
+  Future<void> updateTitle(
+    String userId,
+    String oldTitle,
+    String newTitle,
+  ) async {
+    QuerySnapshot projects =
+        await _db.collection("users").doc(userId).collection("project").get();
+
+    WriteBatch batch = _db.batch();
+
+    for (var project in projects.docs) {
+      List<String> goalsTitles = List<String>.from(
+          (project.data() as Map<String, dynamic>)['goalsTitle'] ?? []);
+
+      int index = goalsTitles.indexOf(oldTitle);
+      if (index != -1) {
+        goalsTitles[index] = newTitle;
+      }
+
+      batch.update(project.reference, {'goalsTitle': goalsTitles});
+
+      QuerySnapshot days = await project.reference.collection("goals").get();
+
+      for (var day in days.docs) {
+        CollectionReference goalCollection = day.reference.collection(oldTitle);
+
+        QuerySnapshot goalDocuments = await goalCollection.get();
+
+        for (var goal in goalDocuments.docs) {
+          batch.update(goal.reference, {"title": newTitle});
+
+          Map<String, dynamic> data = goal.data() as Map<String, dynamic>;
+          batch.set(day.reference.collection(newTitle).doc(goal.id),
+              {...data, 'title': newTitle});
+          batch.delete(goal.reference);
+        }
+      }
+    }
+
+    await batch.commit();
   }
 }
 

@@ -31,32 +31,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   double _rating = 3.0;
 
-  final int _currentPage = 0;
-
   final ValueNotifier<double> _scroll = ValueNotifier(0.0);
-
-  // void _onPageChange(int newPage) {
-  //   setState(() {
-  //     _currentPage = newPage;
-  //   });
-  // }
-
-  // void _onProjectDetailTap(int index) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => ProjectDetailScreen(index: index),
-  //       fullscreenDialog: true,
-  //     ),
-  //   );
-  // }
-
-  // void _onDeleteProject(user) {
-  //   ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
-  //   ref.read(projectProvider.notifier).deleteProject(user.uid);
-  //   Navigator.pop(context);
-  //   Navigator.pop(context);
-  // }
 
   void _onCompleteGoalTap(String userId, String title, double rating) {
     ref.read(ratingProvider.notifier).saveRating(userId, title, rating);
@@ -78,7 +53,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
     final goalsList = ref.watch(dbGoalListProvider);
     ref.watch(ratingProvider);
-    // print(goalsList);
+    print(goalsList);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -89,7 +64,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
         controller: _pageController,
         itemCount: goalsList.length,
         scrollDirection: Axis.horizontal,
-        // onPageChanged: _onPageChange,
         itemBuilder: (context, index) {
           final image = goalsList[index].image;
           final title = goalsList[index].title;

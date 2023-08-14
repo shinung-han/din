@@ -26,7 +26,7 @@ class RatingViewModel extends StateNotifier<double> {
         state = rating;
       }
     } else {
-      print("else");
+      throw Exception('Error가 발생했습니다');
     }
   }
 }
