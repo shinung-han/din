@@ -33,6 +33,8 @@ class ProjectViewModel extends StateNotifier<UserProfileModel?> {
     int period,
     goals,
   ) async {
+    state = state!.copyWith(isLoading: true);
+
     await _projectRepository.createProjectWithGoals(
       userId,
       startDate,
@@ -40,7 +42,8 @@ class ProjectViewModel extends StateNotifier<UserProfileModel?> {
       period,
       goals,
     );
-    state = state!.copyWith(hasProject: true);
+
+    state = state!.copyWith(hasProject: true, isLoading: false);
   }
 
   Future<void> deleteProject(String userId) async {

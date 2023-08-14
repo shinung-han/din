@@ -73,6 +73,7 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
       email: credential.user!.email ?? "anon@din.com",
       hasAvatar: false,
       hasProject: false,
+      isLoading: false,
     );
     await _usersRepository.createProfile(profile, name);
     state = AsyncValue.data(profile);

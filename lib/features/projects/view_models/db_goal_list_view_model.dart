@@ -23,6 +23,7 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
       final data =
           await _projectRepository.fetchGoalsOfToday(userId, projectId);
       state = data;
+      if (!_mounted) return;
     }
   }
 
