@@ -53,7 +53,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
     final goalsList = ref.watch(dbGoalListProvider);
     ref.watch(ratingProvider);
-    print(goalsList);
+    // print(goalsList);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

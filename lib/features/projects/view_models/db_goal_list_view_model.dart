@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
   final ProjectRepository _projectRepository;
+  bool _mounted = true;
 
   DBGoalListViewModel(ref)
       : _projectRepository = ref.read(projectRepo),
@@ -16,7 +17,9 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
   Future<void> loadGoalsOfToday(String userId) async {
     String? projectId =
         await _projectRepository.getProjectDocIdByCondition(userId);
-    if (projectId != null) {
+    if (!_mounted) return;
+
+    if (projectId != null && _mounted) {
       final data =
           await _projectRepository.fetchGoalsOfToday(userId, projectId);
       state = data;
@@ -48,6 +51,12 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
       }
       return goal;
     }).toList();
+  }
+
+  @override
+  void dispose() {
+    _mounted = false;
+    super.dispose();
   }
 }
 

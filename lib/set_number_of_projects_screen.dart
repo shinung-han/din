@@ -26,7 +26,6 @@ class _SetNumberOfProjectsState extends State<SetNumberOfProjects> {
   }
 
   void _onNextTap() {
-    print(_numberOfProjects);
     Navigator.push(
       context,
       MaterialPageRoute(

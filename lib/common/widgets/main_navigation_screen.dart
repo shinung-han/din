@@ -33,22 +33,31 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
 
   late int _currentIndex = _tabs.indexOf(widget.tab!);
 
-  late List<Widget> _pages;
+  bool _hasProject = false;
+
+  List<Widget> _pages = [];
 
   @override
   void initState() {
     super.initState();
-    _pages = [];
     _loadPagesBasedOnUser();
   }
 
   Future<void> _loadPagesBasedOnUser() async {
     final user = ref.read(projectProvider);
 
-    if (user!.hasProject == false) {
+    _hasProject = user!.hasProject;
+
+    if (_hasProject) {
+      _pages = [
+        const CardsScreen(),
+        const ListScreen(),
+        const CardsScreen(),
+        const ProfileScreen(),
+      ];
+    } else {
       await ref.read(projectProvider.notifier).loadUserProfile();
       final userUpdated = ref.watch(projectProvider);
-
       _pages = userUpdated!.hasProject
           ? [
               const CardsScreen(),
@@ -62,15 +71,9 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
               const CardsScreen(),
               const ProfileScreen(),
             ];
-    } else {
-      _pages = [
-        const CardsScreen(),
-        const ListScreen(),
-        const CardsScreen(),
-        const ProfileScreen(),
-      ];
     }
-    setState(() {}); // 상태 업데이트
+
+    setState(() {});
   }
 
   void _onTabTapped(int index) {
@@ -80,8 +83,30 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     });
   }
 
+  void _changePage(bool hasProject) {
+    _pages = hasProject
+        ? [
+            const CardsScreen(),
+            const ListScreen(),
+            const CardsScreen(),
+            const ProfileScreen(),
+          ]
+        : [
+            const CreateProjectFirstScreen(),
+            const ListScreen(),
+            const CardsScreen(),
+            const ProfileScreen(),
+          ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final hasProject = ref.watch(projectProvider)!.hasProject;
+    if (_hasProject != hasProject) {
+      _hasProject = hasProject;
+      _changePage(hasProject);
+    }
+
     return Scaffold(
       body: _pages.isNotEmpty
           ? _pages[_currentIndex]

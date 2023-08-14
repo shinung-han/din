@@ -1,3 +1,4 @@
+import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/edit_db_title_screen.dart';
@@ -19,8 +20,9 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
   void _onDeleteProject(user) {
     ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
     ref.read(projectProvider.notifier).deleteProject(user.uid);
-    Navigator.pop(context);
-    Navigator.pop(context);
+
+    Navigator.popUntil(
+        context, ModalRoute.withName(MainNavigationScreen.routeName));
   }
 
   @override

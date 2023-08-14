@@ -41,13 +41,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void _onSubmitTap() {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
-        print('통과');
         setState(() {
           _isButtonEnabled = true;
         });
       }
     } else {
-      print('스낵바 출동');
+      throw Exception('Error가 발생했습니다');
     }
   }
 

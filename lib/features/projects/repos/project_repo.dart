@@ -155,9 +155,9 @@ class ProjectRepository {
         .doc(formattedDate)
         .get();
 
-    // if (!goalDoc.exists) {
-    //   throw Exception("해당 날짜의 문서가 없습니다.");
-    // }
+    if (!goalDoc.exists) {
+      return [];
+    }
 
     DocumentSnapshot subCollectionNames = await _db
         .collection("users")
@@ -170,7 +170,6 @@ class ProjectRepository {
         subCollectionNames.data() as Map<String, dynamic>?;
 
     List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
-    print("goalsTitleList : $goalsTitleList");
 
     List<DbGoalModel> goals = [];
 
