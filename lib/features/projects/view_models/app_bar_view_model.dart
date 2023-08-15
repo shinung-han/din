@@ -19,8 +19,10 @@ class AppBarViewModel extends StateNotifier<DateModel?> {
     if (!_mounted) return;
 
     if (docId != null) {
-      state = await _projectRepository.getProjectDate(uid, docId);
+      DateModel? dateModel =
+          await _projectRepository.getProjectDate(uid, docId);
       if (!_mounted) return;
+      state = dateModel;
     }
   }
 

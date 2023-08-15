@@ -200,6 +200,13 @@ class ProjectRepository {
     }
 
     await projectDocRef.delete();
+
+    Reference userStorageRef = _storage.ref('project/$uid');
+    ListResult result = await userStorageRef.listAll();
+
+    for (Reference ref in result.items) {
+      await ref.delete();
+    }
   }
 
   Future<void> saveRating(
