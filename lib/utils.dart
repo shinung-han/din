@@ -69,7 +69,7 @@ List<Widget> _buildListItems(
         child: CommonButton(
           text: item['text'],
           icon: item['icon'],
-          onTap: () => item['onTap'](context),
+          onTap: () => item['onTap'](),
         ),
       ),
     );

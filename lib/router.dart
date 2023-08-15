@@ -3,6 +3,7 @@ import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/features/authentication/sign_up_screen.dart';
 import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/features/onboarding/tutorial_screen.dart';
+import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/list_of_goals_screen.dart';
 import 'package:din/features/projects/set_date_screen.dart';
 import 'package:din/splash_screen.dart';
@@ -64,6 +65,11 @@ final routerProvider = Provider((ref) {
                 builder: (context, state) => const ListOfGoalsScreen(),
               ),
             ],
+          ),
+          GoRoute(
+            path: EditProjectScreen.routeURL,
+            name: EditProjectScreen.routeName,
+            builder: (context, state) => const EditProjectScreen(),
           ),
         ],
       ),

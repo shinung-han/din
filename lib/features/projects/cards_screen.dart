@@ -11,6 +11,7 @@ import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CardsScreen extends ConsumerStatefulWidget {
   const CardsScreen({super.key});
@@ -30,6 +31,20 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     });
 
   double _rating = 3.0;
+
+  late List<Map<String, dynamic>> settingModalList;
+
+  @override
+  void initState() {
+    super.initState();
+    settingModalList = [
+      {
+        "text": "Edit project",
+        "icon": Icons.build_outlined,
+        "onTap": () => _onEditProjectTap(),
+      },
+    ];
+  }
 
   final ValueNotifier<double> _scroll = ValueNotifier(0.0);
 
@@ -141,6 +156,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                   children: [
                                     Gaps.v16,
                                     Text(
+                                      textAlign: TextAlign.center,
                                       goalsList[index].title,
                                       style: const TextStyle(
                                         fontSize: 20,
@@ -283,20 +299,24 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     );
   }
 
-  List<Map<String, dynamic>> settingModalList = [
-    {
-      "text": "Edit project",
-      "icon": Icons.build_outlined,
-      "onTap": (context) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const EditProjectScreen(),
-          ),
-        );
-      }
-    },
-  ];
+  // List<Map<String, dynamic>> settingModalList = [
+  //   {
+  //     "text": "Edit project",
+  //     "icon": Icons.build_outlined,
+  //     "onTap": (context) {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => const EditProjectScreen(),
+  //         ),
+  //       );
+  //     }
+  //   },
+  // ];
+
+  void _onEditProjectTap() {
+    context.go('/home/${EditProjectScreen.routeURL}');
+  }
 
   void _onCompleteTap(String userId, String title) {
     showModalBottomSheet(

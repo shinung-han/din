@@ -12,7 +12,12 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class WrapUpScreen extends ConsumerStatefulWidget {
-  const WrapUpScreen({super.key});
+  final bool isWrapUp;
+
+  const WrapUpScreen({
+    required this.isWrapUp,
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _WrapUpScreenState();
@@ -79,6 +84,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                                     title: title,
                                     id: id,
                                     index: 1,
+                                    isWrapUp: widget.isWrapUp,
                                   ),
                                   Gaps.v8,
                                 ],

@@ -11,7 +11,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EditDbTitleScreen extends ConsumerStatefulWidget {
-  const EditDbTitleScreen({super.key});
+  final String? title;
+
+  const EditDbTitleScreen({
+    required this.title,
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -25,15 +30,23 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  late final TextEditingController _titleController = TextEditingController()
-    ..addListener(() {
-      updateButtonState();
-    });
+  late final TextEditingController _titleController =
+      TextEditingController(text: widget.title)
+        ..addListener(() {
+          updateButtonState();
+        });
 
   void updateButtonState() {
-    setState(() {
-      isButtonEnabled = _titleController.text.length > 2;
-    });
+    if (widget.title == _titleController.text ||
+        _titleController.text.isEmpty) {
+      setState(() {
+        isButtonEnabled = false;
+      });
+    } else {
+      setState(() {
+        isButtonEnabled = true;
+      });
+    }
   }
 
   void _onDeleteTap(controller) {
@@ -49,6 +62,8 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
     ref
         .read(dbGoalListProvider.notifier)
         .updateTitle(oldTitle, _titleController.text);
+    Navigator.pop(context);
+    Navigator.pop(context);
     showErrorSnack(context, "The title has been changed");
   }
 
@@ -63,8 +78,6 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(projectProvider);
-    final arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
 
     return GestureDetector(
       onTap: _onScaffoldTap,
@@ -82,8 +95,6 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
                     controller: _titleController,
                     cursorHeight: Sizes.size16,
                     autocorrect: false,
-                    // onFieldSubmitted: (_) =>
-                    //     _onSubmit(user.uid, arguments["title"]!),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     maxLength: 20,
                     decoration: InputDecoration(
@@ -109,22 +120,12 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
                     ),
                   ),
                   Gaps.v10,
-                  Padding(
-                    padding: const EdgeInsets.only(left: Sizes.size2),
+                  const Padding(
+                    padding: EdgeInsets.only(left: Sizes.size2),
                     child: Text(
                       'Titles can be changed once every 3 days.',
                       style: TextStyle(
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-                  ),
-                  Gaps.v4,
-                  Padding(
-                    padding: const EdgeInsets.only(left: Sizes.size2),
-                    child: Text(
-                      "Title up to 20 characters",
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -137,7 +138,7 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
           height: 90,
           child: SubmitButton(
             disabled: isButtonEnabled,
-            onTap: () => _onSubmit(user!.uid, arguments["title"]!),
+            onTap: () => _onSubmit(user!.uid, widget.title!),
             buttonText: 'Edit',
             icon: Icons.edit_outlined,
           ),

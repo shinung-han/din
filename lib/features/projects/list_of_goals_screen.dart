@@ -38,7 +38,9 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const WrapUpScreen(),
+          builder: (context) => const WrapUpScreen(
+            isWrapUp: true,
+          ),
         ),
       );
     }
@@ -50,109 +52,131 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
     final goals = ref.watch(goalListProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.center,
-          child: Padding(
-            padding: EdgeInsets.only(left: Sizes.size24),
-            child: Text(
-              'Create Project',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          if (goals.isNotEmpty)
-            GestureDetector(
-              onTap: _onDeleteGoalsTap,
-              child: const Icon(
-                Icons.remove_circle_outline_rounded,
-                size: 30,
-              ),
-            ),
-          GestureDetector(
-            onTap: _onAddGoalTap,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Icon(
-                Icons.add_circle_outline_rounded,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: isEmpty
-          ? Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-              child: Column(
-                children: [
-                  const AuthHeader(
-                    title: 'Create goals',
-                    subTitle:
-                        'Create your own fantastic project to become a better version of yourself than yesterday.',
-                  ),
-                  Gaps.v20,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.north_east_rounded,
-                        color: Colors.grey.shade400,
-                        size: 50,
-                      ),
-                      Icon(
-                        Icons.add_circle_outline_rounded,
-                        color: Colors.grey.shade400,
-                        size: 50,
-                      ),
-                    ],
-                  ),
-                  Gaps.v10,
-                  Text(
-                    "Tap the icon in the top right to add a goal",
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.only(left: Sizes.size24),
+                  child: Text(
+                    'Create Project',
                     style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                ],
+                ),
               ),
-            )
-          : Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-                top: 10,
-              ),
-              child: ListView.builder(
-                itemCount: goals.length,
-                itemBuilder: (context, index) {
-                  final hasImage = goals[index].image != null;
-                  final image = goals[index].image;
-                  final title = goals[index].title;
-                  final id = goals[index].id;
-
-                  return Column(
-                    children: [
-                      GoalListTile(
-                        hasImage: hasImage,
-                        pickedImage: image,
-                        title: title,
-                        id: id,
-                        index: index,
-                      ),
-                      Gaps.v8,
-                    ],
-                  );
-                },
-              ),
+              actions: [
+                if (goals.isNotEmpty)
+                  GestureDetector(
+                    onTap: () => showModalBottomWithText(
+                      context,
+                      "Are you sure you want to delete all goals?",
+                      () {
+                        ref
+                            .read(goalListProvider.notifier)
+                            .deleteAllGoals(context);
+                      },
+                    ),
+                    child: const Icon(
+                      Icons.remove_circle_outline_rounded,
+                      size: 30,
+                    ),
+                  ),
+                GestureDetector(
+                  onTap: _onAddGoalTap,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Icon(
+                      Icons.add_circle_outline_rounded,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ],
             ),
+            isEmpty
+                ? SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Column(
+                            children: [
+                              const AuthHeader(
+                                title: 'Create goals',
+                                subTitle:
+                                    'Create your own fantastic project to become a better version of yourself than yesterday.',
+                              ),
+                              Gaps.v20,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.north_east_rounded,
+                                    color: Colors.grey.shade400,
+                                    size: 50,
+                                  ),
+                                  Icon(
+                                    Icons.add_circle_outline_rounded,
+                                    color: Colors.grey.shade400,
+                                    size: 50,
+                                  ),
+                                ],
+                              ),
+                              Gaps.v10,
+                              Text(
+                                "Tap the icon in the top right to add a goal",
+                                style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : SliverPadding(
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                      top: 10,
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final hasImage = goals[index].image != null;
+                          final image = goals[index].image;
+                          final title = goals[index].title;
+                          final id = goals[index].id;
+
+                          return Column(
+                            children: [
+                              GoalListTile(
+                                hasImage: hasImage,
+                                pickedImage: image,
+                                title: title,
+                                id: id,
+                                index: index,
+                              ),
+                              Gaps.v8,
+                            ],
+                          );
+                        },
+                        childCount: goals.length,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomAppBar(
         height: 90,
         child: CommonButton(
@@ -163,66 +187,6 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
           icon: Icons.arrow_forward_ios_rounded,
         ),
       ),
-    );
-  }
-
-  void _onDeleteGoalsTap() {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: Sizes.size20,
-                  left: Sizes.size16,
-                  right: Sizes.size16,
-                ),
-                child: Column(
-                  children: [
-                    Gaps.v20,
-                    const SizedBox(
-                      height: 50,
-                      child: Text(
-                        "Are you sure you want to delete all goals?",
-                        style: TextStyle(
-                          fontSize: 17,
-                        ),
-                      ),
-                    ),
-                    Gaps.v20,
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        icon: Icons.remove_circle_outline_rounded,
-                        text: 'Yes',
-                        onTap: () => ref
-                            .read(goalListProvider.notifier)
-                            .deleteAllGoals(context),
-                      ),
-                    ),
-                    Gaps.v16,
-                    SizedBox(
-                      height: 66,
-                      child: CommonButton(
-                        text: 'Cancel',
-                        bgColor: Colors.black,
-                        color: Colors.white,
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ),
-                    Gaps.v12,
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class EditProjectScreen extends ConsumerStatefulWidget {
+  static const routeName = 'edit_project';
+  static const routeURL = 'edit_project';
+
   const EditProjectScreen({super.key});
 
   @override
@@ -33,72 +36,77 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
     // print("user : ${user!.uid}");
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.center,
-          child: Padding(
-            padding: EdgeInsets.only(left: Sizes.size24),
-            child: Text(
-              'Edit Project',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () => showModalBottomWithText(
-              context,
-              "Are you sure you want to delete the project?",
-              () => _onDeleteProject(user),
-            ),
-            child: const Icon(
-              Icons.remove_circle_outline_rounded,
-              size: 30,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Icon(
-                Icons.edit_calendar_outlined,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 10,
-          right: 10,
-          top: 10,
-        ),
-        child: ListView.builder(
-          itemCount: goalsList.length,
-          itemBuilder: (context, index) {
-            final image = goalsList[index].image;
-            final title = goalsList[index].title;
-
-            return Column(
-              children: [
-                GoalListTile(
-                  title: title,
-                  image: image ?? '',
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.only(left: Sizes.size24),
+                  child: Text(
+                    'Edit Project',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-                Gaps.v8,
+              ),
+              actions: [
+                GestureDetector(
+                  onTap: () => showModalBottomWithText(
+                    context,
+                    "Are you sure you want to delete the project?",
+                    () => _onDeleteProject(user),
+                  ),
+                  child: const Icon(
+                    Icons.remove_circle_outline_rounded,
+                    size: 30,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Icon(
+                      Icons.edit_calendar_outlined,
+                      size: 30,
+                    ),
+                  ),
+                ),
               ],
-            );
-          },
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 10,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final image = goalsList[index].image;
+                  final title = goalsList[index].title;
+
+                  return Column(
+                    children: [
+                      GoalListTile(
+                        title: title,
+                        image: image ?? '',
+                      ),
+                      Gaps.v8,
+                    ],
+                  );
+                }, childCount: goalsList.length),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class GoalListTile extends StatelessWidget {
+class GoalListTile extends StatefulWidget {
   final String title;
   final String image;
 
@@ -109,8 +117,16 @@ class GoalListTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    List<Map<String, dynamic>> goalModalList = [
+  State<GoalListTile> createState() => _GoalListTileState();
+}
+
+class _GoalListTileState extends State<GoalListTile> {
+  late List<Map<String, dynamic>> goalModalList;
+
+  @override
+  void initState() {
+    super.initState();
+    goalModalList = [
       {
         "text": "Edit image",
         "icon": Icons.image_search_rounded,
@@ -119,18 +135,22 @@ class GoalListTile extends StatelessWidget {
       {
         "text": "Edit title",
         "icon": Icons.build_outlined,
-        "onTap": (context) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const EditDbTitleScreen(),
-              settings: RouteSettings(arguments: {"title": title}),
-            ),
-          );
-        }
+        "onTap": _onEditTitleTap
       },
     ];
+  }
 
+  void _onEditTitleTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditDbTitleScreen(title: widget.title),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
@@ -142,7 +162,7 @@ class GoalListTile extends StatelessWidget {
         height: 80,
         child: Row(
           children: [
-            image != ""
+            widget.image != ""
                 ? Container(
                     width: 80,
                     height: 80,
@@ -153,7 +173,7 @@ class GoalListTile extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: NetworkImage(
-                          image,
+                          widget.image,
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -187,7 +207,7 @@ class GoalListTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      widget.title,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,

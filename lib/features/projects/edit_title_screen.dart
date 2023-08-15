@@ -2,6 +2,7 @@ import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,9 +35,16 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
         });
 
   void updateButtonState() {
-    setState(() {
-      isButtonEnabled = _titleController.text.length > 2;
-    });
+    if (widget.title == _titleController.text ||
+        _titleController.text.isEmpty) {
+      setState(() {
+        isButtonEnabled = false;
+      });
+    } else {
+      setState(() {
+        isButtonEnabled = true;
+      });
+    }
   }
 
   void _onDeleteTap(controller) {
@@ -52,6 +60,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
         );
     Navigator.pop(context);
     Navigator.pop(context);
+    showErrorSnack(context, "The title has been changed");
   }
 
   bool isButtonEnabled = false;
@@ -73,7 +82,6 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
                     controller: _titleController,
                     cursorHeight: Sizes.size16,
                     autocorrect: false,
-                    onFieldSubmitted: (_) => _onSubmit(),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     maxLength: 20,
                     decoration: InputDecoration(
