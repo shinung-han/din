@@ -3,7 +3,7 @@ import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
-import 'package:din/features/projects/view_models/db_title_project_view_model.dart';
+import 'package:din/features/projects/view_models/db_edit_title_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';

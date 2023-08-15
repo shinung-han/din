@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/edit_db_title_screen.dart';
+import 'package:din/features/projects/view_models/db_edit_image_view_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProjectScreen extends ConsumerStatefulWidget {
   static const routeName = 'edit_project';
@@ -53,23 +57,16 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                 ),
               ),
               actions: [
-                GestureDetector(
-                  onTap: () => showModalBottomWithText(
-                    context,
-                    "Are you sure you want to delete the project?",
-                    () => _onDeleteProject(user),
-                  ),
-                  child: const Icon(
-                    Icons.remove_circle_outline_rounded,
-                    size: 30,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Icon(
-                      Icons.edit_calendar_outlined,
+                Padding(
+                  padding: const EdgeInsets.only(right: Sizes.size5),
+                  child: IconButton(
+                    onPressed: () => showModalBottomWithText(
+                      context,
+                      "Are you sure you want to delete the project?",
+                      () => _onDeleteProject(user),
+                    ),
+                    icon: const Icon(
+                      Icons.remove_circle_outline_rounded,
                       size: 30,
                     ),
                   ),
@@ -90,6 +87,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                   return Column(
                     children: [
                       GoalListTile(
+                        userId: user!.uid,
                         title: title,
                         image: image ?? '',
                       ),
@@ -106,22 +104,26 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
   }
 }
 
-class GoalListTile extends StatefulWidget {
+class GoalListTile extends ConsumerStatefulWidget {
+  final String userId;
   final String title;
   final String image;
 
   const GoalListTile({
     super.key,
+    required this.userId,
     required this.title,
     required this.image,
   });
 
   @override
-  State<GoalListTile> createState() => _GoalListTileState();
+  ConsumerState<GoalListTile> createState() => _GoalListTileState();
 }
 
-class _GoalListTileState extends State<GoalListTile> {
+class _GoalListTileState extends ConsumerState<GoalListTile> {
   late List<Map<String, dynamic>> goalModalList;
+
+  final ImagePicker _imagePicker = ImagePicker();
 
   @override
   void initState() {
@@ -130,7 +132,7 @@ class _GoalListTileState extends State<GoalListTile> {
       {
         "text": "Edit image",
         "icon": Icons.image_search_rounded,
-        "onTap": () {}
+        "onTap": () => _onEditImage(widget.userId, widget.image),
       },
       {
         "text": "Edit title",
@@ -138,6 +140,27 @@ class _GoalListTileState extends State<GoalListTile> {
         "onTap": _onEditTitleTap
       },
     ];
+  }
+
+  Future<void> _onEditImage(
+    String userId,
+    String oldImageUrl,
+  ) async {
+    final pickedFile = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      final newImageUrl = await ref.read(editImageProvider.notifier).editImage(
+            userId,
+            widget.title,
+            oldImageUrl,
+            File(pickedFile.path),
+          );
+
+      ref
+          .read(dbGoalListProvider.notifier)
+          .updateImage(oldImageUrl, newImageUrl);
+    }
   }
 
   void _onEditTitleTap() {
@@ -151,6 +174,7 @@ class _GoalListTileState extends State<GoalListTile> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.image);
     return Container(
       decoration: BoxDecoration(
           border: Border.all(

@@ -54,6 +54,15 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
     }).toList();
   }
 
+  void updateImage(String oldImageUrl, String newImageUrl) {
+    state = state.map((goal) {
+      if (goal.image == oldImageUrl) {
+        return goal.copyWith(image: newImageUrl);
+      }
+      return goal;
+    }).toList();
+  }
+
   @override
   void dispose() {
     _mounted = false;

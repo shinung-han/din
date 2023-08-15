@@ -299,22 +299,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     );
   }
 
-  // List<Map<String, dynamic>> settingModalList = [
-  //   {
-  //     "text": "Edit project",
-  //     "icon": Icons.build_outlined,
-  //     "onTap": (context) {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => const EditProjectScreen(),
-  //         ),
-  //       );
-  //     }
-  //   },
-  // ];
-
   void _onEditProjectTap() {
+    Navigator.pop(context);
     context.go('/home/${EditProjectScreen.routeURL}');
   }
 
