@@ -5,6 +5,7 @@ import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -60,9 +61,22 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
 
   bool isButtonEnabled = false;
 
-  void _onSubmit() {
+  void _onSubmit(goalList) {
     final id = DateTime.now().millisecondsSinceEpoch;
     final title = titleController.text;
+    bool isDuplicate = false;
+
+    for (var goal in goalList) {
+      if (goal.title.contains(title)) {
+        isDuplicate = true;
+        break;
+      }
+    }
+
+    if (isDuplicate) {
+      showErrorSnack(context, "This title exists. Try another");
+      return;
+    }
 
     if (_imageFile == null) {
       ref.read(goalListProvider.notifier).addGoal(
@@ -88,6 +102,7 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final goalList = ref.watch(goalListProvider);
 
     return GestureDetector(
       onTap: _onScaffoldTap,
@@ -240,7 +255,7 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
           child: SubmitButton(
             buttonText: 'Create',
             disabled: isButtonEnabled,
-            onTap: _onSubmit,
+            onTap: () => _onSubmit(goalList),
             icon: Icons.add_circle_outline_rounded,
           ),
         ),

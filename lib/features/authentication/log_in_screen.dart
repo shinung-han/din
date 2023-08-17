@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/features/authentication/log_in_form_screen.dart';
 import 'package:din/features/authentication/sign_up_form_screen.dart';
-import 'package:din/features/authentication/widgets/auth_policy.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/features/onboarding/tutorial_screen.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
@@ -14,11 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 enum LoginPlatform {
-  facebook,
   google,
-  kakao,
-  naver,
-  apple,
   none, // logout
 }
 
@@ -136,7 +131,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
       bottomNavigationBar: const BottomAppBar(
-        child: AuthPolicy(),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 20,
+            // vertical: 20,
+          ),
+          child: Text(
+            'By continuing, you agree to our Terms of Service and acknowledge that you have read our Privacy Policy to learn how we collect, use, and share your data.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+            ),
+          ),
+        ),
       ),
     );
   }
