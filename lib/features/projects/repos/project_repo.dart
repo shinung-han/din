@@ -176,11 +176,12 @@ class ProjectRepository {
       for (var subDoc in subCollectionSnapshot.docs) {
         goals.add(
           DbGoalModel(
-              date: subDoc['date'],
-              image: subDoc['image'],
-              memo: subDoc['memo'],
-              rating: subDoc['rating'],
-              title: subDoc['title']),
+            date: subDoc['date'],
+            image: subDoc['image'],
+            memo: subDoc['memo'],
+            rating: subDoc['rating'],
+            title: subDoc['title'],
+          ),
         );
       }
     }
@@ -341,54 +342,6 @@ class ProjectRepository {
 
     return newImageUrl;
   }
-
-  // Future<String> updateImage(
-  //   String userId,
-  //   String title,
-  //   String? oldImageUrl,
-  //   File newImageFile,
-  // ) async {
-  //   Reference newImageRef =
-  //       _storage.ref('project/$userId/${newImageFile.path.split('/').last}');
-
-  //   UploadTask uploadTask = newImageRef.putFile(newImageFile);
-  //   TaskSnapshot snapshot = await uploadTask.whenComplete(() => {});
-  //   String newImageUrl = await snapshot.ref.getDownloadURL();
-
-  //   QuerySnapshot projects =
-  //       await _db.collection("users").doc(userId).collection("project").get();
-
-  //   WriteBatch batch = _db.batch();
-
-  //   for (var project in projects.docs) {
-  //     List<String> goalsTitles = List<String>.from(
-  //         (project.data() as Map<String, dynamic>)['goalsTitle'] ?? []);
-
-  //     if (goalsTitles.contains(title)) {
-  //       QuerySnapshot days = await project.reference.collection("goals").get();
-
-  //       for (var day in days.docs) {
-  //         CollectionReference goalCollection = day.reference.collection(title);
-
-  //         QuerySnapshot goalDocuments = await goalCollection.get();
-
-  //         for (var goal in goalDocuments.docs) {
-  //           batch.update(goal.reference, {"image": newImageUrl});
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   await batch.commit();
-
-  //   if (oldImageUrl != null && oldImageUrl.isNotEmpty) {
-  //     Reference oldImageRef = FirebaseStorage.instance.refFromURL(oldImageUrl);
-
-  //     await oldImageRef.delete();
-  //   }
-
-  //   return newImageUrl;
-  // }
 }
 
 final projectRepo = Provider((ref) => ProjectRepository());

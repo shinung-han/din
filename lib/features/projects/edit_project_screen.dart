@@ -150,6 +150,12 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
+      final currentContext = context;
+      if (!mounted) return;
+
+      Navigator.popUntil(
+          currentContext, ModalRoute.withName(EditProjectScreen.routeURL));
+
       final newImageUrl = await ref.read(editImageProvider.notifier).editImage(
             userId,
             widget.title,
@@ -159,7 +165,7 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
 
       ref
           .read(dbGoalListProvider.notifier)
-          .updateImage(oldImageUrl, newImageUrl);
+          .updateImage(widget.title, oldImageUrl, newImageUrl);
     }
   }
 
