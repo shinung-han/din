@@ -259,10 +259,12 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          height: 90,
           child: SubmitButton(
             disabled: _isButtonEnabled,
             onTap: _onSubmit,
             buttonText: 'Sign Up',
+            icon: Icons.login_rounded,
           ),
         ),
       ),

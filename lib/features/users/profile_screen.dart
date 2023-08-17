@@ -11,7 +11,7 @@ import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:din/features/users/widgets/avatar.dart';
 import 'package:din/features/users/widgets/profile_list_tile.dart';
 import 'package:din/splash_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,43 +25,11 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  final bool _isEdit = false;
+  // final bool _isEdit = false;
 
   void _onLogoutTap() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: const Text('Are you sure?'),
-        // content: const Text("Please dont go"),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text(
-              'No',
-              style: TextStyle(
-                fontSize: 14,
-              ),
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          CupertinoDialogAction(
-            isDestructiveAction: true,
-            child: const Text(
-              'Yes',
-              style: TextStyle(
-                fontSize: 14,
-              ),
-            ),
-            onPressed: () {
-              ref.read(authRepo).signOut();
-              // TODO LoginScreen으로 경로 수정해야함
-              // [ ] 되는지 테스트해보기
-              // context.go(LoginScreen.routeURL);
-              context.go(SplashScreen.routeURL);
-            },
-          ),
-        ],
-      ),
-    );
+    ref.read(authRepo).signOut();
+    context.go(SplashScreen.routeURL);
   }
 
   void _onChangePasswordTap() {
@@ -184,7 +152,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     subTitle: "You'll be redirected to the login page",
                     leadingIcon: Icons.logout_rounded,
                     isLogo: false,
-                    onPressed: _onLogoutTap,
+                    onPressed: () => showModalBottomWithText(
+                      context,
+                      "Are you sure you want to log out?",
+                      _onLogoutTap,
+                    ),
                   ),
                   ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 20),

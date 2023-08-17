@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/authentication/reset_password_screen.dart';
 import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/features/authentication/view_models/login_view_model.dart';
 import 'package:din/utils.dart';
@@ -80,7 +81,12 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
   }
 
   void _onForgotPasswordTap() {
-    print('Password 잃어버려쪄염');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ResetPasswordScreen(),
+      ),
+    );
   }
 
   // [ ] 오류 message들 쉽게 변경
@@ -207,7 +213,6 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
                             ),
                             Gaps.v20,
                             GestureDetector(
-                              // TODO 비밀번호 찾기 로직
                               onTap: _onForgotPasswordTap,
                               child: Text(
                                 'Forgot your Password?',
@@ -227,10 +232,12 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          height: 90,
           child: SubmitButton(
             disabled: _isButtonEnabled,
             onTap: _onSubmit,
             buttonText: 'Log In',
+            icon: Icons.alternate_email_rounded,
           ),
         ),
       ),

@@ -1,6 +1,5 @@
 import 'package:din/features/authentication/log_in_screen.dart';
 import 'package:din/features/authentication/repos/authentication_repo.dart';
-import 'package:din/features/authentication/sign_up_screen.dart';
 import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/features/onboarding/tutorial_screen.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
@@ -20,8 +19,7 @@ final routerProvider = Provider((ref) {
     redirect: (context, state) {
       final isLoggedIn = ref.read(authRepo).isLoggedIn;
       if (!isLoggedIn) {
-        if (state.matchedLocation != SignUpScreen.routeURL &&
-            state.matchedLocation != LoginScreen.routeURL) {
+        if (state.matchedLocation != LoginScreen.routeURL) {
           return LoginScreen.routeURL;
         }
       }
@@ -38,11 +36,6 @@ final routerProvider = Provider((ref) {
         path: LoginScreen.routeURL,
         name: LoginScreen.routeName,
         builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: SignUpScreen.routeURL,
-        name: SignUpScreen.routeName,
-        builder: (context, state) => const SignUpScreen(),
       ),
       GoRoute(
         path: '/:tab(home|list|chart|profile)',

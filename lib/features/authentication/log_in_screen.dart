@@ -10,7 +10,6 @@ import 'package:din/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -115,14 +114,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Gaps.v80,
                 Gaps.v60,
                 CommonButton(
-                  text: 'Log In',
-                  icon: FontAwesomeIcons.user,
+                  text: 'Log In with Email',
+                  icon: Icons.alternate_email_rounded,
                   onTap: _onUseEmailLoginTap,
                 ),
                 Gaps.v16,
                 CommonButton(
                   text: "Sign Up",
-                  icon: FontAwesomeIcons.francSign,
+                  icon: Icons.login_rounded,
                   onTap: _onSignUpTap,
                 ),
                 Gaps.v16,
