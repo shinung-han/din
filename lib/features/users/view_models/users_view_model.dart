@@ -74,6 +74,7 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
       hasAvatar: false,
       hasProject: false,
       isLoading: false,
+      startDate: DateTime.now(),
     );
     await _usersRepository.createProfile(profile, name);
     state = AsyncValue.data(profile);

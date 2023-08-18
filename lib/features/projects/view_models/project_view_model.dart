@@ -19,10 +19,10 @@ class ProjectViewModel extends StateNotifier<UserProfileModel?> {
     }
   }
 
-  Future<void> updateHasProject(bool value) async {
+  Future<void> updateHasProject(bool value, DateTime startDate) async {
     if (state == null) return;
 
-    await _projectRepository.updateProjectStatus(state!.uid, value);
+    await _projectRepository.updateProjectStatus(state!.uid, value, startDate);
     state = state!.copyWith(hasProject: value);
   }
 
@@ -43,7 +43,11 @@ class ProjectViewModel extends StateNotifier<UserProfileModel?> {
       goals,
     );
 
-    state = state!.copyWith(hasProject: true, isLoading: false);
+    state = state!.copyWith(
+      hasProject: true,
+      isLoading: false,
+      startDate: startDate,
+    );
   }
 
   Future<void> deleteProject(String userId) async {

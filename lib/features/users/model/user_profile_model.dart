@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserProfileModel {
   final String uid;
   final String name;
@@ -7,6 +9,7 @@ class UserProfileModel {
   final bool hasAvatar;
   final bool hasProject;
   final bool isLoading;
+  final DateTime? startDate;
 
   UserProfileModel({
     required this.uid,
@@ -17,6 +20,7 @@ class UserProfileModel {
     required this.hasAvatar,
     required this.hasProject,
     required this.isLoading,
+    this.startDate,
   });
 
   UserProfileModel.empty()
@@ -27,7 +31,8 @@ class UserProfileModel {
         link = "",
         hasAvatar = false,
         hasProject = false,
-        isLoading = false;
+        isLoading = false,
+        startDate = DateTime.now();
 
   UserProfileModel.fromJson(Map<String, dynamic> json)
       : uid = json["uid"],
@@ -37,7 +42,8 @@ class UserProfileModel {
         link = json["link"],
         hasAvatar = json["hasAvatar"],
         hasProject = json["hasProject"],
-        isLoading = json["isLoading"];
+        isLoading = json["isLoading"],
+        startDate = (json["startDate"] as Timestamp?)?.toDate();
 
   Map<String, dynamic> toJson(String name) {
     return {
@@ -49,6 +55,7 @@ class UserProfileModel {
       "hasAvatar": false,
       "hasProject": false,
       "isLoading": false,
+      "startDate": startDate,
     };
   }
 
@@ -61,6 +68,7 @@ class UserProfileModel {
     bool? hasAvatar,
     bool? hasProject,
     bool? isLoading,
+    DateTime? startDate,
   }) {
     return UserProfileModel(
       uid: uid ?? this.uid,
@@ -71,6 +79,7 @@ class UserProfileModel {
       hasAvatar: hasAvatar ?? this.hasAvatar,
       hasProject: hasProject ?? this.hasProject,
       isLoading: isLoading ?? this.isLoading,
+      startDate: startDate ?? this.startDate,
     );
   }
 }

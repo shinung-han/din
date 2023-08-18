@@ -64,11 +64,9 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(projectProvider);
     final userId = user!.uid;
-    // print(user.uid);
-
     final goalsList = ref.watch(dbGoalListProvider);
+    print("cardsScreen : $goalsList");
     ref.watch(ratingProvider);
-    // print(goalsList);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

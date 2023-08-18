@@ -25,7 +25,9 @@ class EditProjectScreen extends ConsumerStatefulWidget {
 
 class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
   void _onDeleteProject(user) {
-    ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
+    ref
+        .read(projectProvider.notifier)
+        .updateHasProject(!user.hasProject, DateTime.now());
     ref.read(projectProvider.notifier).deleteProject(user.uid);
 
     Navigator.popUntil(

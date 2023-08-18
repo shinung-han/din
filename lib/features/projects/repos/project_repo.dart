@@ -14,8 +14,11 @@ class ProjectRepository {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // hasProject false -> true로
-  Future<void> updateProjectStatus(String uid, bool hasProject) async {
-    await _db.collection("users").doc(uid).update({"hasProject": hasProject});
+  Future<void> updateProjectStatus(
+      String uid, bool hasProject, DateTime startDate) async {
+    await _db.collection("users").doc(uid).update(
+      {"hasProject": hasProject, "startDate": startDate},
+    );
   }
 
   // hasProject 정보 가져오기
@@ -44,7 +47,11 @@ class ProjectRepository {
     int period,
     List<GoalModel> goals,
   ) async {
-    await updateProjectStatus(userId, true);
+    await updateProjectStatus(
+      userId,
+      true,
+      startDate,
+    );
 
     DocumentReference projectDoc =
         await _db.collection("users").doc(userId).collection("project").add({

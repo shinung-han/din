@@ -1,6 +1,7 @@
 import 'package:din/features/projects/cards_screen.dart';
 import 'package:din/features/projects/create_project_first_screen.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
+import 'package:din/features/projects/view_models/quote_screen.dart';
 import 'package:din/features/users/profile_screen.dart';
 import 'package:din/list_screen.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
   bool _hasProject = false;
 
   List<Widget> _pages = [];
+
+  late int _difference = 0;
 
   @override
   void initState() {
@@ -83,14 +86,31 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     });
   }
 
+  void _differeceDate(DateTime startDate) {
+    DateTime currentDate = DateTime.now();
+    int difference =
+        currentDate.difference(startDate.add(const Duration(days: 1))).inDays;
+
+    setState(() {
+      _difference = difference;
+    });
+  }
+
   void _changePage(bool hasProject) {
     _pages = hasProject
-        ? [
-            const CardsScreen(),
-            const ListScreen(),
-            const CardsScreen(),
-            const ProfileScreen(),
-          ]
+        ? _difference == 0
+            ? [
+                const CardsScreen(),
+                const ListScreen(),
+                const CardsScreen(),
+                const ProfileScreen(),
+              ]
+            : [
+                const QuoteScreen(),
+                const ListScreen(),
+                const CardsScreen(),
+                const ProfileScreen(),
+              ]
         : [
             const CreateProjectFirstScreen(),
             const ListScreen(),
@@ -101,9 +121,12 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final hasProject = ref.watch(projectProvider)!.hasProject;
+    final user = ref.watch(projectProvider);
+    final hasProject = user!.hasProject;
+    final startDate = user.startDate;
     if (_hasProject != hasProject) {
       _hasProject = hasProject;
+      _differeceDate(startDate!);
       _changePage(hasProject);
     }
 

@@ -23,7 +23,7 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
 
   void _onViewTutorial(user) {
     // TODO 나중에 지워야함
-    ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
+    // ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
   }
 
   @override
