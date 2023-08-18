@@ -6,7 +6,6 @@ import 'package:din/features/users/profile_screen.dart';
 import 'package:din/list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
@@ -148,44 +147,51 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
           showUnselectedLabels: true,
           unselectedItemColor: Colors.grey.shade500,
           unselectedFontSize: 13,
+          type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-              backgroundColor: Colors.white,
+              // backgroundColor: Colors.white,
               icon: Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: FaIcon(
-                  FontAwesomeIcons.house,
-                  size: _currentIndex == 0 ? 18 : 16,
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Icon(
+                  _currentIndex == 0 ? Icons.home : Icons.home_outlined,
+                  size: _currentIndex == 0 ? 32 : 30,
                 ),
               ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: FaIcon(
-                  FontAwesomeIcons.calendarCheck,
-                  size: _currentIndex == 1 ? 18 : 16,
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Icon(
+                  _currentIndex == 1
+                      ? Icons.calendar_month
+                      : Icons.calendar_month_outlined,
+                  size: _currentIndex == 1 ? 30 : 28,
                 ),
               ),
               label: 'Calendar',
             ),
             BottomNavigationBarItem(
               icon: Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: FaIcon(
-                  FontAwesomeIcons.chartColumn,
-                  size: _currentIndex == 2 ? 18 : 16,
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Icon(
+                  _currentIndex == 2
+                      ? Icons.insert_chart
+                      : Icons.insert_chart_outlined_outlined,
+                  size: _currentIndex == 2 ? 30 : 28,
                 ),
               ),
               label: 'Chart',
             ),
             BottomNavigationBarItem(
               icon: Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: FaIcon(
-                  FontAwesomeIcons.user,
-                  size: _currentIndex == 3 ? 18 : 16,
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Icon(
+                  _currentIndex == 3
+                      ? Icons.manage_accounts
+                      : Icons.manage_accounts_outlined,
+                  size: _currentIndex == 3 ? 30 : 28,
                 ),
               ),
               label: 'Profile',
