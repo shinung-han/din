@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
+import 'package:din/features/calendar/view_models/format_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,12 +34,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     return events[normalizedDay] ?? [];
   }
 
-  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
+  Future<void> _onFormatChanged(CalendarFormat format) async {
+    await ref.read(formatProvider.notifier).saveCalendarFormat(format);
+  }
 
   @override
   Widget build(BuildContext context) {
     final list = ref.watch(calendarProvider);
-    print(list);
+    final format = ref.watch(formatProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -50,47 +53,30 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               focusedDay: DateTime.now(),
               headerStyle: HeaderStyle(
                 formatButtonDecoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 0.5,
-                  ),
+                  border: Border.all(color: Colors.grey, width: 0.5),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                formatButtonTextStyle: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
+                formatButtonTextStyle:
+                    const TextStyle(fontSize: 14, color: Colors.black),
                 formatButtonPadding:
                     const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-                titleTextStyle: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
-                ),
+                titleTextStyle:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
               ),
               calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
-                  border: Border.all(
-                    color: Colors.grey.shade300,
-                  ),
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
-                todayTextStyle: const TextStyle(
-                  color: Colors.black,
-                ),
+                todayTextStyle: const TextStyle(color: Colors.black),
                 selectedDecoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
-                  border: Border.all(
-                    color: Colors.black,
-                    // width: 2,
-                  ),
+                  border: Border.all(color: Colors.black),
                 ),
-                selectedTextStyle: const TextStyle(
-                  color: Colors.black,
-                ),
+                selectedTextStyle: const TextStyle(color: Colors.black),
                 markersMaxCount: 1,
-                // markersAnchor: 0,
                 markersAlignment: Alignment.center,
               ),
               availableCalendarFormats: const {
@@ -98,12 +84,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 CalendarFormat.week: "1 Weeks",
                 CalendarFormat.month: "1 Month",
               },
-              calendarFormat: _calendarFormat,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
+              calendarFormat: format,
+              onFormatChanged: (format) => _onFormatChanged(format),
               onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   _selectedDay = DateTime(
@@ -112,8 +94,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 });
               },
               selectedDayPredicate: (date) {
-                if (_selectedDay == null) return false;
-
                 return date.year == _selectedDay.year &&
                     date.month == _selectedDay.month &&
                     date.day == _selectedDay.day;
@@ -328,7 +308,7 @@ class _GoalListTileState extends ConsumerState<GoalListTile>
         ),
         AnimatedSize(
           curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 300),
           child: Visibility(
             visible: _visible,
             child: Padding(
