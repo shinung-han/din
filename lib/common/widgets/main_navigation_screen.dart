@@ -1,9 +1,10 @@
+import 'package:din/features/chart/chart_screen.dart';
 import 'package:din/features/projects/cards_screen.dart';
 import 'package:din/features/projects/create_project_first_screen.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/view_models/quote_screen.dart';
 import 'package:din/features/users/profile_screen.dart';
-import 'package:din/list_screen.dart';
+import 'package:din/features/calendar/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -53,8 +54,8 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     if (_hasProject) {
       _pages = [
         const CardsScreen(),
-        const ListScreen(),
-        const CardsScreen(),
+        const CalendarScreen(),
+        const ChartScreen(),
         const ProfileScreen(),
       ];
     } else {
@@ -63,14 +64,14 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
       _pages = userUpdated!.hasProject
           ? [
               const CardsScreen(),
-              const ListScreen(),
-              const CardsScreen(),
+              const CalendarScreen(),
+              const ChartScreen(),
               const ProfileScreen(),
             ]
           : [
               const CreateProjectFirstScreen(),
-              const ListScreen(),
-              const CardsScreen(),
+              const CalendarScreen(),
+              const ChartScreen(),
               const ProfileScreen(),
             ];
     }
@@ -100,20 +101,20 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
         ? _difference == 0
             ? [
                 const CardsScreen(),
-                const ListScreen(),
-                const CardsScreen(),
+                const CalendarScreen(),
+                const ChartScreen(),
                 const ProfileScreen(),
               ]
             : [
                 const QuoteScreen(),
-                const ListScreen(),
-                const CardsScreen(),
+                const CalendarScreen(),
+                const ChartScreen(),
                 const ProfileScreen(),
               ]
         : [
             const CreateProjectFirstScreen(),
-            const ListScreen(),
-            const CardsScreen(),
+            const CalendarScreen(),
+            const ChartScreen(),
             const ProfileScreen(),
           ];
   }
@@ -155,7 +156,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                 padding: const EdgeInsets.only(bottom: 2),
                 child: Icon(
                   _currentIndex == 0 ? Icons.home : Icons.home_outlined,
-                  size: _currentIndex == 0 ? 32 : 30,
+                  size: _currentIndex == 0 ? 28 : 26,
                 ),
               ),
               label: 'Home',
@@ -167,7 +168,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                   _currentIndex == 1
                       ? Icons.calendar_month
                       : Icons.calendar_month_outlined,
-                  size: _currentIndex == 1 ? 30 : 28,
+                  size: _currentIndex == 1 ? 25 : 23,
                 ),
               ),
               label: 'Calendar',
@@ -179,7 +180,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                   _currentIndex == 2
                       ? Icons.insert_chart
                       : Icons.insert_chart_outlined_outlined,
-                  size: _currentIndex == 2 ? 30 : 28,
+                  size: _currentIndex == 2 ? 25 : 23,
                 ),
               ),
               label: 'Chart',
@@ -188,10 +189,8 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 2),
                 child: Icon(
-                  _currentIndex == 3
-                      ? Icons.manage_accounts
-                      : Icons.manage_accounts_outlined,
-                  size: _currentIndex == 3 ? 30 : 28,
+                  _currentIndex == 3 ? Icons.person : Icons.person_outline,
+                  size: _currentIndex == 3 ? 28 : 26,
                 ),
               ),
               label: 'Profile',

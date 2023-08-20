@@ -65,6 +65,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     final user = ref.watch(projectProvider);
     final userId = user!.uid;
     final goalsList = ref.watch(dbGoalListProvider);
+
     // print("cardsScreen : $goalsList");
     ref.watch(ratingProvider);
 

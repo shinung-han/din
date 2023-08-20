@@ -71,10 +71,7 @@ class ProjectRepository {
           imageUrl = await _uploadImage(userId, goal.image!);
         }
 
-        await projectDoc
-            .collection('goals')
-            .doc(goalDate)
-            .set({'data': goalDate});
+        await projectDoc.collection('goals').doc(goalDate).set({'data': date});
 
         await projectDoc
             .collection('goals')
@@ -192,6 +189,84 @@ class ProjectRepository {
         );
       }
     }
+    return goals;
+  }
+
+  Future<List<DbGoalModel>> fetchGoalsForCurrentAndPreviousMonth(
+      String userId, String projectId) async {
+    DateTime now = DateTime.now();
+
+    // 당월의 시작과 끝을 계산합니다.
+    DateTime monthStartCurrent = DateTime(now.year, now.month);
+    DateTime monthEndCurrent =
+        DateTime(now.year, now.month + 1).subtract(const Duration(days: 1));
+
+    // 전월의 시작과 끝을 계산합니다.
+    DateTime monthStartPrevious = DateTime(now.year, now.month - 1);
+    DateTime monthEndPrevious =
+        monthStartCurrent.subtract(const Duration(days: 1));
+
+    List<DbGoalModel> currentMonthGoals = await _fetchGoalsForMonth(
+        userId, projectId, monthStartCurrent, monthEndCurrent);
+    List<DbGoalModel> previousMonthGoals = await _fetchGoalsForMonth(
+        userId, projectId, monthStartPrevious, monthEndPrevious);
+
+    return currentMonthGoals + previousMonthGoals;
+  }
+
+  Future<List<DbGoalModel>> _fetchGoalsForMonth(String userId, String projectId,
+      DateTime monthStart, DateTime monthEnd) async {
+    // Convert dates to the required format
+    String formattedStart = DateFormat('yyyyMMdd').format(monthStart);
+    String formattedEnd = DateFormat('yyyyMMdd').format(monthEnd);
+
+    // Fetch the 'goals' documents for the given month range
+    QuerySnapshot goalDocsForMonth = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .collection("goals")
+        .where(FieldPath.documentId, isGreaterThanOrEqualTo: formattedStart)
+        .where(FieldPath.documentId, isLessThanOrEqualTo: formattedEnd)
+        .get();
+
+    if (goalDocsForMonth.docs.isEmpty) {
+      return [];
+    }
+
+    DocumentSnapshot subCollectionNames = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .get();
+
+    Map<String, dynamic>? data =
+        subCollectionNames.data() as Map<String, dynamic>?;
+
+    List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
+
+    List<DbGoalModel> goals = [];
+
+    for (DocumentSnapshot goalDoc in goalDocsForMonth.docs) {
+      for (String subCollectionName in goalsTitleList) {
+        QuerySnapshot subCollectionSnapshot =
+            await goalDoc.reference.collection(subCollectionName).get();
+        for (var subDoc in subCollectionSnapshot.docs) {
+          goals.add(
+            DbGoalModel(
+              date: subDoc['date'],
+              image: subDoc['image'],
+              memo: subDoc['memo'],
+              rating: subDoc['rating'],
+              title: subDoc['title'],
+            ),
+          );
+        }
+      }
+    }
+
     return goals;
   }
 
