@@ -10,4 +10,18 @@ class EventModel {
     this.memo,
     required this.rating,
   });
+
+  EventModel copyWith({
+    String? title,
+    String? image,
+    String? memo,
+    double? rating,
+  }) {
+    return EventModel(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      memo: memo ?? this.memo,
+      rating: rating ?? this.rating,
+    );
+  }
 }

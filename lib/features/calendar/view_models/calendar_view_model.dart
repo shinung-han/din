@@ -4,13 +4,11 @@ import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CalendarViewModel extends StateNotifier<Map<DateTime, List<EventModel>>> {
-  // State의 타입을 수정합니다.
   final ProjectRepository _projectRepository;
 
   CalendarViewModel(ref)
       : _projectRepository = ref.read(projectRepo),
         super({}) {
-    // 초기값을 빈 Map으로 설정합니다.
     final user = ref.watch(projectProvider);
     loadGoalListOfTwoMonth(user!.uid);
   }
@@ -26,6 +24,26 @@ class CalendarViewModel extends StateNotifier<Map<DateTime, List<EventModel>>> {
         projectId,
       );
       state = data;
+    }
+  }
+
+  void updateEvent(
+      DateTime date, String goalTitle, String? memo, double? rating) {
+    final normalizedDate = DateTime(date.year, date.month, date.day);
+    final updatedEvents = state[normalizedDate]?.map((event) {
+      if (event.title == goalTitle) {
+        if (memo != null) {
+          return event.copyWith(memo: memo);
+        } else {
+          return event.copyWith(rating: rating);
+        }
+      }
+      return event;
+    }).toList();
+
+    if (updatedEvents != null) {
+      state[normalizedDate] = updatedEvents;
+      state = {...state};
     }
   }
 }

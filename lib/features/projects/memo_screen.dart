@@ -1,4 +1,5 @@
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/memo_view_model.dart';
 import 'package:din/utils.dart';
@@ -41,6 +42,15 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
     ref
         .read(dbGoalListProvider.notifier)
         .updateMemo(widget.title, textController.text);
+
+    final calendarViewModel = ref.read(calendarProvider.notifier);
+    calendarViewModel.updateEvent(
+      DateTime.now(),
+      widget.title,
+      textController.text,
+      null,
+    );
+
     showErrorSnack(context, "A memo has been entered");
   }
 

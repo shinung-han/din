@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/memo_screen.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
@@ -51,6 +52,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
   void _onCompleteGoalTap(String userId, String title, double rating) {
     ref.read(ratingProvider.notifier).saveRating(userId, title, rating);
     ref.read(dbGoalListProvider.notifier).updateRating(title, rating);
+    final calendarViewModel = ref.read(calendarProvider.notifier);
+    calendarViewModel.updateEvent(DateTime.now(), title, null, rating);
     Navigator.pop(context);
   }
 
