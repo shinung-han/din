@@ -195,26 +195,23 @@ class ProjectRepository {
 
   Future<Map<DateTime, List<EventModel>>> fetchEventsForCurrentAndPreviousMonth(
       String userId, String projectId) async {
-    DateTime now = DateTime.now();
+    DocumentSnapshot projectDoc = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .get();
 
-    // 당월의 시작과 끝을 계산합니다.
-    DateTime monthStartCurrent = DateTime(now.year, now.month);
-    DateTime monthEndCurrent =
-        DateTime(now.year, now.month + 1).subtract(const Duration(days: 1));
+    if (!projectDoc.exists) {
+      throw Exception("Project not found");
+    }
 
-    // 전월의 시작과 끝을 계산합니다.
-    DateTime monthStartPrevious = DateTime(now.year, now.month - 1);
-    DateTime monthEndPrevious =
-        monthStartCurrent.subtract(const Duration(days: 1));
+    Map<String, dynamic>? data = projectDoc.data() as Map<String, dynamic>?;
+    DateTime startDate = data?["startDate"].toDate();
+    DateTime endDate = data?["endDate"].toDate();
 
-    // 두 개의 월에 대한 모든 goals를 가져옵니다.
-    List<DbGoalModel> currentMonthGoals = await _fetchGoalsForMonth(
-        userId, projectId, monthStartCurrent, monthEndCurrent);
-    List<DbGoalModel> previousMonthGoals = await _fetchGoalsForMonth(
-        userId, projectId, monthStartPrevious, monthEndPrevious);
-
-    // 두 월의 goals를 합칩니다.
-    List<DbGoalModel> allGoals = currentMonthGoals + previousMonthGoals;
+    List<DbGoalModel> allGoals =
+        await _fetchGoalsForMonth(userId, projectId, startDate, endDate);
 
     Map<DateTime, List<EventModel>> eventSource = {};
 

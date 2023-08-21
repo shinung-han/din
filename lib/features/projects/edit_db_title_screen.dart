@@ -2,6 +2,7 @@ import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/db_edit_title_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
@@ -62,6 +63,13 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
     ref
         .read(dbGoalListProvider.notifier)
         .updateTitle(oldTitle, _titleController.text);
+    ref.read(calendarProvider.notifier).updateAllEventsTitleAndImage(
+          oldTitle,
+          _titleController.text,
+          null,
+          null,
+        );
+
     Navigator.pop(context);
     Navigator.pop(context);
     showErrorSnack(context, "The title has been changed");

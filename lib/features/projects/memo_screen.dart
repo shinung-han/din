@@ -44,7 +44,7 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
         .updateMemo(widget.title, textController.text);
 
     final calendarViewModel = ref.read(calendarProvider.notifier);
-    calendarViewModel.updateEvent(
+    calendarViewModel.updateEventMemoOrRating(
       DateTime.now(),
       widget.title,
       textController.text,

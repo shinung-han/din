@@ -53,7 +53,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     ref.read(ratingProvider.notifier).saveRating(userId, title, rating);
     ref.read(dbGoalListProvider.notifier).updateRating(title, rating);
     final calendarViewModel = ref.read(calendarProvider.notifier);
-    calendarViewModel.updateEvent(DateTime.now(), title, null, rating);
+    calendarViewModel.updateEventMemoOrRating(
+        DateTime.now(), title, null, rating);
     Navigator.pop(context);
   }
 

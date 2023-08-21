@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/projects/edit_db_title_screen.dart';
 import 'package:din/features/projects/view_models/db_edit_image_view_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
@@ -38,8 +39,6 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(projectProvider);
     final goalsList = ref.watch(dbGoalListProvider);
-    // print(goalsList);
-    // print("user : ${user!.uid}");
 
     return Scaffold(
       body: SafeArea(
@@ -168,6 +167,10 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
       ref
           .read(dbGoalListProvider.notifier)
           .updateImage(widget.title, oldImageUrl, newImageUrl);
+
+      ref
+          .read(calendarProvider.notifier)
+          .updateAllEventsTitleAndImage(null, null, oldImageUrl, newImageUrl);
     }
   }
 

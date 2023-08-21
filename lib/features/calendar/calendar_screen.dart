@@ -53,8 +53,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             TableCalendar(
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: DateTime.now(),
+              focusedDay: _focusedDay,
               headerStyle: HeaderStyle(
+                titleTextFormatter: (focusedDay, locale) {
+                  return DateFormat.yMMM(locale)
+                      .format(focusedDay); // 예: "Dec 2023"
+                },
                 formatButtonDecoration: BoxDecoration(
                   border: Border.all(color: Colors.grey, width: 0.5),
                   borderRadius: BorderRadius.circular(20),
@@ -90,11 +94,18 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               calendarFormat: format,
               onFormatChanged: (format) => _onFormatChanged(format),
               onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = DateTime(
-                      selectedDay.year, selectedDay.month, selectedDay.day);
-                  _focusedDay = _selectedDay;
-                });
+                if (selectedDay.month != _focusedDay.month) {
+                  setState(() {
+                    _focusedDay = selectedDay;
+                    _selectedDay = DateTime(
+                        selectedDay.year, selectedDay.month, selectedDay.day);
+                  });
+                } else {
+                  setState(() {
+                    _selectedDay = DateTime(
+                        selectedDay.year, selectedDay.month, selectedDay.day);
+                  });
+                }
               },
               selectedDayPredicate: (date) {
                 return date.year == _selectedDay.year &&
@@ -103,32 +114,15 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               },
               eventLoader: (day) => getEventsForDay(day),
             ),
-            Gaps.v14,
-            Container(
-              color: Colors.black,
-              padding: const EdgeInsets.symmetric(
-                horizontal: Sizes.size16,
-                vertical: Sizes.size10,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    DateFormat('yyyy-MM-dd').format(_selectedDay),
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  const Text(
-                    '5개',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+            Gaps.v10,
+            Divider(
+              color: Colors.grey.shade400,
+              height: Sizes.size14,
+              indent: 10,
+              endIndent: 10,
+              thickness: 0.5,
             ),
-            Gaps.v14,
+            Gaps.v10,
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -137,10 +131,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   itemBuilder: (context, index) {
                     EventModel? currentEvent =
                         eventSource[_selectedDay]?[index];
+
                     if (currentEvent != null) {
+                      print(currentEvent.image);
                       return GoalListTile(
                         title: currentEvent.title,
-                        image: "",
+                        image: currentEvent.image ?? "",
                         memo: currentEvent.memo,
                         rating: currentEvent.rating,
                       ).animate().flipV(

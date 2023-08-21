@@ -27,7 +27,7 @@ class CalendarViewModel extends StateNotifier<Map<DateTime, List<EventModel>>> {
     }
   }
 
-  void updateEvent(
+  void updateEventMemoOrRating(
       DateTime date, String goalTitle, String? memo, double? rating) {
     final normalizedDate = DateTime(date.year, date.month, date.day);
     final updatedEvents = state[normalizedDate]?.map((event) {
@@ -45,6 +45,30 @@ class CalendarViewModel extends StateNotifier<Map<DateTime, List<EventModel>>> {
       state[normalizedDate] = updatedEvents;
       state = {...state};
     }
+  }
+
+  void updateAllEventsTitleAndImage(
+    String? originalTitle,
+    String? newTitle,
+    String? oldImage,
+    String? newImage,
+  ) {
+    Map<DateTime, List<EventModel>> updatedState = {};
+
+    state.forEach((date, events) {
+      final updatedEvents = events.map((event) {
+        if (event.title == originalTitle) {
+          return event.copyWith(title: newTitle ?? event.title);
+        } else if (event.image == oldImage) {
+          return event.copyWith(image: newImage);
+        }
+        return event;
+      }).toList();
+
+      updatedState[date] = updatedEvents;
+    });
+
+    state = updatedState;
   }
 }
 
