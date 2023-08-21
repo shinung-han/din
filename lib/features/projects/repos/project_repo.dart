@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:din/features/calendar/models/event_model.dart';
 import 'package:din/features/projects/models/date_model.dart';
 import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/models/goal_model.dart';
@@ -192,7 +193,7 @@ class ProjectRepository {
     return goals;
   }
 
-  Future<List<DbGoalModel>> fetchGoalsForCurrentAndPreviousMonth(
+  Future<Map<DateTime, List<EventModel>>> fetchEventsForCurrentAndPreviousMonth(
       String userId, String projectId) async {
     DateTime now = DateTime.now();
 
@@ -206,12 +207,41 @@ class ProjectRepository {
     DateTime monthEndPrevious =
         monthStartCurrent.subtract(const Duration(days: 1));
 
+    // 두 개의 월에 대한 모든 goals를 가져옵니다.
     List<DbGoalModel> currentMonthGoals = await _fetchGoalsForMonth(
         userId, projectId, monthStartCurrent, monthEndCurrent);
     List<DbGoalModel> previousMonthGoals = await _fetchGoalsForMonth(
         userId, projectId, monthStartPrevious, monthEndPrevious);
 
-    return currentMonthGoals + previousMonthGoals;
+    // 두 월의 goals를 합칩니다.
+    List<DbGoalModel> allGoals = currentMonthGoals + previousMonthGoals;
+
+    Map<DateTime, List<EventModel>> eventSource = {};
+
+    for (DbGoalModel goal in allGoals) {
+      DateTime goalDate = DateTime.parse(goal.date); // 문자열을 DateTime으로 변환
+      if (eventSource.containsKey(goalDate)) {
+        // DateTime key가 이미 존재할 경우 해당 리스트에 EventModel를 추가합니다.
+        eventSource[goalDate]!.add(EventModel(
+          title: goal.title,
+          image: goal.image,
+          memo: goal.memo,
+          rating: goal.rating!,
+        ));
+      } else {
+        // 새로운 DateTime key를 추가하고 EventModel 리스트를 초기화합니다.
+        eventSource[goalDate] = [
+          EventModel(
+            title: goal.title,
+            image: goal.image,
+            memo: goal.memo,
+            rating: goal.rating!,
+          )
+        ];
+      }
+    }
+
+    return eventSource;
   }
 
   Future<List<DbGoalModel>> _fetchGoalsForMonth(String userId, String projectId,
@@ -269,6 +299,40 @@ class ProjectRepository {
 
     return goals;
   }
+
+  // Future<Map<DateTime, List<EventModel>>> fetchEventsForMonth(String userId,
+  //     String projectId, DateTime monthStart, DateTime monthEnd) async {
+  //   Map<DateTime, List<EventModel>> eventSource = {};
+
+  //   // 기존의 함수를 활용해 month 기간 동안의 모든 goals를 가져옵니다.
+  //   List<DbGoalModel> goals =
+  //       await _fetchGoalsForMonth(userId, projectId, monthStart, monthEnd);
+
+  //   for (DbGoalModel goal in goals) {
+  //     DateTime goalDate = DateTime.parse(goal.date); // 문자열을 DateTime으로 변환
+  //     if (eventSource.containsKey(goalDate)) {
+  //       // DateTime key가 이미 존재할 경우 해당 리스트에 Event를 추가합니다.
+  //       eventSource[goalDate]!.add(EventModel(
+  //         title: goal.title,
+  //         image: goal.image,
+  //         memo: goal.memo,
+  //         rating: goal.rating!,
+  //       ));
+  //     } else {
+  //       // 새로운 DateTime key를 추가하고 EventModel 리스트를 초기화합니다.
+  //       eventSource[goalDate] = [
+  //         EventModel(
+  //           title: goal.title,
+  //           image: goal.image,
+  //           memo: goal.memo,
+  //           rating: goal.rating!,
+  //         )
+  //       ];
+  //     }
+  //   }
+
+  //   return eventSource;
+  // }
 
   Future<void> deleteProject(String uid, String projectId) async {
     DocumentReference projectDocRef =

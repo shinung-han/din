@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/calendar/models/event_model.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/calendar/view_models/format_view_model.dart';
 import 'package:flutter/material.dart';
@@ -25,22 +26,23 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
   DateTime _focusedDay = DateTime.now();
 
-  final events = LinkedHashMap(
-    equals: isSameDay,
-  )..addAll(eventSource);
-
-  List<Event> getEventsForDay(DateTime day) {
-    DateTime normalizedDay = DateTime(day.year, day.month, day.day);
-    return events[normalizedDay] ?? [];
-  }
-
   Future<void> _onFormatChanged(CalendarFormat format) async {
     await ref.read(formatProvider.notifier).saveCalendarFormat(format);
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = ref.watch(calendarProvider);
+    final eventSource = ref.watch(calendarProvider);
+
+    final events = LinkedHashMap(
+      equals: isSameDay,
+    )..addAll(eventSource);
+
+    List<EventModel> getEventsForDay(DateTime day) {
+      DateTime normalizedDay = DateTime(day.year, day.month, day.day);
+      return events[normalizedDay] ?? [];
+    }
+
     final format = ref.watch(formatProvider);
 
     return Scaffold(
@@ -132,7 +134,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 child: ListView.separated(
                   itemCount: eventSource[_selectedDay]?.length ?? 0,
                   itemBuilder: (context, index) {
-                    Event? currentEvent = eventSource[_selectedDay]?[index];
+                    EventModel? currentEvent =
+                        eventSource[_selectedDay]?[index];
                     if (currentEvent != null) {
                       return GoalListTile(
                         title: currentEvent.title,
@@ -333,97 +336,94 @@ class _GoalListTileState extends ConsumerState<GoalListTile>
   }
 }
 
-class Event {
-  final String title;
-  final String? image;
-  final String? memo;
-  final double rating;
+// class Event {
+//   final String title;
+//   final String? image;
+//   final String? memo;
+//   final double rating;
 
-  Event({
-    required this.title,
-    this.image,
-    this.memo,
-    required this.rating,
-  });
+//   Event({
+//     required this.title,
+//     this.image,
+//     this.memo,
+//     required this.rating,
+//   });
+// }
 
-  @override
-  String toString() => title;
-}
-
-Map<DateTime, dynamic> eventSource = {
-  DateTime(2023, 08, 19): [
-    Event(
-      title: '아침 7시에 일어나기',
-      image: "",
-      memo:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
-      rating: 3.5,
-    ),
-    Event(
-      title: '1시간 동안 웨이트하기',
-      image: "",
-      memo: "",
-      rating: 3.5,
-    ),
-    Event(
-        title: '책 10페이지 읽기',
-        image: "",
-        memo: "오늘은 괜찮은 날이었다-!! 음.. 메모를 뭐라고 적으면 좋을까?",
-        rating: 0.0),
-    Event(
-        title: "일기쓰기",
-        image: "",
-        memo: "일기는 좀 더 자세하게 쓰는게 좋을 것 같다.",
-        rating: 3.5),
-    Event(
-      title: "명상하기",
-      image: "",
-      memo: "",
-      rating: 3.5,
-    ),
-  ],
-  DateTime(2023, 08, 20): [
-    Event(
-        title: '아침 7시에 일어나기',
-        image: "",
-        memo:
-            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
-        rating: 4.5),
-    Event(
-      title: '1시간 동안 웨이트하기',
-      image: "",
-      memo: "",
-      rating: 5.0,
-    ),
-    Event(
-      title: '책 10페이지 읽기',
-      image: "",
-      memo:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
-      rating: 0.0,
-    ),
-    Event(
-        title: "일기쓰기",
-        image: "",
-        memo: "일기는 좀 더 자세하게 쓰는게 좋을 것 같다.",
-        rating: 4.5),
-    Event(
-      title: "명상하기",
-      image: "",
-      memo: "",
-      rating: 4.5,
-    ),
-    Event(
-        title: '아침 7시에 일어나기',
-        image: "",
-        memo:
-            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
-        rating: 4.5),
-    Event(
-      title: '1시간 동안 웨이트하기',
-      image: "",
-      memo: "안녕하세요. 저는 플러터 개발자입니다! 캬캬캬캬캬캬캬캬캬캬캬캬",
-      rating: 5.0,
-    ),
-  ],
-};
+// Map<DateTime, dynamic> eventSource = {
+//   DateTime(2023, 08, 19): [
+//     Event(
+//       title: '아침 7시에 일어나기',
+//       image: "",
+//       memo:
+//           "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
+//       rating: 3.5,
+//     ),
+//     Event(
+//       title: '1시간 동안 웨이트하기',
+//       image: "",
+//       memo: "",
+//       rating: 3.5,
+//     ),
+//     Event(
+//         title: '책 10페이지 읽기',
+//         image: "",
+//         memo: "오늘은 괜찮은 날이었다-!! 음.. 메모를 뭐라고 적으면 좋을까?",
+//         rating: 0.0),
+//     Event(
+//         title: "일기쓰기",
+//         image: "",
+//         memo: "일기는 좀 더 자세하게 쓰는게 좋을 것 같다.",
+//         rating: 3.5),
+//     Event(
+//       title: "명상하기",
+//       image: "",
+//       memo: "",
+//       rating: 3.5,
+//     ),
+//   ],
+//   DateTime(2023, 08, 20): [
+//     Event(
+//         title: '아침 7시에 일어나기',
+//         image: "",
+//         memo:
+//             "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
+//         rating: 4.5),
+//     Event(
+//       title: '1시간 동안 웨이트하기',
+//       image: "",
+//       memo: "",
+//       rating: 5.0,
+//     ),
+//     Event(
+//       title: '책 10페이지 읽기',
+//       image: "",
+//       memo:
+//           "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
+//       rating: 0.0,
+//     ),
+//     Event(
+//         title: "일기쓰기",
+//         image: "",
+//         memo: "일기는 좀 더 자세하게 쓰는게 좋을 것 같다.",
+//         rating: 4.5),
+//     Event(
+//       title: "명상하기",
+//       image: "",
+//       memo: "",
+//       rating: 4.5,
+//     ),
+//     Event(
+//         title: '아침 7시에 일어나기',
+//         image: "",
+//         memo:
+//             "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less",
+//         rating: 4.5),
+//     Event(
+//       title: '1시간 동안 웨이트하기',
+//       image: "",
+//       memo: "안녕하세요. 저는 플러터 개발자입니다! 캬캬캬캬캬캬캬캬캬캬캬캬",
+//       rating: 5.0,
+//     ),
+//   ],
+// };
