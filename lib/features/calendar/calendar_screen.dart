@@ -69,6 +69,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                 titleTextStyle:
                     const TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                leftChevronIcon: const Icon(
+                  Icons.chevron_left_rounded,
+                  color: Colors.black,
+                  size: 30,
+                ),
+                rightChevronIcon: const Icon(
+                  Icons.chevron_right_rounded,
+                  color: Colors.black,
+                  size: 30,
+                ),
               ),
               calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(
@@ -80,7 +90,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 selectedDecoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
-                  border: Border.all(color: Colors.black),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1.5,
+                  ),
                 ),
                 selectedTextStyle: const TextStyle(color: Colors.black),
                 markersMaxCount: 1,
@@ -133,7 +146,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         eventSource[_selectedDay]?[index];
 
                     if (currentEvent != null) {
-                      print(currentEvent.image);
                       return GoalListTile(
                         title: currentEvent.title,
                         image: currentEvent.image ?? "",
