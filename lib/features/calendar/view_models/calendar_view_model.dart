@@ -18,8 +18,7 @@ class CalendarViewModel extends StateNotifier<Map<DateTime, List<EventModel>>> {
         await _projectRepository.getProjectDocIdByCondition(userId);
 
     if (projectId != null) {
-      final data =
-          await _projectRepository.fetchEventsForCurrentAndPreviousMonth(
+      final data = await _projectRepository.fetchEventEverything(
         userId,
         projectId,
       );

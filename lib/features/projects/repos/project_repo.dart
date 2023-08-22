@@ -7,6 +7,7 @@ import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/users/model/user_profile_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -193,7 +194,85 @@ class ProjectRepository {
     return goals;
   }
 
-  Future<Map<DateTime, List<EventModel>>> fetchEventsForCurrentAndPreviousMonth(
+  Future<Map<String, List<DbGoalModel>>> fetchGoalsOfTodayAndWeek(
+      String userId, String projectId) async {
+    DateTime now = DateTime.now();
+    String formattedDateToday = DateFormat('yyyyMMdd').format(now);
+
+    // 주의 시작과 끝 날짜 계산
+    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    // print(startOfWeek);
+    DateTime endOfWeek = startOfWeek.add(const Duration(days: 6));
+    // print(endOfWeek);
+    // String formattedStartDateOfWeek =
+    //     DateFormat('yyyyMMdd').format(startOfWeek);
+    // String formattedEndDateOfWeek = DateFormat('yyyyMMdd').format(endOfWeek);
+
+    Map<String, List<DbGoalModel>> result = {
+      'today': await fetchGoalsByDate(userId, projectId, formattedDateToday),
+      'week': [],
+    };
+
+    for (var date = startOfWeek;
+        date.isBefore(endOfWeek.add(const Duration(days: 1)));
+        date = date.add(const Duration(days: 1))) {
+      String formattedDate = DateFormat('yyyyMMdd').format(date);
+      List<DbGoalModel> dailyGoals =
+          await fetchGoalsByDate(userId, projectId, formattedDate);
+      result['week']!.addAll(dailyGoals);
+    }
+
+    return result;
+  }
+
+  Future<List<DbGoalModel>> fetchGoalsByDate(
+      String userId, String projectId, String date) async {
+    DocumentSnapshot? goalDoc = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .collection("goals")
+        .doc(date)
+        .get();
+
+    if (!goalDoc.exists) {
+      return [];
+    }
+
+    DocumentSnapshot subCollectionNames = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .get();
+
+    Map<String, dynamic>? data =
+        subCollectionNames.data() as Map<String, dynamic>?;
+
+    List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
+
+    List<DbGoalModel> goals = [];
+
+    for (String subCollectionName in goalsTitleList) {
+      QuerySnapshot subCollectionSnapshot =
+          await goalDoc.reference.collection(subCollectionName).get();
+      for (var subDoc in subCollectionSnapshot.docs) {
+        goals.add(
+          DbGoalModel(
+            date: subDoc['date'],
+            image: subDoc['image'],
+            memo: subDoc['memo'],
+            rating: subDoc['rating'],
+            title: subDoc['title'],
+          ),
+        );
+      }
+    }
+    return goals;
+  }
+
+  Future<Map<DateTime, List<EventModel>>> fetchEventEverything(
       String userId, String projectId) async {
     DocumentSnapshot projectDoc = await _db
         .collection("users")
@@ -488,3 +567,12 @@ class ProjectRepository {
 }
 
 final projectRepo = Provider((ref) => ProjectRepository());
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
