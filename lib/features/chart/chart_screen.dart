@@ -1,9 +1,9 @@
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/chart/view_model/chart_view_model.dart';
+import 'package:din/features/chart/widgets/bar_chart.dart';
 import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -58,8 +58,8 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
               child: AspectRatio(
                 aspectRatio: 2.5,
                 child: weekDate != null
-                    ? _BarChart(
-                        monthlyData: getWeeklyAverageRatings(weekDate),
+                    ? BarChartWidget(
+                        weekData: getWeeklyAverageRatings(weekDate),
                       )
                     : const Center(
                         child: CircularProgressIndicator(),
@@ -297,8 +297,8 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
               padding: EdgeInsets.only(top: 20.0),
               child: AspectRatio(
                 aspectRatio: 2.3,
-                child: _BarChart(
-                  monthlyData: [
+                child: BarChartWidget(
+                  weekData: [
                     4.5,
                     4.0,
                     3.5,
@@ -315,141 +315,4 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
       ],
     );
   }
-}
-
-class _BarChart extends StatelessWidget {
-  final List<double>? monthlyData;
-
-  const _BarChart({
-    this.monthlyData,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        barTouchData: barTouchData,
-        titlesData: titlesData,
-        borderData: borderData,
-        barGroups: barGroups,
-        gridData: const FlGridData(show: false),
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 6,
-      ),
-    );
-  }
-
-  BarTouchData get barTouchData => BarTouchData(
-        enabled: false,
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
-          tooltipPadding: EdgeInsets.zero,
-          tooltipMargin: 5,
-          getTooltipItem: (
-            BarChartGroupData group,
-            int groupIndex,
-            BarChartRodData rod,
-            int rodIndex,
-          ) {
-            return BarTooltipItem(
-              rod.toY.toString(),
-              const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          },
-        ),
-      );
-
-  Widget getTitles(double value, TitleMeta meta) {
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'MON';
-        break;
-      case 1:
-        text = 'TUE';
-        break;
-      case 2:
-        text = 'WED';
-        break;
-      case 3:
-        text = 'THU';
-        break;
-      case 4:
-        text = 'FRI';
-        break;
-      case 5:
-        text = 'SAT';
-        break;
-      case 6:
-        text = 'SUN';
-        break;
-      default:
-        text = '';
-        break;
-    }
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 4,
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.black87,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  FlTitlesData get titlesData => FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: getTitles,
-          ),
-        ),
-        leftTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      );
-
-  FlBorderData get borderData => FlBorderData(
-        show: false,
-      );
-
-  LinearGradient get _barsGradient => LinearGradient(
-        colors: [
-          // Color(0xff02d39a),
-          // Color(0xff23b6e6),
-          // Colors.amberAccent,
-          Colors.amberAccent.withOpacity(0.4),
-          Colors.amber,
-        ],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-
-  List<BarChartGroupData> get barGroups => List.generate(7, (index) {
-        return BarChartGroupData(
-          x: index,
-          barRods: [
-            BarChartRodData(
-              toY: monthlyData![index].toDouble(),
-              gradient: _barsGradient,
-              width: 12,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        );
-      }).toList();
 }
