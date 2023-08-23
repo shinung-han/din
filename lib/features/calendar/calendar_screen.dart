@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/models/event_model.dart';
@@ -235,7 +236,7 @@ class _GoalListTileState extends ConsumerState<GoalListTile>
                             bottomLeft: Radius.circular(10),
                           ),
                           image: DecorationImage(
-                            image: NetworkImage(
+                            image: CachedNetworkImageProvider(
                               widget.image,
                             ),
                             fit: BoxFit.cover,

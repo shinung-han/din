@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:din/features/users/view_models/avatar_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Avatar extends ConsumerWidget {
   final String name;
@@ -36,23 +36,31 @@ class Avatar extends ConsumerWidget {
               color: Colors.white,
             ),
           )
-        : CircleAvatar(
-            radius: 65,
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.grey.shade300,
-            foregroundImage: hasAvatar
-                ? NetworkImage(
-                    "https://firebasestorage.googleapis.com/v0/b/do-it-now-a5725.appspot.com/o/avatars%2F$uid?alt=media&date=${DateTime.now().toString()}")
-                : null,
-            child: CircleAvatar(
-              radius: 63,
-              foregroundColor: Colors.grey.shade300,
-              backgroundColor: Colors.white,
-              child: const FaIcon(
-                FontAwesomeIcons.user,
-                size: 40,
+        : Container(
+            width: 130,
+            height: 130,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+
+              border: Border.all(
+                color: Colors.grey.shade300,
+                width: 2,
               ),
+              // borderRadius: BorderRadius.circular(radius)
             ),
+            child: hasAvatar
+                ? Image(
+                    image: CachedNetworkImageProvider(
+                        "https://firebasestorage.googleapis.com/v0/b/do-it-now-a5725.appspot.com/o/avatars%2F$uid?alt=media&date=${DateTime.now().toString()}"),
+                  )
+                : Center(
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey.shade300,
+                      size: 50,
+                    ),
+                  ),
           );
   }
 }

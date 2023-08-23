@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
@@ -164,7 +165,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                             : Image(
                                                 width: 350,
                                                 height: 350,
-                                                image: NetworkImage(
+                                                image:
+                                                    CachedNetworkImageProvider(
                                                   image!,
                                                 ),
                                                 fit: BoxFit.cover,

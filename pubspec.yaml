@@ -65,7 +65,7 @@ dependencies:
 
   fl_chart: ^0.63.0
 
-  # cached_network_image: ^3.2.3
+  cached_network_image: ^3.2.3
 
   flutter_rating_bar: ^4.0.1
 
