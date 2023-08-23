@@ -18,7 +18,7 @@ class ChartScreen extends ConsumerStatefulWidget {
 class _ChartScreenState extends ConsumerState<ChartScreen> {
   @override
   Widget build(BuildContext context) {
-    final weekDate = ref.watch(chartProvider)["week"];
+    final weekDate = ref.watch(chartProvider);
     final goalsList = ref.watch(dbGoalListProvider);
 
     return Scaffold(
@@ -57,12 +57,14 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
             SliverToBoxAdapter(
               child: AspectRatio(
                 aspectRatio: 2.5,
-                child: weekDate != null
+                child: weekDate.isNotEmpty
                     ? BarChartWidget(
                         weekData: getWeeklyAverageRatings(weekDate),
                       )
                     : const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
                       ),
               ),
             ),

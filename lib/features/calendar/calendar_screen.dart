@@ -139,31 +139,37 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.separated(
-                  itemCount: eventSource[_selectedDay]?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    EventModel? currentEvent =
-                        eventSource[_selectedDay]?[index];
+                child: eventSource.isEmpty
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
+                      )
+                    : ListView.separated(
+                        itemCount: eventSource[_selectedDay]?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          EventModel? currentEvent =
+                              eventSource[_selectedDay]?[index];
 
-                    if (currentEvent != null) {
-                      return GoalListTile(
-                        title: currentEvent.title,
-                        image: currentEvent.image ?? "",
-                        memo: currentEvent.memo,
-                        rating: currentEvent.rating,
-                      ).animate().flipV(
-                            begin: -0.5,
-                            end: 0,
-                            curve: Curves.easeOutExpo,
-                          );
-                    }
-                    return const SizedBox
-                        .shrink(); // This shouldn't happen but is a safe fallback
-                  },
-                  separatorBuilder: (context, index) {
-                    return Gaps.v8;
-                  },
-                ),
+                          if (currentEvent != null) {
+                            return GoalListTile(
+                              title: currentEvent.title,
+                              image: currentEvent.image ?? "",
+                              memo: currentEvent.memo,
+                              rating: currentEvent.rating,
+                            ).animate().flipV(
+                                  begin: -0.5,
+                                  end: 0,
+                                  curve: Curves.easeOutExpo,
+                                );
+                          }
+                          return const SizedBox
+                              .shrink(); // This shouldn't happen but is a safe fallback
+                        },
+                        separatorBuilder: (context, index) {
+                          return Gaps.v8;
+                        },
+                      ),
               ),
             ),
             Gaps.v20,

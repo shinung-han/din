@@ -21,9 +21,9 @@ class DBGoalListViewModel extends StateNotifier<List<DbGoalModel>> {
 
     if (projectId != null && _mounted) {
       final data =
-          await _projectRepository.fetchGoalsOfToday(userId, projectId);
+          await _projectRepository.fetchGoalsOfTodayAndWeek(userId, projectId);
       if (!_mounted) return;
-      state = data;
+      state = data["today"]!;
     }
   }
 

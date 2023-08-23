@@ -70,7 +70,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     final userId = user!.uid;
     final goalsList = ref.watch(dbGoalListProvider);
 
-    // print("cardsScreen : $goalsList");
     ref.watch(ratingProvider);
 
     return Scaffold(
@@ -78,227 +77,257 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
       appBar: ProjectAppBar(
         onPressed: () => showModalBottom(context, settingModalList),
       ),
-      body: PageView.builder(
-        controller: _pageController,
-        itemCount: goalsList.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          final image = goalsList[index].image;
-          final title = goalsList[index].title;
-          final rating = goalsList[index].rating;
-          final memo = goalsList[index].memo;
-
-          return Center(
-            child: SingleChildScrollView(
+      body: goalsList.isEmpty
+          ? const SizedBox(
+              width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ValueListenableBuilder(
-                    valueListenable: _scroll,
-                    builder: (context, scroll, child) {
-                      final difference = (scroll - index).abs();
-                      final scale = 1 - (difference * 0.13);
+                  CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                  Gaps.v32,
+                  Text(
+                    "Please wait a moment..",
+                    style: TextStyle(
+                      fontSize: Sizes.size16,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : PageView.builder(
+              controller: _pageController,
+              itemCount: goalsList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final image = goalsList[index].image;
+                final title = goalsList[index].title;
+                final rating = goalsList[index].rating;
+                final memo = goalsList[index].memo;
 
-                      return Transform.scale(
-                        scale: scale,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              width: 0.5,
-                              color: Colors.grey.shade400,
-                            ),
-                            borderRadius: BorderRadius.circular(28),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.15),
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(28),
-                                  topRight: Radius.circular(28),
-                                ),
-                                child: Container(
-                                  width: 350,
-                                  height: 350,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.grey.shade400,
-                                        width: 0.5,
-                                      ),
-                                    ),
+                return Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ValueListenableBuilder(
+                          valueListenable: _scroll,
+                          builder: (context, scroll, child) {
+                            final difference = (scroll - index).abs();
+                            final scale = 1 - (difference * 0.13);
+
+                            return Transform.scale(
+                              scale: scale,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Colors.grey.shade400,
                                   ),
-                                  child: image == ""
-                                      ? Icon(
-                                          Icons.image_outlined,
-                                          color: Colors.grey.shade300,
-                                          size: 70,
-                                        )
-                                      : Image(
-                                          width: 350,
-                                          height: 350,
-                                          image: NetworkImage(
-                                            image!,
-                                          ),
-                                          fit: BoxFit.cover,
-                                        ),
+                                  borderRadius: BorderRadius.circular(28),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.15),
+                                      blurRadius: 8,
+                                      spreadRadius: 2,
+                                      offset: const Offset(0, 8),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(15),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Gaps.v16,
-                                    Text(
-                                      textAlign: TextAlign.center,
-                                      goalsList[index].title,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(28),
+                                        topRight: Radius.circular(28),
+                                      ),
+                                      child: Container(
+                                        width: 350,
+                                        height: 350,
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: Colors.grey.shade400,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: image == ""
+                                            ? Icon(
+                                                Icons.image_outlined,
+                                                color: Colors.grey.shade300,
+                                                size: 70,
+                                              )
+                                            : Image(
+                                                width: 350,
+                                                height: 350,
+                                                image: NetworkImage(
+                                                  image!,
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
                                       ),
                                     ),
-                                    Gaps.v24,
-                                    RatingBar.builder(
-                                      initialRating: rating ?? 0,
-                                      itemCount: 5,
-                                      itemSize: 40,
-                                      ignoreGestures: true,
-                                      allowHalfRating: true,
-                                      glow: false,
-                                      unratedColor: Colors.grey.shade200,
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star_rounded,
-                                        color: Colors.amber,
+                                    Padding(
+                                      padding: const EdgeInsets.all(15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Gaps.v16,
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            goalsList[index].title,
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Gaps.v24,
+                                          RatingBar.builder(
+                                            initialRating: rating ?? 0,
+                                            itemCount: 5,
+                                            itemSize: 40,
+                                            ignoreGestures: true,
+                                            allowHalfRating: true,
+                                            glow: false,
+                                            unratedColor: Colors.grey.shade200,
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star_rounded,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (rating) {},
+                                          ),
+                                          Gaps.v16,
+                                        ],
                                       ),
-                                      onRatingUpdate: (rating) {},
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: SizedBox(
+                                        height: 60,
+                                        child: rating == 0
+                                            ? Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MemoScreen(
+                                                            userId: userId,
+                                                            title: title,
+                                                            memo: memo ?? "",
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: CircleAvatar(
+                                                      radius: 30,
+                                                      backgroundColor:
+                                                          Colors.grey.shade400,
+                                                      child: const CircleAvatar(
+                                                        radius: 29.5,
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        child: Icon(
+                                                          Icons.notes_rounded,
+                                                          size: 30,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Gaps.h10,
+                                                  Expanded(
+                                                    child: CommonButton(
+                                                      text: 'Complete',
+                                                      icon: Icons
+                                                          .task_alt_rounded,
+                                                      bgColor: Colors.black,
+                                                      color: Colors.white,
+                                                      onTap: () =>
+                                                          _onCompleteTap(
+                                                              userId, title),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MemoScreen(
+                                                            userId: userId,
+                                                            title: title,
+                                                            memo: memo ?? "",
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: CircleAvatar(
+                                                      radius: 30,
+                                                      backgroundColor:
+                                                          Colors.grey.shade400,
+                                                      child: const CircleAvatar(
+                                                        radius: 29.5,
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        child: Icon(
+                                                          Icons.notes_rounded,
+                                                          size: 30,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Gaps.h10,
+                                                  Expanded(
+                                                    child: CommonButton(
+                                                      text: 'Cancel',
+                                                      icon: Icons
+                                                          .highlight_off_rounded,
+                                                      bgColor: Colors.white,
+                                                      color:
+                                                          Colors.grey.shade400,
+                                                      onTap: () =>
+                                                          showModalBottomWithText(
+                                                        context,
+                                                        "Are you sure you want to cancel?",
+                                                        () =>
+                                                            _onCompleteGoalTap(
+                                                                userId,
+                                                                title,
+                                                                0.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                      ),
                                     ),
                                     Gaps.v16,
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: SizedBox(
-                                  height: 60,
-                                  child: rating == 0
-                                      ? Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MemoScreen(
-                                                      userId: userId,
-                                                      title: title,
-                                                      memo: memo ?? "",
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: CircleAvatar(
-                                                radius: 30,
-                                                backgroundColor:
-                                                    Colors.grey.shade400,
-                                                child: const CircleAvatar(
-                                                  radius: 29.5,
-                                                  backgroundColor: Colors.white,
-                                                  child: Icon(
-                                                    Icons.notes_rounded,
-                                                    size: 30,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Gaps.h10,
-                                            Expanded(
-                                              child: CommonButton(
-                                                text: 'Complete',
-                                                icon: Icons.task_alt_rounded,
-                                                bgColor: Colors.black,
-                                                color: Colors.white,
-                                                onTap: () => _onCompleteTap(
-                                                    userId, title),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MemoScreen(
-                                                      userId: userId,
-                                                      title: title,
-                                                      memo: memo ?? "",
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: CircleAvatar(
-                                                radius: 30,
-                                                backgroundColor:
-                                                    Colors.grey.shade400,
-                                                child: const CircleAvatar(
-                                                  radius: 29.5,
-                                                  backgroundColor: Colors.white,
-                                                  child: Icon(
-                                                    Icons.notes_rounded,
-                                                    size: 30,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Gaps.h10,
-                                            Expanded(
-                                              child: CommonButton(
-                                                text: 'Cancel',
-                                                icon:
-                                                    Icons.highlight_off_rounded,
-                                                bgColor: Colors.white,
-                                                color: Colors.grey.shade400,
-                                                onTap: () =>
-                                                    showModalBottomWithText(
-                                                  context,
-                                                  "Are you sure you want to cancel?",
-                                                  () => _onCompleteGoalTap(
-                                                      userId, title, 0.0),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                ),
-                              ),
-                              Gaps.v16,
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                        Gaps.v32,
+                      ],
+                    ),
                   ),
-                  Gaps.v32,
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 

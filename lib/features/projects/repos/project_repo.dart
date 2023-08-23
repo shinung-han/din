@@ -144,55 +144,55 @@ class ProjectRepository {
     return null;
   }
 
-  Future<List<DbGoalModel>> fetchGoalsOfToday(
-      String userId, String projectId) async {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyyMMdd').format(now);
+  // Future<List<DbGoalModel>> fetchGoalsOfToday(
+  //     String userId, String projectId) async {
+  //   DateTime now = DateTime.now();
+  //   String formattedDate = DateFormat('yyyyMMdd').format(now);
 
-    DocumentSnapshot? goalDoc = await _db
-        .collection("users")
-        .doc(userId)
-        .collection("project")
-        .doc(projectId)
-        .collection("goals")
-        .doc(formattedDate)
-        .get();
+  //   DocumentSnapshot? goalDoc = await _db
+  //       .collection("users")
+  //       .doc(userId)
+  //       .collection("project")
+  //       .doc(projectId)
+  //       .collection("goals")
+  //       .doc(formattedDate)
+  //       .get();
 
-    if (!goalDoc.exists) {
-      return [];
-    }
+  //   if (!goalDoc.exists) {
+  //     return [];
+  //   }
 
-    DocumentSnapshot subCollectionNames = await _db
-        .collection("users")
-        .doc(userId)
-        .collection("project")
-        .doc(projectId)
-        .get();
+  //   DocumentSnapshot subCollectionNames = await _db
+  //       .collection("users")
+  //       .doc(userId)
+  //       .collection("project")
+  //       .doc(projectId)
+  //       .get();
 
-    Map<String, dynamic>? data =
-        subCollectionNames.data() as Map<String, dynamic>?;
+  //   Map<String, dynamic>? data =
+  //       subCollectionNames.data() as Map<String, dynamic>?;
 
-    List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
+  //   List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
 
-    List<DbGoalModel> goals = [];
+  //   List<DbGoalModel> goals = [];
 
-    for (String subCollectionName in goalsTitleList) {
-      QuerySnapshot subCollectionSnapshot =
-          await goalDoc.reference.collection(subCollectionName).get();
-      for (var subDoc in subCollectionSnapshot.docs) {
-        goals.add(
-          DbGoalModel(
-            date: subDoc['date'],
-            image: subDoc['image'],
-            memo: subDoc['memo'],
-            rating: subDoc['rating'],
-            title: subDoc['title'],
-          ),
-        );
-      }
-    }
-    return goals;
-  }
+  //   for (String subCollectionName in goalsTitleList) {
+  //     QuerySnapshot subCollectionSnapshot =
+  //         await goalDoc.reference.collection(subCollectionName).get();
+  //     for (var subDoc in subCollectionSnapshot.docs) {
+  //       goals.add(
+  //         DbGoalModel(
+  //           date: subDoc['date'],
+  //           image: subDoc['image'],
+  //           memo: subDoc['memo'],
+  //           rating: subDoc['rating'],
+  //           title: subDoc['title'],
+  //         ),
+  //       );
+  //     }
+  //   }
+  //   return goals;
+  // }
 
   Future<Map<String, List<DbGoalModel>>> fetchGoalsOfTodayAndWeek(
       String userId, String projectId) async {

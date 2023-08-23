@@ -3,12 +3,12 @@ import 'package:din/features/projects/repos/project_repo.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChartViewModel extends StateNotifier<Map<String, List<DbGoalModel>>> {
+class ChartViewModel extends StateNotifier<List<DbGoalModel>> {
   final ProjectRepository _projectRepository;
 
   ChartViewModel(ref)
       : _projectRepository = ref.read(projectRepo),
-        super({}) {
+        super([]) {
     final user = ref.watch(projectProvider);
     loadGoalListOfTwoMonth(user!.uid);
   }
@@ -22,13 +22,12 @@ class ChartViewModel extends StateNotifier<Map<String, List<DbGoalModel>>> {
         userId,
         projectId,
       );
-      state = data.cast<String, List<DbGoalModel>>();
+      state = data["week"]!;
     }
   }
 }
 
 final chartProvider =
-    StateNotifierProvider<ChartViewModel, Map<String, List<DbGoalModel>>>(
-        (ref) {
+    StateNotifierProvider<ChartViewModel, List<DbGoalModel>>((ref) {
   return ChartViewModel(ref);
 });
