@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:din/change_password_screen.dart';
+import 'package:din/features/users/change_password_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/log_in_screen.dart';

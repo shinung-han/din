@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
           return const ProviderScope(child: DinApp());
         }
 
-        // Otherwise, show a loading spinner
         return LoadingScreen();
       },
     );
@@ -42,7 +41,9 @@ class LoadingScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: Colors.black,
+          ),
         ),
       ),
     );

@@ -5,7 +5,6 @@ import 'package:din/features/onboarding/tutorial_screen.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/list_of_goals_screen.dart';
 import 'package:din/features/projects/set_date_screen.dart';
-import 'package:din/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,11 +26,6 @@ final routerProvider = Provider((ref) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: SplashScreen.routeURL,
-        name: SplashScreen.routeName,
-        builder: (context, state) => const SplashScreen(),
-      ),
       GoRoute(
         path: LoginScreen.routeURL,
         name: LoginScreen.routeName,
