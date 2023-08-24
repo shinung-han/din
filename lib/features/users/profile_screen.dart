@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:din/change_password_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/authentication/log_in_screen.dart';
 import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/features/users/edit_profile_screen.dart';
 import 'package:din/features/users/password_change_screen.dart';
@@ -10,7 +11,6 @@ import 'package:din/features/users/view_models/avatar_view_model.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:din/features/users/widgets/avatar.dart';
 import 'package:din/features/users/widgets/profile_list_tile.dart';
-import 'package:din/splash_screen.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +29,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   void _onLogoutTap() {
     ref.read(authRepo).signOut();
-    context.go(SplashScreen.routeURL);
+    context.go(LoginScreen.routeURL);
   }
 
   void _onChangePasswordTap() {
@@ -82,12 +82,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             final loginMethod =
                 ref.read(usersProvider.notifier).getLoginMethod();
 
+            bool isLogo =
+                loginMethod.isNotEmpty && loginMethod[0] == 'google.com';
+
             return Scaffold(
               appBar: AppBar(
                 title: Text(
                   data.name,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -122,9 +125,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     leadingIcon: Icons.check_circle_outline_rounded,
                     title: "Linked account",
                     subTitle: "Check the connected login method",
-                    isLogo: loginMethod[0] == 'google.com' ? true : false,
+                    isLogo: isLogo,
                     image: 'assets/images/google_logo.png',
-                    loginMethod: loginMethod[0],
+                    loginMethod: loginMethod.isNotEmpty ? loginMethod[0] : null,
                   ),
                   ProfileListTile(
                     title: "Edit Profile",
@@ -133,7 +136,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     isLogo: false,
                     onPressed: _onEditProfileTap,
                   ),
-                  if (loginMethod[0] == "password")
+                  if (loginMethod.isNotEmpty && loginMethod[0] == "password")
                     ProfileListTile(
                       title: "Password change",
                       subTitle: 'Change your current password',

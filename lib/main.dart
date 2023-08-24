@@ -1,21 +1,65 @@
-import 'package:din/firebase_options.dart';
 import 'package:din/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  runApp(
-    const ProviderScope(
-      child: DinApp(),
-    ),
-  );
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return SomethingWentWrong();
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          FlutterNativeSplash.remove();
+          return const ProviderScope(child: DinApp());
+        }
+
+        // Otherwise, show a loading spinner
+        return LoadingScreen();
+      },
+    );
+  }
+}
+
+class LoadingScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+}
+
+class SomethingWentWrong extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Something went wrong!'),
+        ),
+      ),
+    );
+  }
 }
 
 class DinApp extends ConsumerWidget {
@@ -44,7 +88,6 @@ class DinApp extends ConsumerWidget {
         splashColor: Colors.transparent,
         useMaterial3: true,
       ),
-      // home: const LoginScreen(),
     );
   }
 }

@@ -10,12 +10,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final routerProvider = Provider((ref) {
-  // ref.watch(authStateStream);
+  // ref.watch(authState);
 
   return GoRouter(
     // initialLocation: LoginScreen.routeURL,
-    initialLocation: SplashScreen.routeURL,
-    // initialLocation: '/home',
+    // initialLocation: SplashScreen.routeURL,
+    initialLocation: '/home',
     redirect: (context, state) {
       final isLoggedIn = ref.read(authRepo).isLoggedIn;
       if (!isLoggedIn) {

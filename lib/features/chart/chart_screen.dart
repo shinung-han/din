@@ -20,22 +20,26 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
   Widget build(BuildContext context) {
     final weekDate = ref.watch(chartProvider);
     final goalsList = ref.watch(dbGoalListProvider);
+    final uniqueTitles = goalsList
+        .map(
+          (goal) => goal.title,
+        )
+        .toSet()
+        .toList();
+
+    List<DbGoalModel> getGoalsForTitle(String title) {
+      return weekDate.where((item) => item.title == title).toList();
+    }
 
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             const SliverAppBar(
-              title: Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: EdgeInsets.only(left: Sizes.size24),
-                  child: Text(
-                    'Chart',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+              title: Text(
+                'Chart',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -114,22 +118,35 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                 top: 10,
               ),
               sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final image = goalsList[index].image;
-                  final title = goalsList[index].title;
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final currentTitleGoals =
+                        getGoalsForTitle(uniqueTitles[index]);
 
-                  return Column(
-                    children: [
-                      GoalListTile(
-                        userId: "",
-                        title: title,
-                        image: image ?? '',
-                        rating: 3.5,
-                      ),
-                      Gaps.v8,
-                    ],
-                  );
-                }, childCount: goalsList.length),
+                    // final image = goalsList[index].image;
+                    // final title = goalsList[index].title;
+                    if (currentTitleGoals.isNotEmpty) {
+                      final goalItem = currentTitleGoals
+                          .first; // 혹은 평균 등의 처리로 데이터를 수정하실 수 있습니다.
+
+                      return Column(
+                        children: [
+                          GoalListTile(
+                            userId: "", // 사용자 ID를 업데이트하십시오.
+                            title: goalItem.title,
+                            image: goalItem.image ?? '',
+                            rating: goalItem.rating!, // 이제 rating 데이터도 반영됩니다.
+                          ),
+                          Gaps.v8,
+                        ],
+                      );
+                    } else {
+                      return const SizedBox
+                          .shrink(); // 해당 제목의 데이터가 없을 경우, 아무 것도 반환하지 않습니다.
+                    }
+                  },
+                  childCount: uniqueTitles.length,
+                ),
               ),
             ),
           ],
@@ -197,6 +214,8 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.rating);
+
     return Column(
       children: [
         GestureDetector(

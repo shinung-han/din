@@ -99,15 +99,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Column(
               children: [
                 Gaps.v80,
-                Gaps.v60,
-                const Text(
-                  'DIN',
+                Gaps.v40,
+                Image(
+                  image: AssetImage("assets/images/logo.png"),
+                  width: 150,
+                ),
+                Gaps.v28,
+                Text(
+                  "DIN",
                   style: TextStyle(
-                    fontSize: 80,
+                    fontSize: 40,
+                    // fontWeight: FontWeight.w500,
                   ),
                 ),
+                Text(
+                  "Do it now",
+                  style: TextStyle(color: Colors.grey.shade400),
+                ),
                 Gaps.v80,
-                Gaps.v60,
                 CommonButton(
                   text: 'Log In with Email',
                   icon: Icons.alternate_email_rounded,
