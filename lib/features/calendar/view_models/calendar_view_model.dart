@@ -56,9 +56,9 @@ class CalendarViewModel extends StateNotifier<Map<DateTime, List<EventModel>>> {
 
     state.forEach((date, events) {
       final updatedEvents = events.map((event) {
-        if (event.title == originalTitle) {
+        if (event.title == originalTitle && oldImage == null) {
           return event.copyWith(title: newTitle ?? event.title);
-        } else if (event.image == oldImage) {
+        } else if (event.title == originalTitle && event.image == oldImage) {
           return event.copyWith(image: newImage);
         }
         return event;

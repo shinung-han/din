@@ -143,19 +143,45 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
     ];
   }
 
-  Future<void> _onEditImage(
-    String userId,
-    String oldImageUrl,
-  ) async {
+  Future<void> _onEditImage(String userId, String oldImageUrl) async {
     final pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
     );
+
+    if (!mounted) return;
+
     if (pickedFile != null) {
       final currentContext = context;
-      if (!mounted) return;
 
       Navigator.popUntil(
           currentContext, ModalRoute.withName(EditProjectScreen.routeURL));
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            content: Container(
+              height: 130,
+              color: Colors.white,
+              width: MediaQuery.of(context).size.width * 0.55,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: Colors.black),
+                  Gaps.v16,
+                  Text("Editing image.."),
+                ],
+              ),
+            ),
+          );
+        },
+      );
 
       final newImageUrl = await ref.read(editImageProvider.notifier).editImage(
             userId,
@@ -168,9 +194,10 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
           .read(dbGoalListProvider.notifier)
           .updateImage(widget.title, oldImageUrl, newImageUrl);
 
-      ref
-          .read(calendarProvider.notifier)
-          .updateAllEventsTitleAndImage(null, null, oldImageUrl, newImageUrl);
+      ref.read(calendarProvider.notifier).updateAllEventsTitleAndImage(
+          widget.title, null, oldImageUrl, newImageUrl);
+
+      Navigator.of(context, rootNavigator: true).pop(); // 로딩 대화상자 제거
     }
   }
 
