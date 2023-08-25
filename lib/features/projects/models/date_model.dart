@@ -16,4 +16,9 @@ class DateModel {
         endDate = DateTime.now(),
         period = 1,
         goalsTitle = [];
+
+  DateModel.fromJson(Map<String, dynamic> json)
+      : startDate = json["startDate"],
+        endDate = json["endDate"],
+        period = json["period"];
 }

@@ -1,13 +1,9 @@
-import 'dart:io';
-
-import 'package:din/features/users/change_password_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/log_in_screen.dart';
 import 'package:din/features/authentication/repos/authentication_repo.dart';
 import 'package:din/features/users/edit_profile_screen.dart';
-import 'package:din/features/users/password_change_screen.dart';
-import 'package:din/features/users/view_models/avatar_view_model.dart';
+import 'package:din/features/users/change_password_screen.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:din/features/users/widgets/avatar.dart';
 import 'package:din/features/users/widgets/profile_list_tile.dart';
@@ -15,7 +11,6 @@ import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -25,41 +20,16 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  // final bool _isEdit = false;
-
   void _onLogoutTap() {
     ref.read(authRepo).signOut();
     context.go(LoginScreen.routeURL);
-  }
-
-  void _onChangePasswordTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ChangePasswordScreen(),
-      ),
-    );
-  }
-
-  Future<void> _onChangeProfileImage() async {
-    final xFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 100,
-      maxHeight: 200,
-      maxWidth: 200,
-      // 수정 전 : imageQuality : 50, maxHeight & maxWidth : 150
-    );
-    if (xFile != null) {
-      final file = File(xFile.path);
-      ref.read(avatarProvider.notifier).uploadAvatar(file);
-    }
   }
 
   void _onPasswordChangeTap() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PasswordChangeScreen(),
+        builder: (context) => const ChangePasswordScreen(),
       ),
     );
   }
@@ -117,8 +87,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   Divider(
                     thickness: 0.5,
                     color: Colors.grey.shade400,
-                    indent: Sizes.size24,
-                    endIndent: Sizes.size24,
+                    indent: Sizes.size10,
+                    endIndent: Sizes.size10,
                   ),
                   Gaps.v10,
                   ProfileListTile(
@@ -130,7 +100,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     loginMethod: loginMethod.isNotEmpty ? loginMethod[0] : null,
                   ),
                   ProfileListTile(
-                    title: "Edit Profile",
+                    title: "Edit profile",
                     subTitle: 'Change profile image and user name',
                     leadingIcon: Icons.manage_accounts,
                     isLogo: false,
@@ -138,7 +108,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                   if (loginMethod.isNotEmpty && loginMethod[0] == "password")
                     ProfileListTile(
-                      title: "Password change",
+                      title: "Change password",
                       subTitle: 'Change your current password',
                       leadingIcon: Icons.lock_reset_rounded,
                       isLogo: false,
@@ -162,7 +132,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                   ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                     leading: const Icon(
                       Icons.info_outline_rounded,
                       size: 30,

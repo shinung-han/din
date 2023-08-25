@@ -29,8 +29,8 @@ class ProfileListTile extends StatelessWidget {
       onTap: onPressed,
       child: ListTile(
         contentPadding: EdgeInsets.only(
-          left: Sizes.size20,
-          right: loginMethod == 'password' ? Sizes.size10 : Sizes.size5,
+          left: Sizes.size10,
+          right: loginMethod == 'password' ? Sizes.size7 : Sizes.size5,
         ),
         leading: Icon(
           leadingIcon,
@@ -53,7 +53,7 @@ class ProfileListTile extends StatelessWidget {
                 ),
               )
             : Padding(
-                padding: const EdgeInsets.only(right: Sizes.size4),
+                padding: const EdgeInsets.only(right: Sizes.size2),
                 child: Icon(
                   loginMethod == 'password'
                       ? Icons.alternate_email_outlined

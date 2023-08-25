@@ -1,6 +1,4 @@
 import 'package:din/constants/gaps.dart';
-import 'package:din/constants/sizes.dart';
-import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/features/projects/add_goal_screen.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
@@ -58,13 +56,10 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
             SliverAppBar(
               title: const Align(
                 alignment: Alignment.center,
-                child: Padding(
-                  padding: EdgeInsets.only(left: Sizes.size24),
-                  child: Text(
-                    'Create Project',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                    ),
+                child: Text(
+                  'Create Project',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -101,44 +96,27 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
                 ? SliverPadding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
-                      vertical: 10,
                     ),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Column(
+                    sliver: SliverFillRemaining(
+                      hasScrollBody: false, // 스크롤이 발생하지 않도록 설정
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const AuthHeader(
-                                title: 'Create goals',
-                                subTitle:
-                                    'Create your own fantastic project to become a better version of yourself than yesterday.',
+                              Icon(
+                                Icons.north_east_rounded,
+                                size: 50,
                               ),
-                              Gaps.v20,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.north_east_rounded,
-                                    color: Colors.grey.shade400,
-                                    size: 50,
-                                  ),
-                                  Icon(
-                                    Icons.add_circle_outline_rounded,
-                                    color: Colors.grey.shade400,
-                                    size: 50,
-                                  ),
-                                ],
-                              ),
-                              Gaps.v10,
-                              Text(
-                                "Tap the icon in the top right to add a goal",
-                                style: TextStyle(
-                                  color: Colors.grey.shade500,
-                                  fontSize: 15,
-                                ),
+                              Icon(
+                                Icons.add_circle_outline_rounded,
+                                size: 50,
                               ),
                             ],
                           ),
+                          Gaps.v16,
+                          Text("Tap the icon in the top right to add a goal"),
                         ],
                       ),
                     ),

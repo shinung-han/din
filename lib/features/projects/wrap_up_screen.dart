@@ -1,15 +1,14 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
-import 'package:din/features/projects/models/date_model.dart';
 import 'package:din/features/projects/view_models/date_view_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
+import 'package:din/features/projects/widgets/date_information.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class WrapUpScreen extends ConsumerStatefulWidget {
   final bool isWrapUp;
@@ -66,7 +65,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                       children: [
                         header(),
                         title('Date information', 200),
-                        dateInformation(date),
+                        DateInformation(date: date),
                         title('Goal list', 120),
                         SingleChildScrollView(
                           child: Column(
@@ -111,7 +110,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
             user!.uid,
             date.startDate,
             date.endDate,
-            date.period + 1,
+            date.period,
           ),
           icon: Icons.task_alt_rounded,
         ),
@@ -171,63 +170,6 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
         ),
         Gaps.v16,
       ],
-    );
-  }
-
-  IntrinsicHeight dateInformation(DateModel date) {
-    const textStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-    );
-
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            children: [
-              const Text(
-                'Start date',
-                style: textStyle,
-              ),
-              Gaps.v4,
-              Text(DateFormat.yMd().format(date.startDate)),
-            ],
-          ),
-          verticalDivider(),
-          Column(
-            children: [
-              const Text(
-                'End date',
-                style: textStyle,
-              ),
-              Gaps.v4,
-              Text(DateFormat.yMd().format(date.endDate)),
-            ],
-          ),
-          verticalDivider(),
-          Column(
-            children: [
-              const Text(
-                'Period',
-                style: textStyle,
-              ),
-              Gaps.v4,
-              Text('For ${date.period + 1} days'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  VerticalDivider verticalDivider() {
-    return VerticalDivider(
-      width: Sizes.size1,
-      indent: Sizes.size8,
-      endIndent: Sizes.size8,
-      color: Colors.grey.shade400,
-      thickness: 0.5,
     );
   }
 }

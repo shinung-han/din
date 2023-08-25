@@ -5,9 +5,11 @@ import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/projects/edit_db_title_screen.dart';
+import 'package:din/features/projects/view_models/app_bar_view_model.dart';
 import 'package:din/features/projects/view_models/db_edit_image_view_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
+import 'package:din/features/projects/widgets/date_information.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +40,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(projectProvider);
+    final date = ref.watch(appBarProvider);
     final goalsList = ref.watch(dbGoalListProvider);
 
     return Scaffold(
@@ -50,7 +53,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(left: Sizes.size24),
                   child: Text(
-                    'Edit Project',
+                    'Edit project',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                     ),
@@ -74,12 +77,51 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                 ),
               ],
             ),
-            SliverPadding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-                top: 10,
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          left: 15,
+                          bottom: 15,
+                        ),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Date information",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      DateInformation(date: date!),
+                      Gaps.v14,
+                      divider(),
+                    ],
+                  ),
+                ],
               ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 15,
+                ),
+                child: Text(
+                  "Goal list",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   final image = goalsList[index].image;
@@ -212,7 +254,6 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.image);
     return Container(
       decoration: BoxDecoration(
           border: Border.all(

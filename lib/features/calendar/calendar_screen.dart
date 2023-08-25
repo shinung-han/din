@@ -6,6 +6,7 @@ import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/models/event_model.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/calendar/view_models/format_view_model.dart';
+import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +35,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(projectProvider);
     final eventSource = ref.watch(calendarProvider);
 
     final events = LinkedHashMap(
@@ -137,42 +139,62 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               thickness: 0.5,
             ),
             Gaps.v10,
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: eventSource.isEmpty
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                        ),
-                      )
-                    : ListView.separated(
-                        itemCount: eventSource[_selectedDay]?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          EventModel? currentEvent =
-                              eventSource[_selectedDay]?[index];
-
-                          if (currentEvent != null) {
-                            return GoalListTile(
-                              title: currentEvent.title,
-                              image: currentEvent.image ?? "",
-                              memo: currentEvent.memo,
-                              rating: currentEvent.rating,
-                            ).animate().flipV(
-                                  begin: -0.5,
-                                  end: 0,
-                                  curve: Curves.easeOutExpo,
-                                );
-                          }
-                          return const SizedBox
-                              .shrink(); // This shouldn't happen but is a safe fallback
-                        },
-                        separatorBuilder: (context, index) {
-                          return Gaps.v8;
-                        },
+            if (user!.hasProject == false)
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.announcement_outlined,
+                        size: 50,
                       ),
+                      Gaps.v16,
+                      Text(
+                        "No data available\nPlease create a project",
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            if (user.hasProject == true)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: eventSource.isEmpty
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        )
+                      : ListView.separated(
+                          itemCount: eventSource[_selectedDay]?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            EventModel? currentEvent =
+                                eventSource[_selectedDay]?[index];
+
+                            if (currentEvent != null) {
+                              return GoalListTile(
+                                title: currentEvent.title,
+                                image: currentEvent.image ?? "",
+                                memo: currentEvent.memo,
+                                rating: currentEvent.rating,
+                              ).animate().flipV(
+                                    begin: -0.5,
+                                    end: 0,
+                                    curve: Curves.easeOutExpo,
+                                  );
+                            }
+                            return const SizedBox
+                                .shrink(); // This shouldn't happen but is a safe fallback
+                          },
+                          separatorBuilder: (context, index) {
+                            return Gaps.v8;
+                          },
+                        ),
+                ),
+              ),
             Gaps.v20,
           ],
         ),

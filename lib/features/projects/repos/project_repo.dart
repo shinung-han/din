@@ -144,56 +144,6 @@ class ProjectRepository {
     return null;
   }
 
-  // Future<List<DbGoalModel>> fetchGoalsOfToday(
-  //     String userId, String projectId) async {
-  //   DateTime now = DateTime.now();
-  //   String formattedDate = DateFormat('yyyyMMdd').format(now);
-
-  //   DocumentSnapshot? goalDoc = await _db
-  //       .collection("users")
-  //       .doc(userId)
-  //       .collection("project")
-  //       .doc(projectId)
-  //       .collection("goals")
-  //       .doc(formattedDate)
-  //       .get();
-
-  //   if (!goalDoc.exists) {
-  //     return [];
-  //   }
-
-  //   DocumentSnapshot subCollectionNames = await _db
-  //       .collection("users")
-  //       .doc(userId)
-  //       .collection("project")
-  //       .doc(projectId)
-  //       .get();
-
-  //   Map<String, dynamic>? data =
-  //       subCollectionNames.data() as Map<String, dynamic>?;
-
-  //   List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
-
-  //   List<DbGoalModel> goals = [];
-
-  //   for (String subCollectionName in goalsTitleList) {
-  //     QuerySnapshot subCollectionSnapshot =
-  //         await goalDoc.reference.collection(subCollectionName).get();
-  //     for (var subDoc in subCollectionSnapshot.docs) {
-  //       goals.add(
-  //         DbGoalModel(
-  //           date: subDoc['date'],
-  //           image: subDoc['image'],
-  //           memo: subDoc['memo'],
-  //           rating: subDoc['rating'],
-  //           title: subDoc['title'],
-  //         ),
-  //       );
-  //     }
-  //   }
-  //   return goals;
-  // }
-
   Future<Map<String, List<DbGoalModel>>> fetchGoalsOfTodayAndWeek(
       String userId, String projectId) async {
     DateTime now = DateTime.now();
@@ -375,40 +325,6 @@ class ProjectRepository {
 
     return goals;
   }
-
-  // Future<Map<DateTime, List<EventModel>>> fetchEventsForMonth(String userId,
-  //     String projectId, DateTime monthStart, DateTime monthEnd) async {
-  //   Map<DateTime, List<EventModel>> eventSource = {};
-
-  //   // 기존의 함수를 활용해 month 기간 동안의 모든 goals를 가져옵니다.
-  //   List<DbGoalModel> goals =
-  //       await _fetchGoalsForMonth(userId, projectId, monthStart, monthEnd);
-
-  //   for (DbGoalModel goal in goals) {
-  //     DateTime goalDate = DateTime.parse(goal.date); // 문자열을 DateTime으로 변환
-  //     if (eventSource.containsKey(goalDate)) {
-  //       // DateTime key가 이미 존재할 경우 해당 리스트에 Event를 추가합니다.
-  //       eventSource[goalDate]!.add(EventModel(
-  //         title: goal.title,
-  //         image: goal.image,
-  //         memo: goal.memo,
-  //         rating: goal.rating!,
-  //       ));
-  //     } else {
-  //       // 새로운 DateTime key를 추가하고 EventModel 리스트를 초기화합니다.
-  //       eventSource[goalDate] = [
-  //         EventModel(
-  //           title: goal.title,
-  //           image: goal.image,
-  //           memo: goal.memo,
-  //           rating: goal.rating!,
-  //         )
-  //       ];
-  //     }
-  //   }
-
-  //   return eventSource;
-  // }
 
   Future<void> deleteProject(String uid, String projectId) async {
     DocumentReference projectDocRef =

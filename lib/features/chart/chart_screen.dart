@@ -4,6 +4,7 @@ import 'package:din/features/chart/view_model/chart_view_model.dart';
 import 'package:din/features/chart/widgets/bar_chart.dart';
 import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
+import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +20,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     final weekDate = ref.watch(chartProvider);
+    final user = ref.watch(projectProvider);
     final goalsList = ref.watch(dbGoalListProvider);
     final uniqueTitles = goalsList
         .map(
@@ -33,124 +35,142 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            const SliverAppBar(
-              title: Text(
-                'Chart',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 15,
-                  bottom: 10,
-                ),
-                child: Text(
-                  "Weekly Average",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: AspectRatio(
-                aspectRatio: 2.5,
-                child: weekDate.isNotEmpty
-                    ? BarChartWidget(
-                        weekData: getWeeklyAverageRatings(weekDate),
-                      )
-                    : const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                        ),
-                      ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  Gaps.v14,
-                  Divider(
-                    color: Colors.grey.shade400,
-                    height: Sizes.size14,
-                    indent: 10,
-                    endIndent: 10,
-                    thickness: 0.5,
-                  ),
-                  Gaps.v14,
-                ],
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 15,
-                  bottom: 10,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Rating per Goal",
+        child: user!.hasProject == true
+            ? CustomScrollView(
+                slivers: [
+                  const SliverAppBar(
+                    title: Text(
+                      'Chart',
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        "Weekly Average",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: AspectRatio(
+                      aspectRatio: 2.5,
+                      child: weekDate.isNotEmpty
+                          ? BarChartWidget(
+                              weekData: getWeeklyAverageRatings(weekDate),
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                              ),
+                            ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        Gaps.v14,
+                        Divider(
+                          color: Colors.grey.shade400,
+                          height: Sizes.size14,
+                          indent: 10,
+                          endIndent: 10,
+                          thickness: 0.5,
+                        ),
+                        Gaps.v14,
+                      ],
+                    ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        bottom: 10,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Rating per Goal",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            "Tap the goal to see statistics",
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                      top: 10,
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final currentTitleGoals =
+                              getGoalsForTitle(uniqueTitles[index]);
+
+                          // final image = goalsList[index].image;
+                          // final title = goalsList[index].title;
+                          if (currentTitleGoals.isNotEmpty) {
+                            final goalItem = currentTitleGoals
+                                .first; // 혹은 평균 등의 처리로 데이터를 수정하실 수 있습니다.
+
+                            return Column(
+                              children: [
+                                GoalListTile(
+                                  userId: "", // 사용자 ID를 업데이트하십시오.
+                                  title: goalItem.title,
+                                  image: goalItem.image ?? '',
+                                  rating:
+                                      goalItem.rating!, // 이제 rating 데이터도 반영됩니다.
+                                ),
+                                Gaps.v8,
+                              ],
+                            );
+                          } else {
+                            return const SizedBox
+                                .shrink(); // 해당 제목의 데이터가 없을 경우, 아무 것도 반환하지 않습니다.
+                          }
+                        },
+                        childCount: uniqueTitles.length,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.announcement_outlined,
+                      size: 50,
+                    ),
+                    Gaps.v16,
                     Text(
-                      "Tap the goal to see statistics",
-                      style: TextStyle(color: Colors.black54),
+                      "No data available\nPlease create a project",
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-                top: 10,
-              ),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final currentTitleGoals =
-                        getGoalsForTitle(uniqueTitles[index]);
-
-                    // final image = goalsList[index].image;
-                    // final title = goalsList[index].title;
-                    if (currentTitleGoals.isNotEmpty) {
-                      final goalItem = currentTitleGoals
-                          .first; // 혹은 평균 등의 처리로 데이터를 수정하실 수 있습니다.
-
-                      return Column(
-                        children: [
-                          GoalListTile(
-                            userId: "", // 사용자 ID를 업데이트하십시오.
-                            title: goalItem.title,
-                            image: goalItem.image ?? '',
-                            rating: goalItem.rating!, // 이제 rating 데이터도 반영됩니다.
-                          ),
-                          Gaps.v8,
-                        ],
-                      );
-                    } else {
-                      return const SizedBox
-                          .shrink(); // 해당 제목의 데이터가 없을 경우, 아무 것도 반환하지 않습니다.
-                    }
-                  },
-                  childCount: uniqueTitles.length,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

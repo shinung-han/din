@@ -49,15 +49,21 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
 
     if (newDateRange == null) return null;
 
+    if (newDateRange.start == newDateRange.end) {
+      showErrorSnack(context, "You cannot select the same date twice");
+      return null;
+    }
+
     setState(() {
       _dateRange = newDateRange;
     });
+
     return null;
   }
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _onSetCardsTap(
       start, end, difference) {
-    if (difference == 0) {
+    if (difference == 1) {
       showErrorSnack(context, 'Please select a date');
     } else {
       ref.read(dateProvider.notifier).setDate(start, end, difference);
@@ -73,7 +79,7 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
   Widget build(BuildContext context) {
     final start = _dateRange.start;
     final end = _dateRange.end;
-    final difference = _dateRange.duration.inDays;
+    final difference = _dateRange.duration.inDays + 1;
 
     const textStyle = TextStyle(
       fontSize: 18,
@@ -82,66 +88,80 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
 
     return Scaffold(
       appBar: const CommonAppBar(title: 'Create Project'),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AuthHeader(
-              title: 'Set the Date',
-              subTitle:
-                  'Create your own fantastic project to become a better version of yourself than yesterday.',
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const AuthHeader(
+                  title: 'Set a Date',
+                  subTitle:
+                      'Create your own fantastic project to become a better version of yourself than yesterday.',
+                ),
+                // Gaps.v20,
+                CommonButton(
+                  text: 'Calendar',
+                  onTap: _pickDateRange,
+                  icon: Icons.edit_calendar_rounded,
+                ),
+                Gaps.v24,
+                IntrinsicHeight(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          const Text(
+                            'Start date',
+                            style: textStyle,
+                          ),
+                          Gaps.v4,
+                          Text(start == end
+                              ? '-'
+                              : DateFormat.yMd().format(start)),
+                        ],
+                      ),
+                      verticalDivider(),
+                      Column(
+                        children: [
+                          const Text(
+                            'End date',
+                            style: textStyle,
+                          ),
+                          Gaps.v4,
+                          Text(start == end
+                              ? '-'
+                              : DateFormat.yMd().format(end)),
+                        ],
+                      ),
+                      verticalDivider(),
+                      Column(
+                        children: [
+                          const Text(
+                            'Period',
+                            style: textStyle,
+                          ),
+                          Gaps.v4,
+                          Text(start == end ? '-' : 'For ${difference} days'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Gaps.v60,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.warning_amber_rounded),
+                    Gaps.h5,
+                    Text("Date can't be changed after creating a project"),
+                  ],
+                ),
+              ],
             ),
-            Gaps.v20,
-            CommonButton(
-              text: 'Calendar',
-              onTap: _pickDateRange,
-              icon: Icons.edit_calendar_rounded,
-            ),
-            Gaps.v24,
-            IntrinsicHeight(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      const Text(
-                        'Start date',
-                        style: textStyle,
-                      ),
-                      Gaps.v4,
-                      Text(start == end ? '-' : DateFormat.yMd().format(start)),
-                    ],
-                  ),
-                  verticalDivider(),
-                  Column(
-                    children: [
-                      const Text(
-                        'End date',
-                        style: textStyle,
-                      ),
-                      Gaps.v4,
-                      Text(start == end ? '-' : DateFormat.yMd().format(end)),
-                    ],
-                  ),
-                  verticalDivider(),
-                  Column(
-                    children: [
-                      const Text(
-                        'Period',
-                        style: textStyle,
-                      ),
-                      Gaps.v4,
-                      Text(start == end ? '-' : 'For ${difference + 1} days'),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

@@ -149,3 +149,23 @@ void showModalBottomWithText(
     },
   );
 }
+
+VerticalDivider verticalDivider() {
+  return VerticalDivider(
+    width: Sizes.size1,
+    indent: Sizes.size8,
+    endIndent: Sizes.size8,
+    color: Colors.grey.shade400,
+    thickness: 0.5,
+  );
+}
+
+Divider divider() {
+  return Divider(
+    color: Colors.grey.shade400,
+    height: Sizes.size14,
+    indent: 10,
+    endIndent: 10,
+    thickness: 0.5,
+  );
+}

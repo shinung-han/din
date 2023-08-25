@@ -85,7 +85,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               onTap: _onScaffoldTap,
               child: Scaffold(
                 appBar: CommonAppBar(
-                  title: "Edit Profile",
+                  title: "Edit profile",
                   icon: Icons.image_search_rounded,
                   onPressed: _onChangeProfileImage,
                 ),
@@ -183,6 +183,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 bottomNavigationBar: BottomAppBar(
                   height: 90,
                   child: SubmitButton(
+                    icon: Icons.edit_outlined,
                     disabled: isButtonEnabled,
                     onTap: _onSubmit,
                     buttonText: 'Edit',

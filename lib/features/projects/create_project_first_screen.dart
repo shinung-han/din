@@ -72,32 +72,32 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Gaps.v48,
-                    const AuthHeader(
-                      title: 'There is no Project',
-                      subTitle:
-                          'Create your own fantastic project to become a better version of yourself than yesterday.',
-                    ),
-                    Gaps.v20,
-                    CommonButton(
-                      text: 'Create a Project',
-                      bgColor: Colors.black,
-                      color: Colors.white,
-                      icon: Icons.add_location_alt_outlined,
-                      onTap: _onCreateProject,
-                    ),
-                    Gaps.v16,
-                    CommonButton(
-                      text: 'View Tutorial',
-                      onTap: () => _onViewTutorial(userModel),
-                      icon: Icons.navigation_outlined,
-                    ),
-                  ],
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const AuthHeader(
+                        title: 'There is no Project',
+                        subTitle:
+                            'Create your own fantastic project to become a better version of yourself than yesterday.',
+                      ),
+                      CommonButton(
+                        text: 'Create a Project',
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        icon: Icons.add_location_alt_outlined,
+                        onTap: _onCreateProject,
+                      ),
+                      Gaps.v16,
+                      CommonButton(
+                        text: 'View Tutorial',
+                        onTap: () => _onViewTutorial(userModel),
+                        icon: Icons.navigation_outlined,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
