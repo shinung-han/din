@@ -7,6 +7,7 @@ class UserProfileModel {
   final String bio;
   final String link;
   final bool hasAvatar;
+  final String avatarUrl;
   final bool hasProject;
   final bool isLoading;
   final DateTime? startDate;
@@ -18,6 +19,7 @@ class UserProfileModel {
     required this.bio,
     required this.link,
     required this.hasAvatar,
+    required this.avatarUrl,
     required this.hasProject,
     required this.isLoading,
     this.startDate,
@@ -30,6 +32,7 @@ class UserProfileModel {
         bio = "",
         link = "",
         hasAvatar = false,
+        avatarUrl = "",
         hasProject = false,
         isLoading = false,
         startDate = DateTime.now();
@@ -41,6 +44,7 @@ class UserProfileModel {
         bio = json["bio"],
         link = json["link"],
         hasAvatar = json["hasAvatar"],
+        avatarUrl = json["avatarUrl"],
         hasProject = json["hasProject"],
         isLoading = json["isLoading"],
         startDate = (json["startDate"] as Timestamp?)?.toDate();
@@ -53,6 +57,7 @@ class UserProfileModel {
       "bio": bio,
       "link": link,
       "hasAvatar": false,
+      "avatarUrl": avatarUrl,
       "hasProject": false,
       "isLoading": false,
       "startDate": startDate,
@@ -66,6 +71,7 @@ class UserProfileModel {
     String? bio,
     String? link,
     bool? hasAvatar,
+    String? avatarUrl,
     bool? hasProject,
     bool? isLoading,
     DateTime? startDate,
@@ -77,6 +83,7 @@ class UserProfileModel {
       bio: bio ?? this.bio,
       link: link ?? this.link,
       hasAvatar: hasAvatar ?? this.hasAvatar,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       hasProject: hasProject ?? this.hasProject,
       isLoading: isLoading ?? this.isLoading,
       startDate: startDate ?? this.startDate,

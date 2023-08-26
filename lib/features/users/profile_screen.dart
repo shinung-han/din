@@ -45,117 +45,111 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(usersProvider).when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Center(child: Text(error.toString())),
-          data: (data) {
-            final loginMethod =
-                ref.read(usersProvider.notifier).getLoginMethod();
+    final data = ref.watch(usersProvider);
 
-            bool isLogo =
-                loginMethod.isNotEmpty && loginMethod[0] == 'google.com';
+    final loginMethod = ref.read(usersProvider.notifier).getLoginMethod(ref);
+    bool isLogo = loginMethod.isNotEmpty && loginMethod[0] == 'google.com';
 
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  data.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          data.name,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Gaps.v20,
+          Hero(
+            tag: 'avatar',
+            child: Avatar(
+              name: data.name,
+              hasAvatar: data.hasAvatar,
+              avatarUrl: data.avatarUrl,
+              uid: data.uid,
+            ),
+          ),
+          Gaps.v16,
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              data.email,
+              style: const TextStyle(fontSize: Sizes.size20),
+            ),
+          ),
+          Gaps.v20,
+          Divider(
+            thickness: 0.5,
+            color: Colors.grey.shade400,
+            indent: Sizes.size10,
+            endIndent: Sizes.size10,
+          ),
+          Gaps.v10,
+          ProfileListTile(
+            leadingIcon: Icons.check_circle_outline_rounded,
+            title: "Linked account",
+            subTitle: "Check the connected login method",
+            isLogo: isLogo,
+            image: 'assets/images/google_logo.png',
+            loginMethod: loginMethod.isNotEmpty ? loginMethod[0] : null,
+          ),
+          ProfileListTile(
+            title: "Edit profile",
+            subTitle: 'Change profile image and user name',
+            leadingIcon: Icons.manage_accounts,
+            isLogo: false,
+            onPressed: _onEditProfileTap,
+          ),
+          if (loginMethod.isNotEmpty && loginMethod[0] == "password")
+            ProfileListTile(
+              title: "Change password",
+              subTitle: 'Change your current password',
+              leadingIcon: Icons.lock_reset_rounded,
+              isLogo: false,
+              onPressed: _onPasswordChangeTap,
+            ),
+          const ProfileListTile(
+            title: "Notice",
+            subTitle: "App improvements and revisions",
+            leadingIcon: Icons.notification_add_outlined,
+            isLogo: false,
+          ),
+          ProfileListTile(
+            title: "Log out",
+            subTitle: "You'll be redirected to the login page",
+            leadingIcon: Icons.logout_rounded,
+            isLogo: false,
+            onPressed: () => showModalBottomWithText(
+              context,
+              "Are you sure you want to log out?",
+              _onLogoutTap,
+            ),
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            leading: const Icon(
+              Icons.info_outline_rounded,
+              size: 30,
+            ),
+            title: const Text("App version"),
+            subtitle: Text(
+              'Last Updated 30 Jul 2023',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey.shade800,
               ),
-              body: Column(
-                children: [
-                  Gaps.v20,
-                  Hero(
-                    tag: 'avatar',
-                    child: Avatar(
-                      name: data.name,
-                      hasAvatar: data.hasAvatar,
-                      uid: data.uid,
-                    ),
-                  ),
-                  Gaps.v16,
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      data.email,
-                      style: const TextStyle(fontSize: Sizes.size20),
-                    ),
-                  ),
-                  Gaps.v20,
-                  Divider(
-                    thickness: 0.5,
-                    color: Colors.grey.shade400,
-                    indent: Sizes.size10,
-                    endIndent: Sizes.size10,
-                  ),
-                  Gaps.v10,
-                  ProfileListTile(
-                    leadingIcon: Icons.check_circle_outline_rounded,
-                    title: "Linked account",
-                    subTitle: "Check the connected login method",
-                    isLogo: isLogo,
-                    image: 'assets/images/google_logo.png',
-                    loginMethod: loginMethod.isNotEmpty ? loginMethod[0] : null,
-                  ),
-                  ProfileListTile(
-                    title: "Edit profile",
-                    subTitle: 'Change profile image and user name',
-                    leadingIcon: Icons.manage_accounts,
-                    isLogo: false,
-                    onPressed: _onEditProfileTap,
-                  ),
-                  if (loginMethod.isNotEmpty && loginMethod[0] == "password")
-                    ProfileListTile(
-                      title: "Change password",
-                      subTitle: 'Change your current password',
-                      leadingIcon: Icons.lock_reset_rounded,
-                      isLogo: false,
-                      onPressed: _onPasswordChangeTap,
-                    ),
-                  const ProfileListTile(
-                    title: "Notice",
-                    subTitle: "App improvements and revisions",
-                    leadingIcon: Icons.notification_add_outlined,
-                    isLogo: false,
-                  ),
-                  ProfileListTile(
-                    title: "Log out",
-                    subTitle: "You'll be redirected to the login page",
-                    leadingIcon: Icons.logout_rounded,
-                    isLogo: false,
-                    onPressed: () => showModalBottomWithText(
-                      context,
-                      "Are you sure you want to log out?",
-                      _onLogoutTap,
-                    ),
-                  ),
-                  ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    leading: const Icon(
-                      Icons.info_outline_rounded,
-                      size: 30,
-                    ),
-                    title: const Text("App version"),
-                    subtitle: Text(
-                      'Last Updated 30 Jul 2023',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey.shade800,
-                      ),
-                    ),
-                    trailing: const Text(
-                      '1.0.0',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ],
+            ),
+            trailing: const Text(
+              '1.0.0',
+              style: TextStyle(
+                fontSize: 14,
               ),
-            );
-          },
-        );
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

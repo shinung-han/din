@@ -22,9 +22,35 @@ class UserRepository {
 
   // 3. 프로필 수정(업데이트)
   // 3-1. avatar 업데이트
-  Future<void> uploadAvatar(File file, String fileName) async {
-    final fileRef = _storage.ref().child("avatars/$fileName");
+  Future<String> uploadAvatar(
+      File file, String oldFileName, String userId) async {
+    final fileNamePart =
+        await extractFileNameWithTimestamp(oldFileName, userId);
+    final oldFileRef = _storage.ref().child("avatars/$fileNamePart");
+    await oldFileRef.delete().catchError((error) {
+      print("Error deleting old avatar: $error");
+    });
+
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final newFileName = "${userId}_$timestamp";
+
+    final fileRef = _storage.ref().child("avatars/$newFileName");
     await fileRef.putFile(file);
+
+    final avatarUrl = await fileRef.getDownloadURL();
+
+    await updateUser(userId, {'avatarUrl': avatarUrl});
+
+    return await fileRef.getDownloadURL();
+  }
+
+  String extractFileNameWithTimestamp(String url, String userId) {
+    int startIndex = url.indexOf(userId);
+    int endIndex = url.indexOf('?alt');
+    if (startIndex != -1 && endIndex != -1) {
+      return url.substring(startIndex, endIndex);
+    }
+    return '';
   }
 
   Future<void> updateUser(String uid, Map<String, dynamic> data) async {
@@ -38,8 +64,6 @@ class UserRepository {
   ) async {
     await _db.collection("users").doc(uid).update(data!);
   }
-
-  // 3-3. 비밀번호 수정
 }
 
 final userRepo = Provider((ref) => UserRepository());

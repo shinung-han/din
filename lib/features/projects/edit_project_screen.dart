@@ -244,7 +244,7 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
       ref.read(calendarProvider.notifier).updateAllEventsTitleAndImage(
           widget.title, null, oldImageUrl, newImageUrl);
 
-      Navigator.of(context, rootNavigator: true).pop(); // 로딩 대화상자 제거
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 
