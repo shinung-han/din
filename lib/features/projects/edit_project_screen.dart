@@ -86,7 +86,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                         padding: EdgeInsets.only(
                           top: 10,
                           left: 15,
-                          bottom: 15,
+                          bottom: 10,
                         ),
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -98,7 +98,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                         ),
                       ),
                       DateInformation(date: date!),
-                      Gaps.v14,
+                      Gaps.v20,
                       divider(),
                     ],
                   ),
@@ -109,7 +109,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 15,
-                  vertical: 15,
+                  vertical: 10,
                 ),
                 child: Text(
                   "Goal list",

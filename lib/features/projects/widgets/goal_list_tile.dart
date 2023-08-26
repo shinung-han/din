@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/edit_title_screen.dart';
 import 'package:din/features/projects/list_of_goals_screen.dart';
+import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class GoalListTile extends ConsumerStatefulWidget {
   final int id;
   final int index;
   final bool? isWrapUp;
+  final List<GoalModel>? goalList;
 
   const GoalListTile({
     this.hasImage,
@@ -24,6 +26,7 @@ class GoalListTile extends ConsumerStatefulWidget {
     required this.id,
     required this.index,
     this.isWrapUp,
+    this.goalList,
     super.key,
   });
 
@@ -84,6 +87,7 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
         builder: (context) => EditTitleScreen(
           title: widget.title,
           id: widget.id,
+          goalList: widget.goalList!,
         ),
       ),
     );

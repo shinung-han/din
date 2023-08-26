@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/sizes.dart';
+import 'package:din/features/projects/models/goal_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class EditTitleScreen extends ConsumerStatefulWidget {
   final String? title;
   final int? id;
+  final List<GoalModel> goalList;
 
   const EditTitleScreen({
     this.title,
     this.id,
+    required this.goalList,
     super.key,
   });
 
@@ -53,7 +56,21 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
     });
   }
 
-  void _onSubmit() {
+  void _onSubmit(goalList) {
+    bool isDuplicate = false;
+
+    for (var goal in goalList) {
+      if (goal.title.contains(_titleController.text)) {
+        isDuplicate = true;
+        break;
+      }
+    }
+
+    if (isDuplicate) {
+      showErrorSnack(context, "This title exists. Try another");
+      return;
+    }
+
     ref.read(goalListProvider.notifier).changeGoalTitle(
           widget.id!,
           _titleController.text,
@@ -114,7 +131,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
           height: 90,
           child: SubmitButton(
             disabled: isButtonEnabled,
-            onTap: _onSubmit,
+            onTap: () => _onSubmit(widget.goalList),
             buttonText: 'Edit',
             icon: Icons.edit_outlined,
           ),

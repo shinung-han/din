@@ -1,11 +1,11 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
-import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/view_models/date_view_model.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/widgets/date_information.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -56,18 +56,20 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.all(Sizes.size20),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    Column(
-                      children: [
-                        header(),
-                        title('Date information', 200),
-                        DateInformation(date: date),
-                        title('Goal list', 120),
-                        SingleChildScrollView(
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Column(
+                    children: [
+                      header(),
+                      title('Date information'),
+                      DateInformation(date: date),
+                      Gaps.v20,
+                      divider(),
+                      title('Goal list'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: SingleChildScrollView(
                           child: Column(
                             children: goals.map((goal) {
                               final hasImage = goal.image != null;
@@ -91,10 +93,10 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                             }).toList(),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -119,57 +121,41 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
   }
 
   Widget header() {
-    return const Column(
-      children: [
-        Text(
-          "Are you ready?",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 30,
+    return Padding(
+      padding: const EdgeInsets.all(40),
+      child: const Column(
+        children: [
+          Text(
+            "Are you ready?",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
           ),
-        ),
-        Text(
-          "Create your own fantastic project to become a better version of yourself than yesterday.",
-          textAlign: TextAlign.center,
-        ),
-      ],
+          Text(
+            "Create your own fantastic project to become a better version of yourself than yesterday.",
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget title(String title, double width) {
-    return Column(
-      children: [
-        Gaps.v40,
-        Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Divider(
-                color: Colors.grey.shade400,
-                indent: 10,
-                endIndent: 10,
-                thickness: 0.5,
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: width,
-                color: Colors.white,
-                alignment: Alignment.center,
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-          ],
+  Widget title(String title) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: 10,
+        left: 15,
+        bottom: 10,
+      ),
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
         ),
-        Gaps.v16,
-      ],
+      ),
     );
   }
 }

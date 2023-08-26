@@ -20,11 +20,13 @@ class ListOfGoalsScreen extends ConsumerStatefulWidget {
 }
 
 class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
-  void _onAddGoalTap() {
+  void _onAddGoalTap(goals) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const AddGoalScreen(),
+        builder: (context) => AddGoalScreen(
+          goalList: goals,
+        ),
       ),
     );
   }
@@ -81,7 +83,7 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
                     ),
                   ),
                 GestureDetector(
-                  onTap: _onAddGoalTap,
+                  onTap: () => _onAddGoalTap(goals),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Icon(
@@ -143,6 +145,7 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
                                 title: title,
                                 id: id,
                                 index: index,
+                                goalList: goals,
                               ),
                               Gaps.v8,
                             ],
@@ -156,13 +159,30 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: 90,
-        child: CommonButton(
-          text: 'Next',
-          bgColor: Colors.black,
-          color: Colors.white,
-          onTap: () => _onSubmit(goals),
-          icon: Icons.arrow_forward_ios_rounded,
+        height: 128,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.warning_amber_rounded),
+                Gaps.h5,
+                Text("After creating a project, you can't add or delete goals"),
+              ],
+            ),
+            Gaps.v10,
+            Container(
+              height: 66,
+              child: CommonButton(
+                text: 'Next',
+                bgColor: Colors.black,
+                color: Colors.white,
+                onTap: () => _onSubmit(goals),
+                icon: Icons.arrow_forward_ios_rounded,
+              ),
+            ),
+          ],
         ),
       ),
     );

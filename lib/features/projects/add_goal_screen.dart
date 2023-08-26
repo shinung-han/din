@@ -12,7 +12,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddGoalScreen extends ConsumerStatefulWidget {
-  const AddGoalScreen({super.key});
+  final List<GoalModel> goalList;
+
+  const AddGoalScreen({
+    super.key,
+    required this.goalList,
+  });
 
   @override
   ConsumerState<AddGoalScreen> createState() => _ListSettingScreenState();
@@ -102,7 +107,8 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final goalList = ref.watch(goalListProvider);
+    // final goalList = ref.watch(goalListProvider);
+    print("add : ${widget.goalList}");
 
     return GestureDetector(
       onTap: _onScaffoldTap,
@@ -255,7 +261,7 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
           child: SubmitButton(
             buttonText: 'Create',
             disabled: isButtonEnabled,
-            onTap: () => _onSubmit(goalList),
+            onTap: () => _onSubmit(widget.goalList),
             icon: Icons.add_circle_outline_rounded,
           ),
         ),

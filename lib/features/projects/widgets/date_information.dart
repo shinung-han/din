@@ -1,4 +1,5 @@
 import 'package:din/constants/gaps.dart';
+import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/models/date_model.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
@@ -20,42 +21,45 @@ class DateInformation extends StatelessWidget {
     );
 
     return IntrinsicHeight(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            children: [
-              const Text(
-                'Start date',
-                style: textStyle,
-              ),
-              Gaps.v4,
-              Text(DateFormat.yMd().format(date.startDate)),
-            ],
-          ),
-          verticalDivider(),
-          Column(
-            children: [
-              const Text(
-                'End date',
-                style: textStyle,
-              ),
-              Gaps.v4,
-              Text(DateFormat.yMd().format(date.endDate)),
-            ],
-          ),
-          verticalDivider(),
-          Column(
-            children: [
-              const Text(
-                'Period',
-                style: textStyle,
-              ),
-              Gaps.v4,
-              Text('For ${date.period} days'),
-            ],
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.size20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  'Start date',
+                  style: textStyle,
+                ),
+                Gaps.v4,
+                Text(DateFormat.yMd().format(date.startDate)),
+              ],
+            ),
+            verticalDivider(),
+            Column(
+              children: [
+                const Text(
+                  'End date',
+                  style: textStyle,
+                ),
+                Gaps.v4,
+                Text(DateFormat.yMd().format(date.endDate)),
+              ],
+            ),
+            verticalDivider(),
+            Column(
+              children: [
+                const Text(
+                  'Period',
+                  style: textStyle,
+                ),
+                Gaps.v4,
+                Text('For ${date.period} days'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -100,7 +100,6 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
                   subTitle:
                       'Create your own fantastic project to become a better version of yourself than yesterday.',
                 ),
-                // Gaps.v20,
                 CommonButton(
                   text: 'Calendar',
                   onTap: _pickDateRange,
@@ -151,27 +150,44 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
                   ),
                 ),
                 Gaps.v60,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.warning_amber_rounded),
-                    Gaps.h5,
-                    Text("Date can't be changed after creating a project"),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Icon(Icons.warning_amber_rounded),
+                //     Gaps.h5,
+                //     Text("Date can't be changed after creating a project"),
+                //   ],
+                // ),
               ],
             ),
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: 90,
-        child: CommonButton(
-          text: 'Next',
-          bgColor: Colors.black,
-          color: Colors.white,
-          onTap: () => _onSetCardsTap(start, end, difference),
-          icon: Icons.arrow_forward_ios_rounded,
+        height: 128,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.warning_amber_rounded),
+                Gaps.h5,
+                Text("Date can't be changed after creating a project"),
+              ],
+            ),
+            Gaps.v10,
+            Container(
+              height: 66,
+              child: CommonButton(
+                text: 'Next',
+                bgColor: Colors.black,
+                color: Colors.white,
+                onTap: () => _onSetCardsTap(start, end, difference),
+                icon: Icons.arrow_forward_ios_rounded,
+              ),
+            ),
+          ],
         ),
       ),
     );
