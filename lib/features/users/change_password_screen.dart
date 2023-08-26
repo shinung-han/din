@@ -1,6 +1,7 @@
 import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/features/users/view_models/change_password_view_model.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,11 +50,12 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
   bool isButtonEnabled = false;
 
-  void _onSubmit() {
-    ref.read(changePasswordProvider.notifier).passwordUpdate(
-          context,
-          _newPassword,
-        );
+  void _onSubmit() async {
+    await ref
+        .read(changePasswordProvider.notifier)
+        .passwordUpdate(_newPassword);
+    Navigator.pop(context);
+    showErrorSnack(context, "The password has been changed");
   }
 
   void _onDeleteTap(controller) {
