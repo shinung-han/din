@@ -7,6 +7,7 @@ import 'package:din/constants/sizes.dart';
 import 'package:din/features/users/view_models/edit_profile_view_model.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:din/features/users/widgets/avatar.dart';
+import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,7 +44,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   void _onSubmit() {
     ref
         .read(editProfileProvider.notifier)
-        .profileUpdate(context, _nameController.text);
+        .profileUpdate(ref, _nameController.text);
+    Navigator.pop(context);
+    showErrorSnack(context, "Your username has been successfully changed");
   }
 
   void _onDeleteTap(controller) {
