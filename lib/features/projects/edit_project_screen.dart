@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/projects/edit_db_title_screen.dart';
+import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/app_bar_view_model.dart';
 import 'package:din/features/projects/view_models/db_edit_image_view_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
@@ -133,6 +135,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                         userId: user!.uid,
                         title: title,
                         image: image ?? '',
+                        goalList: goalsList,
                       ),
                       Gaps.v8,
                     ],
@@ -151,12 +154,14 @@ class GoalListTile extends ConsumerStatefulWidget {
   final String userId;
   final String title;
   final String image;
+  final List<DbGoalModel> goalList;
 
   const GoalListTile({
     super.key,
     required this.userId,
     required this.title,
     required this.image,
+    required this.goalList,
   });
 
   @override
@@ -247,7 +252,10 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditDbTitleScreen(title: widget.title),
+        builder: (context) => EditDbTitleScreen(
+          title: widget.title,
+          goalList: widget.goalList,
+        ),
       ),
     );
   }
@@ -275,7 +283,7 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
                         bottomLeft: Radius.circular(10),
                       ),
                       image: DecorationImage(
-                        image: NetworkImage(
+                        image: CachedNetworkImageProvider(
                           widget.image,
                         ),
                         fit: BoxFit.cover,

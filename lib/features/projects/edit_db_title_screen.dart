@@ -4,6 +4,7 @@ import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
+import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/db_edit_title_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
@@ -14,9 +15,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EditDbTitleScreen extends ConsumerStatefulWidget {
   final String? title;
+  final List<DbGoalModel> goalList;
 
   const EditDbTitleScreen({
     required this.title,
+    required this.goalList,
     super.key,
   });
 
@@ -57,7 +60,25 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
     });
   }
 
-  void _onSubmit(String userId, String oldTitle) {
+  void _onSubmit(
+    String userId,
+    String oldTitle,
+    List<DbGoalModel> goalList,
+  ) {
+    bool isDuplicate = false;
+
+    for (var goal in goalList) {
+      if (goal.title.contains(_titleController.text)) {
+        isDuplicate = true;
+        break;
+      }
+    }
+
+    if (isDuplicate) {
+      showErrorSnack(context, "This title exists. Try another");
+      return;
+    }
+
     ref
         .read(editTitleProvider.notifier)
         .editTitle(userId, oldTitle, _titleController.text);
@@ -147,7 +168,11 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
           height: 90,
           child: SubmitButton(
             disabled: isButtonEnabled,
-            onTap: () => _onSubmit(user!.uid, widget.title!),
+            onTap: () => _onSubmit(
+              user!.uid,
+              widget.title!,
+              widget.goalList,
+            ),
             buttonText: 'Edit',
             icon: Icons.edit_outlined,
           ),
