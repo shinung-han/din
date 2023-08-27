@@ -43,6 +43,10 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                  Gaps.v40,
                   const Text(
                     'Creating your project',
                     style: TextStyle(
@@ -58,10 +62,6 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
                       fontSize: 16,
                       color: Colors.black54,
                     ),
-                  ),
-                  Gaps.v40,
-                  CircularProgressIndicator(
-                    color: Colors.grey.shade400,
                   ),
                 ],
               ),

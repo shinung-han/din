@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/chart/view_model/chart_view_model.dart';
@@ -6,6 +7,7 @@ import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -140,7 +142,11 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                                   image: goalItem.image ?? '',
                                   rating:
                                       goalItem.rating!, // 이제 rating 데이터도 반영됩니다.
-                                ),
+                                ).animate().flipV(
+                                      begin: -0.5,
+                                      end: 0,
+                                      curve: Curves.easeOutExpo,
+                                    ),
                                 Gaps.v8,
                               ],
                             );
@@ -261,7 +267,7 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
                               bottomLeft: Radius.circular(10),
                             ),
                             image: DecorationImage(
-                              image: NetworkImage(
+                              image: CachedNetworkImageProvider(
                                 widget.image,
                               ),
                               fit: BoxFit.cover,

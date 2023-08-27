@@ -24,12 +24,14 @@ class UserRepository {
   // 3-1. avatar 업데이트
   Future<String> uploadAvatar(
       File file, String oldFileName, String userId) async {
-    final fileNamePart =
-        await extractFileNameWithTimestamp(oldFileName, userId);
-    final oldFileRef = _storage.ref().child("avatars/$fileNamePart");
-    await oldFileRef.delete().catchError((error) {
-      print("Error deleting old avatar: $error");
-    });
+    if (oldFileName != "") {
+      final fileNamePart =
+          await extractFileNameWithTimestamp(oldFileName, userId);
+      final oldFileRef = _storage.ref().child("avatars/$fileNamePart");
+      await oldFileRef.delete().catchError((error) {
+        print("Error deleting old avatar: $error");
+      });
+    }
 
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final newFileName = "${userId}_$timestamp";

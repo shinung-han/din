@@ -14,7 +14,10 @@ class BarChartWidget extends StatelessWidget {
         titlesData: titlesData,
         borderData: borderData,
         barGroups: barGroups,
-        gridData: const FlGridData(show: false),
+        gridData: const FlGridData(
+          show: true,
+          drawVerticalLine: false,
+        ),
         alignment: BarChartAlignment.spaceAround,
         maxY: 6,
       ),
@@ -36,8 +39,8 @@ class BarChartWidget extends StatelessWidget {
             return BarTooltipItem(
               rod.toY.toString(),
               const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+                // color: Colors.black,
+                fontWeight: FontWeight.w500,
               ),
             );
           },
@@ -75,13 +78,7 @@ class BarChartWidget extends StatelessWidget {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 4,
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.black87,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
+      child: Text(text),
     );
   }
 
@@ -106,16 +103,24 @@ class BarChartWidget extends StatelessWidget {
       );
 
   FlBorderData get borderData => FlBorderData(
-        show: false,
-      );
+      show: true,
+      border: Border(
+        bottom: BorderSide(
+          color: Colors.black,
+          width: 1,
+        ),
+      ));
 
   LinearGradient get _barsGradient => LinearGradient(
         colors: [
+          // Colors.grey,
+          // Colors.black,
           // Color(0xff02d39a),
           // Color(0xff23b6e6),
-          // Colors.amberAccent,
-          Colors.amberAccent.withOpacity(0.4),
+          // Color(0xff23b6e6),
+          // Colors.amberAccent.withOpacity(0.4),
           Colors.amber,
+          Colors.amberAccent,
         ],
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,
@@ -128,7 +133,13 @@ class BarChartWidget extends StatelessWidget {
             BarChartRodData(
               toY: weekData![index].toDouble(),
               gradient: _barsGradient,
-              width: 12,
+              width: 10,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(2),
+                topRight: Radius.circular(2),
+                bottomLeft: Radius.circular(0),
+                bottomRight: Radius.circular(0),
+              ),
             )
           ],
           showingTooltipIndicators: [0],

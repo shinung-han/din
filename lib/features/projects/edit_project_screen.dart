@@ -14,6 +14,7 @@ import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/widgets/date_information.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -136,7 +137,11 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                         title: title,
                         image: image ?? '',
                         goalList: goalsList,
-                      ),
+                      ).animate(delay: 100.milliseconds).flipV(
+                            begin: -0.5,
+                            end: 0,
+                            curve: Curves.easeOutExpo,
+                          ),
                       Gaps.v8,
                     ],
                   );

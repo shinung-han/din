@@ -105,7 +105,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
       bottomNavigationBar: BottomAppBar(
         height: 90,
         child: CommonButton(
-          text: "Done",
+          text: "Create",
           bgColor: Colors.black,
           color: Colors.white,
           onTap: () => _onCreateProject(
