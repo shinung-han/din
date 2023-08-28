@@ -91,7 +91,7 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false/>
+		<true/>
 		<key>naverConsumerKey</key>
 		<string>JgJrt0KYK0yAOs0NQ5FA</string>
 		<key>naverConsumerSecret</key>

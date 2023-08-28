@@ -1,6 +1,7 @@
 import 'package:din/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,12 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   runApp(MyApp());
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -77,7 +84,12 @@ class DinApp extends ConsumerWidget {
       theme: ThemeData(
         fontFamily: 'NotoSans',
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+          ),
+        ),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: Colors.black,
           selectionColor: Colors.grey.shade200,
