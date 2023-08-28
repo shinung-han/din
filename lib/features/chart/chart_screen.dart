@@ -24,6 +24,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
     final weekDate = ref.watch(chartProvider);
     final user = ref.watch(projectProvider);
     final goalsList = ref.watch(dbGoalListProvider);
+
     final uniqueTitles = goalsList
         .map(
           (goal) => goal.title,
@@ -240,7 +241,7 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.rating);
+    // print(widget.rating);
 
     return Column(
       children: [

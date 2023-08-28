@@ -3,6 +3,7 @@ import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
+import 'package:din/features/chart/view_model/chart_view_model.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/memo_screen.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
@@ -56,6 +57,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     final calendarViewModel = ref.read(calendarProvider.notifier);
     calendarViewModel.updateEventMemoOrRating(
         DateTime.now(), title, null, rating);
+    ref.read(chartProvider.notifier).updateRating(title, rating);
     Navigator.pop(context);
   }
 

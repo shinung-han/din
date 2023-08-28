@@ -2,6 +2,7 @@ import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/repos/project_repo.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class ChartViewModel extends StateNotifier<List<DbGoalModel>> {
   final ProjectRepository _projectRepository;
@@ -24,6 +25,17 @@ class ChartViewModel extends StateNotifier<List<DbGoalModel>> {
       );
       state = data["week"]!;
     }
+  }
+
+  void updateRating(String goalTitle, double rating) {
+    final now = DateFormat('yyyyMMdd').format(DateTime.now());
+
+    state = state.map((goal) {
+      if (goal.title == goalTitle && goal.date == now) {
+        return goal.copyWith(rating: rating);
+      }
+      return goal;
+    }).toList();
   }
 }
 
