@@ -123,31 +123,39 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final image = goalsList[index].image;
-                  final title = goalsList[index].title;
+            goalsList.isEmpty
+                ? SliverFillRemaining(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                : SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final image = goalsList[index].image;
+                        final title = goalsList[index].title;
 
-                  return Column(
-                    children: [
-                      GoalListTile(
-                        userId: user!.uid,
-                        title: title,
-                        image: image ?? '',
-                        goalList: goalsList,
-                      ).animate(delay: 100.milliseconds).flipV(
-                            begin: -0.5,
-                            end: 0,
-                            curve: Curves.easeOutExpo,
-                          ),
-                      Gaps.v8,
-                    ],
-                  );
-                }, childCount: goalsList.length),
-              ),
-            ),
+                        return Column(
+                          children: [
+                            GoalListTile(
+                              userId: user!.uid,
+                              title: title,
+                              image: image ?? '',
+                              goalList: goalsList,
+                            ).animate(delay: 100.milliseconds).flipV(
+                                  begin: -0.5,
+                                  end: 0,
+                                  curve: Curves.easeOutExpo,
+                                ),
+                            Gaps.v8,
+                          ],
+                        );
+                      }, childCount: goalsList.length),
+                    ),
+                  ),
           ],
         ),
       ),

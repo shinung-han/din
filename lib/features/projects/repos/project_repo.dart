@@ -151,9 +151,7 @@ class ProjectRepository {
 
     // 주의 시작과 끝 날짜 계산
     DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    // print(startOfWeek);
     DateTime endOfWeek = startOfWeek.add(const Duration(days: 6));
-    // print(endOfWeek);
     // String formattedStartDateOfWeek =
     //     DateFormat('yyyyMMdd').format(startOfWeek);
     // String formattedEndDateOfWeek = DateFormat('yyyyMMdd').format(endOfWeek);
@@ -177,6 +175,18 @@ class ProjectRepository {
 
   Future<List<DbGoalModel>> fetchGoalsByDate(
       String userId, String projectId, String date) async {
+    DocumentSnapshot projectSnapshot = await _db
+        .collection("users")
+        .doc(userId)
+        .collection("project")
+        .doc(projectId)
+        .get();
+
+    if (!projectSnapshot.exists) return [];
+
+    Map<String, dynamic> data = projectSnapshot.data() as Map<String, dynamic>;
+    List<String> goalsTitleList = List<String>.from(data["goalsTitle"]);
+
     DocumentSnapshot? goalDoc = await _db
         .collection("users")
         .doc(userId)
@@ -186,22 +196,25 @@ class ProjectRepository {
         .doc(date)
         .get();
 
+    // If the document doesn't exist, use the project's start date instead
     if (!goalDoc.exists) {
-      return [];
+      DateTime startDate = data["startDate"].toDate();
+      String formattedDate = DateFormat('yyyyMMdd').format(startDate);
+      goalDoc = await _db
+          .collection("users")
+          .doc(userId)
+          .collection("project")
+          .doc(projectId)
+          .collection("goals")
+          .doc(formattedDate)
+          .get();
     }
 
-    DocumentSnapshot subCollectionNames = await _db
-        .collection("users")
-        .doc(userId)
-        .collection("project")
-        .doc(projectId)
-        .get();
+    return _fetchGoalsFromDoc(goalDoc, goalsTitleList);
+  }
 
-    Map<String, dynamic>? data =
-        subCollectionNames.data() as Map<String, dynamic>?;
-
-    List<String> goalsTitleList = List<String>.from(data!["goalsTitle"]);
-
+  Future<List<DbGoalModel>> _fetchGoalsFromDoc(
+      DocumentSnapshot goalDoc, List<String> goalsTitleList) async {
     List<DbGoalModel> goals = [];
 
     for (String subCollectionName in goalsTitleList) {
@@ -219,6 +232,7 @@ class ProjectRepository {
         );
       }
     }
+
     return goals;
   }
 

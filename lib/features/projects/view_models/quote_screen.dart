@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
@@ -45,6 +46,18 @@ class _QuoteScreenState extends ConsumerState<QuoteScreen> {
 
     int difference =
         normalizedCurrentDate.difference(normalizedStartDate).inDays;
+
+    if (difference > 0) {
+      final user = ref.watch(projectProvider);
+
+      ref
+          .read(projectProvider.notifier)
+          .updateHasProject(false, DateTime.now());
+      ref.read(projectProvider.notifier).deleteProject(user!.uid);
+
+      Navigator.popUntil(
+          context, ModalRoute.withName(MainNavigationScreen.routeName));
+    }
 
     return "D$difference";
   }

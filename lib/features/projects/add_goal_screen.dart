@@ -108,7 +108,6 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     // final goalList = ref.watch(goalListProvider);
-    print("add : ${widget.goalList}");
 
     return GestureDetector(
       onTap: _onScaffoldTap,
