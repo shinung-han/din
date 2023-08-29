@@ -1,14 +1,35 @@
+import 'dart:io';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:din/router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+Map<String, String> UNIT_ID = kReleaseMode
+    ? {
+        'ios': 'ca-app-pub-8268099499009870~6548359452',
+        'android': '[YOUR ANDROID AD UNIT ID]',
+      }
+    : {
+        'ios': 'ca-app-pub-8268099499009870/1356614665',
+        'android': 'ca-app-pub-3940256099942544/6300978111',
+      };
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  if (Platform.isIOS) {
+    final status = await AppTrackingTransparency.requestTrackingAuthorization();
+    print(status);
+  }
 
   runApp(MyApp());
 

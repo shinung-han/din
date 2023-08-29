@@ -69,6 +69,18 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // TargetPlatform os = Theme.of(context).platform;
+
+    // BannerAd banner = BannerAd(
+    //   size: AdSize.banner,
+    //   adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
+    //   listener: BannerAdListener(
+    //     onAdFailedToLoad: (ad, error) {},
+    //     onAdLoaded: (ad) {},
+    //   ),
+    //   request: AdRequest(),
+    // );
+
     final user = ref.watch(projectProvider);
     final userId = user!.uid;
     final goalsList = ref.watch(dbGoalListProvider);

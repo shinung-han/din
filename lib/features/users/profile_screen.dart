@@ -7,10 +7,12 @@ import 'package:din/features/users/change_password_screen.dart';
 import 'package:din/features/users/view_models/users_view_model.dart';
 import 'package:din/features/users/widgets/avatar.dart';
 import 'package:din/features/users/widgets/profile_list_tile.dart';
+import 'package:din/main.dart';
 import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -20,6 +22,34 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  BannerAd? banner;
+  TargetPlatform? os;
+
+  @override
+  void initState() {
+    super.initState();
+
+    banner = BannerAd(
+      size: AdSize.banner,
+      adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
+      listener: BannerAdListener(
+        onAdFailedToLoad: (ad, error) {},
+        onAdLoaded: (ad) {
+          setState(() {});
+        },
+      ),
+      request: AdRequest(),
+    );
+
+    banner?.load();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    os = Theme.of(context).platform;
+  }
+
   void _onLogoutTap() {
     ref.read(authRepo).signOut();
     context.go(LoginScreen.routeURL);
@@ -110,12 +140,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               isLogo: false,
               onPressed: _onPasswordChangeTap,
             ),
-          const ProfileListTile(
-            title: "Notice",
-            subTitle: "App improvements and revisions",
-            leadingIcon: Icons.notification_add_outlined,
-            isLogo: false,
-          ),
+          // const ProfileListTile(
+          //   title: "Notice",
+          //   subTitle: "App improvements and revisions",
+          //   leadingIcon: Icons.notification_add_outlined,
+          //   isLogo: false,
+          // ),
           ProfileListTile(
             title: "Log out",
             subTitle: "You'll be redirected to the login page",
@@ -148,6 +178,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
             ),
           ),
+          Spacer(),
+          Container(
+            height: 60,
+            child: AdWidget(ad: banner!),
+          )
         ],
       ),
     );

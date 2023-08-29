@@ -21,6 +21,50 @@ class CalendarScreen extends ConsumerStatefulWidget {
 }
 
 class _CalendarScreenState extends ConsumerState<CalendarScreen> {
+  // BannerAd? banner;
+  // TargetPlatform? os;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   banner = BannerAd(
+  //     size: AdSize.banner,
+  //     adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
+  //     listener: BannerAdListener(
+  //       onAdFailedToLoad: (ad, error) {},
+  //       onAdLoaded: (ad) {
+  //         setState(() {});
+  //       },
+  //     ),
+  //     request: AdRequest(),
+  //   );
+
+  //   banner?.load();
+  // }
+
+  // String getAdUnitId(TargetPlatform os) {
+  //   if (kReleaseMode) {
+  //     if (os == TargetPlatform.iOS) {
+  //       return dotenv.env['IOS_RELEASE_UNIT_ID']!;
+  //     } else {
+  //       return dotenv.env['ANDROID_RELEASE_UNIT_ID']!;
+  //     }
+  //   } else {
+  //     if (os == TargetPlatform.iOS) {
+  //       return dotenv.env['IOS_DEBUG_UNIT_ID']!;
+  //     } else {
+  //       return dotenv.env['ANDROID_DEBUG_UNIT_ID']!;
+  //     }
+  //   }
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   os = Theme.of(context).platform;
+  // }
+
   late DateTime _selectedDay = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -32,6 +76,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   Future<void> _onFormatChanged(CalendarFormat format) async {
     await ref.read(formatProvider.notifier).saveCalendarFormat(format);
   }
+
+  // @override
+  // void dispose() {
+  //   banner?.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -195,6 +245,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         ),
                 ),
               ),
+            // Container(
+            //   height: 50,
+            //   child: AdWidget(ad: banner!),
+            // ),
             Gaps.v20,
           ],
         ),
