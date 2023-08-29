@@ -22,6 +22,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     final weekDate = ref.watch(chartProvider);
+    // print("weekDate : $weekDate");
     final user = ref.watch(projectProvider);
     final goalsList = ref.watch(dbGoalListProvider);
 
@@ -31,6 +32,8 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
         )
         .toSet()
         .toList();
+
+    print("uniqueTitles : $uniqueTitles");
 
     List<DbGoalModel> getGoalsForTitle(String title) {
       return weekDate.where((item) => item.title == title).toList();
@@ -129,20 +132,35 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                           final currentTitleGoals =
                               getGoalsForTitle(uniqueTitles[index]);
 
-                          // final image = goalsList[index].image;
-                          // final title = goalsList[index].title;
                           if (currentTitleGoals.isNotEmpty) {
-                            final goalItem = currentTitleGoals
-                                .first; // 혹은 평균 등의 처리로 데이터를 수정하실 수 있습니다.
+                            final goalItem = currentTitleGoals.first;
+
+                            final weeklyRatings =
+                                computeWeeklyRatings(currentTitleGoals);
+
+                            double averageRating;
+                            int count = weeklyRatings
+                                .where((rating) => rating > 0.0)
+                                .length;
+                            if (count > 0) {
+                              averageRating = weeklyRatings
+                                      .where((rating) => rating > 0.0)
+                                      .reduce((a, b) => a + b) /
+                                  count;
+                              averageRating = double.parse(
+                                  averageRating.toStringAsFixed(1));
+                            } else {
+                              averageRating = 0.0;
+                            }
 
                             return Column(
                               children: [
                                 GoalListTile(
-                                  userId: "", // 사용자 ID를 업데이트하십시오.
+                                  userId: "",
                                   title: goalItem.title,
                                   image: goalItem.image ?? '',
-                                  rating:
-                                      goalItem.rating!, // 이제 rating 데이터도 반영됩니다.
+                                  rating: averageRating,
+                                  weeklyRatings: weeklyRatings,
                                 ).animate().flipV(
                                       begin: -0.5,
                                       end: 0,
@@ -152,8 +170,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                               ],
                             );
                           } else {
-                            return const SizedBox
-                                .shrink(); // 해당 제목의 데이터가 없을 경우, 아무 것도 반환하지 않습니다.
+                            return const SizedBox.shrink();
                           }
                         },
                         childCount: uniqueTitles.length,
@@ -197,12 +214,20 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
           .toList();
 
       if (matchingData.isNotEmpty) {
-        double dayAverage =
-            matchingData.map((e) => e.rating).reduce((a, b) => a! + b!)! /
-                matchingData.length;
-        dayAverage = double.parse(dayAverage.toStringAsFixed(1));
+        var validRatings = matchingData
+            .map((e) => e.rating)
+            .where((rating) => rating != null && rating > 0)
+            .toList();
 
-        weeklyAverages.add(dayAverage);
+        if (validRatings.isNotEmpty) {
+          double dayAverage =
+              validRatings.reduce((a, b) => a! + b!)! / validRatings.length;
+          dayAverage = double.parse(dayAverage.toStringAsFixed(1));
+
+          weeklyAverages.add(dayAverage);
+        } else {
+          weeklyAverages.add(0.0);
+        }
       } else {
         weeklyAverages.add(0.0);
       }
@@ -212,11 +237,44 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
   }
 }
 
+List<double> computeWeeklyRatings(List<DbGoalModel> goals) {
+  DateTime now = DateTime.now();
+  DateTime monday = now.subtract(Duration(days: now.weekday - 1));
+
+  List<double> weeklyRatings = List<double>.filled(7, 0.0);
+
+  for (int i = 0; i < 7; i++) {
+    DateTime currentDay = monday.add(Duration(days: i));
+
+    var matchingGoals = goals
+        .where((goal) => DateFormat('yyyyMMdd').format(currentDay) == goal.date)
+        .toList();
+
+    if (matchingGoals.isNotEmpty) {
+      double sum = 0;
+      int count = 0;
+
+      for (var goal in matchingGoals) {
+        if (goal.rating != null) {
+          sum += goal.rating!;
+          count++;
+        }
+      }
+
+      if (count > 0) {
+        weeklyRatings[i] = double.parse((sum / count).toStringAsFixed(1));
+      }
+    }
+  }
+  return weeklyRatings;
+}
+
 class GoalListTile extends ConsumerStatefulWidget {
   final String userId;
   final String title;
   final String image;
   final double rating;
+  final List<double> weeklyRatings;
 
   const GoalListTile({
     super.key,
@@ -224,6 +282,7 @@ class GoalListTile extends ConsumerStatefulWidget {
     required this.title,
     required this.image,
     required this.rating,
+    required this.weeklyRatings,
   });
 
   @override
@@ -241,8 +300,6 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.rating);
-
     return Column(
       children: [
         GestureDetector(
@@ -341,20 +398,12 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
           duration: const Duration(milliseconds: 300),
           child: Visibility(
             visible: _visible,
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.only(top: 20.0),
               child: AspectRatio(
                 aspectRatio: 2.3,
                 child: BarChartWidget(
-                  weekData: [
-                    4.5,
-                    4.0,
-                    3.5,
-                    4.5,
-                    2.5,
-                    5.0,
-                    4.0,
-                  ],
+                  weekData: widget.weeklyRatings,
                 ),
               ),
             ),
