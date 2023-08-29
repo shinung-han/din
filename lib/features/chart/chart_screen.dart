@@ -120,63 +120,71 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                       ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      right: 10,
-                      top: 10,
-                    ),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final currentTitleGoals =
-                              getGoalsForTitle(uniqueTitles[index]);
+                  weekDate.isNotEmpty
+                      ? SliverPadding(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                          ),
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                final currentTitleGoals =
+                                    getGoalsForTitle(uniqueTitles[index]);
 
-                          if (currentTitleGoals.isNotEmpty) {
-                            final goalItem = currentTitleGoals.first;
+                                if (currentTitleGoals.isNotEmpty) {
+                                  final goalItem = currentTitleGoals.first;
 
-                            final weeklyRatings =
-                                computeWeeklyRatings(currentTitleGoals);
+                                  final weeklyRatings =
+                                      computeWeeklyRatings(currentTitleGoals);
 
-                            double averageRating;
-                            int count = weeklyRatings
-                                .where((rating) => rating > 0.0)
-                                .length;
-                            if (count > 0) {
-                              averageRating = weeklyRatings
+                                  double averageRating;
+                                  int count = weeklyRatings
                                       .where((rating) => rating > 0.0)
-                                      .reduce((a, b) => a + b) /
-                                  count;
-                              averageRating = double.parse(
-                                  averageRating.toStringAsFixed(1));
-                            } else {
-                              averageRating = 0.0;
-                            }
+                                      .length;
+                                  if (count > 0) {
+                                    averageRating = weeklyRatings
+                                            .where((rating) => rating > 0.0)
+                                            .reduce((a, b) => a + b) /
+                                        count;
+                                    averageRating = double.parse(
+                                        averageRating.toStringAsFixed(1));
+                                  } else {
+                                    averageRating = 0.0;
+                                  }
 
-                            return Column(
-                              children: [
-                                GoalListTile(
-                                  userId: "",
-                                  title: goalItem.title,
-                                  image: goalItem.image ?? '',
-                                  rating: averageRating,
-                                  weeklyRatings: weeklyRatings,
-                                ).animate().flipV(
-                                      begin: -0.5,
-                                      end: 0,
-                                      curve: Curves.easeOutExpo,
-                                    ),
-                                Gaps.v8,
-                              ],
-                            );
-                          } else {
-                            return const SizedBox.shrink();
-                          }
-                        },
-                        childCount: uniqueTitles.length,
-                      ),
-                    ),
-                  ),
+                                  return Column(
+                                    children: [
+                                      GoalListTile(
+                                        userId: "",
+                                        title: goalItem.title,
+                                        image: goalItem.image ?? '',
+                                        rating: averageRating,
+                                        weeklyRatings: weeklyRatings,
+                                      ).animate().flipV(
+                                            begin: -0.5,
+                                            end: 0,
+                                            curve: Curves.easeOutExpo,
+                                          ),
+                                      Gaps.v8,
+                                    ],
+                                  );
+                                } else {
+                                  return const SizedBox.shrink();
+                                }
+                              },
+                              childCount: uniqueTitles.length,
+                            ),
+                          ),
+                        )
+                      : SliverFillRemaining(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
                 ],
               )
             : Center(

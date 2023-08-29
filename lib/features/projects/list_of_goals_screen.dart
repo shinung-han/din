@@ -168,7 +168,7 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
               children: [
                 Icon(Icons.warning_amber_rounded),
                 Gaps.h5,
-                Text("After creating a project, you can't add or delete goals"),
+                Text("You can't add or delete goals after creating a project"),
               ],
             ),
             Gaps.v10,

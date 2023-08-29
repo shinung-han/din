@@ -37,6 +37,9 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
   Future<void> _onSelectImage() async {
     final pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
+      imageQuality: 100,
+      maxHeight: 500,
+      maxWidth: 500,
     );
     if (pickedFile != null) {
       setState(() {
@@ -184,13 +187,6 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
                                             fontSize: 16,
                                           ),
                                         ),
-                                        Gaps.v10,
-                                        Text(
-                                          'Image can be added and edited later',
-                                          style: TextStyle(
-                                            color: Colors.grey.shade500,
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   )
@@ -256,12 +252,29 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
-          height: 90,
-          child: SubmitButton(
-            buttonText: 'Create',
-            disabled: isButtonEnabled,
-            onTap: () => _onSubmit(widget.goalList),
-            icon: Icons.add_circle_outline_rounded,
+          height: 128,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.info_outline),
+                  Gaps.h5,
+                  Text("Image and title can be edited later"),
+                ],
+              ),
+              Gaps.v10,
+              Container(
+                height: 66,
+                child: SubmitButton(
+                  buttonText: 'Create',
+                  disabled: isButtonEnabled,
+                  onTap: () => _onSubmit(widget.goalList),
+                  icon: Icons.add_circle_outline_rounded,
+                ),
+              ),
+            ],
           ),
         ),
       ),

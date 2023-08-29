@@ -150,14 +150,6 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
                   ),
                 ),
                 Gaps.v60,
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Icon(Icons.warning_amber_rounded),
-                //     Gaps.h5,
-                //     Text("Date can't be changed after creating a project"),
-                //   ],
-                // ),
               ],
             ),
           ),

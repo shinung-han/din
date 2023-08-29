@@ -10,6 +10,7 @@ import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/app_bar_view_model.dart';
 import 'package:din/features/projects/view_models/db_edit_image_view_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
+import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
 import 'package:din/features/projects/widgets/date_information.dart';
 import 'package:din/utils.dart';
@@ -34,7 +35,10 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
     ref
         .read(projectProvider.notifier)
         .updateHasProject(!user.hasProject, DateTime.now());
+
     ref.read(projectProvider.notifier).deleteProject(user.uid);
+
+    ref.read(goalListProvider.notifier).deleteAllGoals(context);
 
     Navigator.popUntil(
         context, ModalRoute.withName(MainNavigationScreen.routeName));
