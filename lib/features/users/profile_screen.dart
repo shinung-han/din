@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/log_in_screen.dart';
@@ -22,12 +25,22 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  void _requestTrackingAuthorization() async {
+    if (Platform.isIOS) {
+      final status =
+          await AppTrackingTransparency.requestTrackingAuthorization();
+      print(status);
+    }
+  }
+
   BannerAd? banner;
   TargetPlatform? os;
 
   @override
   void initState() {
     super.initState();
+
+    _requestTrackingAuthorization();
 
     banner = BannerAd(
       size: AdSize.banner,

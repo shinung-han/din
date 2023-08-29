@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:din/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -25,11 +22,6 @@ Future<void> main() async {
   MobileAds.instance.initialize();
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
-  if (Platform.isIOS) {
-    final status = await AppTrackingTransparency.requestTrackingAuthorization();
-    print(status);
-  }
 
   runApp(MyApp());
 
