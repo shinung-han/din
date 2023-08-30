@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/projects/set_date_screen.dart';
 import 'package:din/common/widgets/common_button.dart';
@@ -17,6 +20,14 @@ class CreateProjectFirstScreen extends ConsumerStatefulWidget {
 }
 
 class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
+  void _requestTrackingAuthorization() async {
+    if (Platform.isIOS) {
+      final status =
+          await AppTrackingTransparency.requestTrackingAuthorization();
+      print(status);
+    }
+  }
+
   void _onCreateProject() {
     context.go('/home/${SetDateScreen.routeURL}');
   }
@@ -30,6 +41,7 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
   void initState() {
     super.initState();
     ref.read(projectProvider.notifier).loadUserProfile();
+    _requestTrackingAuthorization();
   }
 
   @override

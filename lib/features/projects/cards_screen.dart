@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
@@ -24,6 +27,14 @@ class CardsScreen extends ConsumerStatefulWidget {
 }
 
 class _CardsScreenState extends ConsumerState<CardsScreen> {
+  void _requestTrackingAuthorization() async {
+    if (Platform.isIOS) {
+      final status =
+          await AppTrackingTransparency.requestTrackingAuthorization();
+      print(status);
+    }
+  }
+
   late final PageController _pageController = PageController(
     viewportFraction: 0.8,
   )..addListener(() {
@@ -40,6 +51,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
   @override
   void initState() {
     super.initState();
+    _requestTrackingAuthorization();
     settingModalList = [
       {
         "text": "Edit project",
