@@ -102,13 +102,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                   CircularProgressIndicator(
                     color: Colors.black,
                   ),
-                  Gaps.v32,
-                  Text(
-                    "Please wait a moment..",
-                    style: TextStyle(
-                      fontSize: Sizes.size16,
-                    ),
-                  ),
                 ],
               ),
             )

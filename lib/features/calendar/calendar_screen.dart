@@ -21,50 +21,6 @@ class CalendarScreen extends ConsumerStatefulWidget {
 }
 
 class _CalendarScreenState extends ConsumerState<CalendarScreen> {
-  // BannerAd? banner;
-  // TargetPlatform? os;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   banner = BannerAd(
-  //     size: AdSize.banner,
-  //     adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
-  //     listener: BannerAdListener(
-  //       onAdFailedToLoad: (ad, error) {},
-  //       onAdLoaded: (ad) {
-  //         setState(() {});
-  //       },
-  //     ),
-  //     request: AdRequest(),
-  //   );
-
-  //   banner?.load();
-  // }
-
-  // String getAdUnitId(TargetPlatform os) {
-  //   if (kReleaseMode) {
-  //     if (os == TargetPlatform.iOS) {
-  //       return dotenv.env['IOS_RELEASE_UNIT_ID']!;
-  //     } else {
-  //       return dotenv.env['ANDROID_RELEASE_UNIT_ID']!;
-  //     }
-  //   } else {
-  //     if (os == TargetPlatform.iOS) {
-  //       return dotenv.env['IOS_DEBUG_UNIT_ID']!;
-  //     } else {
-  //       return dotenv.env['ANDROID_DEBUG_UNIT_ID']!;
-  //     }
-  //   }
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   os = Theme.of(context).platform;
-  // }
-
   late DateTime _selectedDay = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -76,12 +32,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   Future<void> _onFormatChanged(CalendarFormat format) async {
     await ref.read(formatProvider.notifier).saveCalendarFormat(format);
   }
-
-  // @override
-  // void dispose() {
-  //   banner?.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +48,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     }
 
     final format = ref.watch(formatProvider);
+
+    List<_EventEntry> _flattenedEvents = eventSource.entries.expand((_entry) {
+      return _entry.value
+          .map((event) => _EventEntry(date: _entry.key, event: event));
+    }).toList();
 
     return Scaffold(
       body: SafeArea(
@@ -224,12 +179,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                             EventModel? currentEvent =
                                 eventSource[_selectedDay]?[index];
 
+                            DateTime eventDate = _flattenedEvents[index].date;
+
                             if (currentEvent != null) {
                               return GoalListTile(
                                 title: currentEvent.title,
                                 image: currentEvent.image ?? "",
                                 memo: currentEvent.memo,
                                 rating: currentEvent.rating,
+                                selectedDay: _selectedDay,
+                                eventDay: eventDate,
                               ).animate().flipV(
                                     begin: -0.5,
                                     end: 0,
@@ -245,10 +204,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         ),
                 ),
               ),
-            // Container(
-            //   height: 50,
-            //   child: AdWidget(ad: banner!),
-            // ),
             Gaps.v20,
           ],
         ),
@@ -257,12 +212,20 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   }
 }
 
+class _EventEntry {
+  final DateTime date;
+  final EventModel event;
+
+  _EventEntry({required this.date, required this.event});
+}
+
 class GoalListTile extends ConsumerStatefulWidget {
   final String title;
   final String image;
   final String? memo;
   final bool? isMemo;
   final double rating;
+  final DateTime selectedDay, eventDay;
 
   const GoalListTile({
     super.key,
@@ -270,6 +233,8 @@ class GoalListTile extends ConsumerStatefulWidget {
     required this.memo,
     required this.image,
     required this.rating,
+    required this.selectedDay,
+    required this.eventDay,
     this.isMemo,
   });
 
@@ -401,28 +366,29 @@ class _GoalListTileState extends ConsumerState<GoalListTile>
             ),
           ),
         ),
-        AnimatedSize(
-          curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: 300),
-          child: Visibility(
-            visible: _visible,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-                top: 15,
-                bottom: 20,
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "${widget.memo}",
-                  textAlign: TextAlign.start,
+        if (widget.eventDay == widget.selectedDay)
+          AnimatedSize(
+            curve: Curves.easeInOut,
+            duration: const Duration(milliseconds: 300),
+            child: Visibility(
+              visible: _visible,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  top: 15,
+                  bottom: 20,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    "${widget.memo}",
+                    textAlign: TextAlign.start,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }

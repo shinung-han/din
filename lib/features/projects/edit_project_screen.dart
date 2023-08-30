@@ -210,6 +210,9 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
   Future<void> _onEditImage(String userId, String oldImageUrl) async {
     final pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
+      imageQuality: 100,
+      maxHeight: 500,
+      maxWidth: 500,
     );
 
     if (!mounted) return;
