@@ -22,7 +22,6 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     final weekDate = ref.watch(chartProvider);
-    // print("weekDate : $weekDate");
     final user = ref.watch(projectProvider);
     final goalsList = ref.watch(dbGoalListProvider);
 
@@ -32,8 +31,6 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
         )
         .toSet()
         .toList();
-
-    print("uniqueTitles : $uniqueTitles");
 
     List<DbGoalModel> getGoalsForTitle(String title) {
       return weekDate.where((item) => item.title == title).toList();

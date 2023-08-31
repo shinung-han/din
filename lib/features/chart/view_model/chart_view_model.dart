@@ -37,6 +37,24 @@ class ChartViewModel extends StateNotifier<List<DbGoalModel>> {
       return goal;
     }).toList();
   }
+
+  void updateTitle(String oldTitle, String newTitle) {
+    state = state.map((goal) {
+      if (goal.title == oldTitle) {
+        return goal.copyWith(title: newTitle);
+      }
+      return goal;
+    }).toList();
+  }
+
+  void updateImage(String targetTitle, String oldImageUrl, String newImageUrl) {
+    state = state.map((goal) {
+      if (goal.title == targetTitle && goal.image == oldImageUrl) {
+        return goal.copyWith(image: newImageUrl);
+      }
+      return goal;
+    }).toList();
+  }
 }
 
 final chartProvider =

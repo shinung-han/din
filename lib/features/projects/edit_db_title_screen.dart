@@ -3,6 +3,7 @@ import 'package:din/common/widgets/submit_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
+import 'package:din/features/chart/view_model/chart_view_model.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/db_goal_list_view_model.dart';
@@ -82,15 +83,21 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
     ref
         .read(editTitleProvider.notifier)
         .editTitle(userId, oldTitle, _titleController.text);
+
     ref
         .read(dbGoalListProvider.notifier)
         .updateTitle(oldTitle, _titleController.text);
+
     ref.read(calendarProvider.notifier).updateAllEventsTitleAndImage(
           oldTitle,
           _titleController.text,
           null,
           null,
         );
+
+    ref
+        .read(chartProvider.notifier)
+        .updateTitle(oldTitle, _titleController.text);
 
     Navigator.popUntil(
         context, ModalRoute.withName(EditProjectScreen.routeURL));

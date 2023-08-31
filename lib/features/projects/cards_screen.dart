@@ -29,9 +29,8 @@ class CardsScreen extends ConsumerStatefulWidget {
 class _CardsScreenState extends ConsumerState<CardsScreen> {
   void _requestTrackingAuthorization() async {
     if (Platform.isIOS) {
-      final status =
-          await AppTrackingTransparency.requestTrackingAuthorization();
-      print(status);
+      await AppTrackingTransparency.requestTrackingAuthorization();
+      // print(status);
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
+import 'package:din/features/chart/view_model/chart_view_model.dart';
 import 'package:din/features/projects/edit_db_title_screen.dart';
 import 'package:din/features/projects/models/db_goal_model.dart';
 import 'package:din/features/projects/view_models/app_bar_view_model.dart';
@@ -263,6 +264,10 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
 
       ref.read(calendarProvider.notifier).updateAllEventsTitleAndImage(
           widget.title, null, oldImageUrl, newImageUrl);
+
+      ref
+          .read(chartProvider.notifier)
+          .updateImage(widget.title, oldImageUrl, newImageUrl);
 
       Navigator.of(context, rootNavigator: true).pop();
     }
