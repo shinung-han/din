@@ -19,6 +19,9 @@ class ChartScreen extends ConsumerStatefulWidget {
 }
 
 class _ChartScreenState extends ConsumerState<ChartScreen> {
+  final GlobalKey _weeklyToolTipKey = GlobalKey();
+  final GlobalKey _ratingPerToolTipKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final weekDate = ref.watch(chartProvider);
@@ -49,18 +52,47 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(
+                  SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(
                         left: 15,
                         bottom: 10,
                       ),
-                      child: Text(
-                        "Weekly Average",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Weekly Average",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dynamic tooltip =
+                                  _weeklyToolTipKey.currentState;
+                              tooltip?.ensureTooltipVisible();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                top: 2,
+                                left: 5,
+                                right: 10,
+                              ),
+                              child: Tooltip(
+                                key: _weeklyToolTipKey,
+                                message:
+                                    "\nDisplays the weekly star rating average for\ndaily objectives, counting onlycompleted goals\n",
+                                child: Icon(
+                                  Icons.info_outline,
+                                  size: Sizes.size24,
+                                  color: Colors.grey.shade500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -93,7 +125,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                       ],
                     ),
                   ),
-                  const SliverToBoxAdapter(
+                  SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(
                         left: 15,
@@ -102,12 +134,41 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Rating per Goal",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Rating per Goal",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  final dynamic tooltip =
+                                      _ratingPerToolTipKey.currentState;
+                                  tooltip?.ensureTooltipVisible();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 2,
+                                    left: 5,
+                                    right: 10,
+                                  ),
+                                  child: Tooltip(
+                                    key: _ratingPerToolTipKey,
+                                    message:
+                                        "\nDisplays the weekly average star rating for your goals,\nfactoring in only completed ones\n",
+                                    child: Icon(
+                                      Icons.info_outline,
+                                      size: Sizes.size24,
+                                      color: Colors.grey.shade500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Text(
                             "Tap the goal to see statistics",
@@ -415,6 +476,18 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class TooltipSample extends StatelessWidget {
+  const TooltipSample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Tooltip(
+      message: 'I am a Tooltip',
+      child: Text('Hover over the text to show a tooltip.'),
     );
   }
 }
