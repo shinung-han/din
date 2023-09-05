@@ -49,11 +49,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
     final format = ref.watch(formatProvider);
 
-    List<_EventEntry> _flattenedEvents = eventSource.entries.expand((_entry) {
-      return _entry.value
-          .map((event) => _EventEntry(date: _entry.key, event: event));
-    }).toList();
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -179,16 +174,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                             EventModel? currentEvent =
                                 eventSource[_selectedDay]?[index];
 
-                            DateTime eventDate = _flattenedEvents[index].date;
+                            // print(currentEvent.date);
 
                             if (currentEvent != null) {
                               return GoalListTile(
+                                key: ValueKey<String>(
+                                    currentEvent.date!.toString()),
                                 title: currentEvent.title,
                                 image: currentEvent.image ?? "",
                                 memo: currentEvent.memo,
                                 rating: currentEvent.rating,
-                                selectedDay: _selectedDay,
-                                eventDay: eventDate,
                               ).animate().flipV(
                                     begin: -0.5,
                                     end: 0,
@@ -212,31 +207,21 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   }
 }
 
-class _EventEntry {
-  final DateTime date;
-  final EventModel event;
-
-  _EventEntry({required this.date, required this.event});
-}
-
 class GoalListTile extends ConsumerStatefulWidget {
   final String title;
   final String image;
   final String? memo;
   final bool? isMemo;
   final double rating;
-  final DateTime selectedDay, eventDay;
 
   const GoalListTile({
-    super.key,
+    Key? key,
     required this.title,
     required this.memo,
     required this.image,
     required this.rating,
-    required this.selectedDay,
-    required this.eventDay,
     this.isMemo,
-  });
+  }) : super(key: key);
 
   @override
   ConsumerState<GoalListTile> createState() => _GoalListTileState();
@@ -366,29 +351,28 @@ class _GoalListTileState extends ConsumerState<GoalListTile>
             ),
           ),
         ),
-        if (widget.eventDay == widget.selectedDay)
-          AnimatedSize(
-            curve: Curves.easeInOut,
-            duration: const Duration(milliseconds: 300),
-            child: Visibility(
-              visible: _visible,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                  top: 15,
-                  bottom: 20,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    "${widget.memo}",
-                    textAlign: TextAlign.start,
-                  ),
+        AnimatedSize(
+          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 300),
+          child: Visibility(
+            visible: _visible,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 15,
+                bottom: 20,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "${widget.memo}",
+                  textAlign: TextAlign.start,
                 ),
               ),
             ),
           ),
+        ),
       ],
     );
   }

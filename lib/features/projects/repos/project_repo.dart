@@ -267,6 +267,7 @@ class ProjectRepository {
           image: goal.image,
           memo: goal.memo,
           rating: goal.rating!,
+          date: goal.date,
         ));
       } else {
         // 새로운 DateTime key를 추가하고 EventModel 리스트를 초기화합니다.
@@ -276,6 +277,7 @@ class ProjectRepository {
             image: goal.image,
             memo: goal.memo,
             rating: goal.rating!,
+            date: goal.date,
           )
         ];
       }

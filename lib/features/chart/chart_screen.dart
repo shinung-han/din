@@ -83,7 +83,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                               child: Tooltip(
                                 key: _weeklyToolTipKey,
                                 message:
-                                    "\nDisplays the weekly star rating average for\ndaily objectives, counting onlycompleted goals\n",
+                                    "\nDisplays the weekly star rating average for daily\nobjectives, counting onlycompleted goals\n",
                                 child: Icon(
                                   Icons.info_outline,
                                   size: Sizes.size24,
@@ -159,7 +159,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                                   child: Tooltip(
                                     key: _ratingPerToolTipKey,
                                     message:
-                                        "\nDisplays the weekly average star rating for your goals,\nfactoring in only completed ones\n",
+                                        "\nDisplays the weekly average star rating for\nyour goals, factoring in only completed ones\n",
                                     child: Icon(
                                       Icons.info_outline,
                                       size: Sizes.size24,
