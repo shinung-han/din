@@ -1,7 +1,7 @@
 import 'package:din/common/widgets/common_button.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void showFirebaseErrorSnack(
@@ -12,7 +12,12 @@ void showFirebaseErrorSnack(
     SnackBar(
       showCloseIcon: true,
       content: Text(
-        (error as FirebaseException).message ?? "Something wen't wrong",
+        (error as FirebaseException).message ==
+                "The email address is already in use by another account."
+            ? "동일한 계정이 존재합니다"
+            : error.message.toString(),
+
+        // (error as FirebaseException).message ?? "문제가 발생했습니다",
       ),
     ),
   );
@@ -37,6 +42,7 @@ bool emailValid(email) {
 void showModalBottom(BuildContext context, List<Map<String, dynamic>> list) {
   showModalBottomSheet(
     backgroundColor: Colors.white,
+    elevation: 0,
     context: context,
     builder: (context) {
       return Wrap(
@@ -80,7 +86,7 @@ List<Widget> _buildListItems(
     SizedBox(
       height: 66,
       child: CommonButton(
-        text: 'Cancel',
+        text: '취소',
         bgColor: Colors.black,
         color: Colors.white,
         icon: Icons.arrow_back_ios_new_rounded,
@@ -96,6 +102,7 @@ void showModalBottomWithText(
     BuildContext context, String title, Function() onTap) {
   showModalBottomSheet(
     backgroundColor: Colors.white,
+    elevation: 0,
     context: context,
     builder: (context) {
       return Wrap(
@@ -124,7 +131,9 @@ void showModalBottomWithText(
                     height: 66,
                     child: CommonButton(
                       icon: Icons.task_alt_rounded,
-                      text: 'Yes',
+                      text: '예',
+                      bgColor: Colors.black,
+                      color: Colors.white,
                       onTap: onTap,
                     ),
                   ),
@@ -132,9 +141,9 @@ void showModalBottomWithText(
                   SizedBox(
                     height: 66,
                     child: CommonButton(
-                      text: 'Cancel',
-                      bgColor: Colors.black,
-                      color: Colors.white,
+                      text: '취소',
+                      bgColor: Colors.white,
+                      color: Colors.black,
                       icon: Icons.arrow_back_ios_new_rounded,
                       onTap: () => Navigator.pop(context),
                     ),

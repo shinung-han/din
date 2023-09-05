@@ -76,7 +76,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       onTap: _onScaffoldTap,
       child: Scaffold(
         appBar: CommonAppBar(
-          title: "Password Change",
+          title: "비밀번호 변경",
         ),
         body: SafeArea(
           child: Padding(
@@ -99,7 +99,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400),
                       ),
-                      labelText: 'New Password',
+                      labelText: '새로운 비밀번호',
                       suffix: Padding(
                         padding: const EdgeInsets.only(right: Sizes.size10),
                         child: Row(
@@ -135,7 +135,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: Sizes.size4),
                       child: Text(
-                        'Please enter a password of at least 6 digits.',
+                        '비밀번호는 최소 6자리 이상 입력해 주세요',
                         style: TextStyle(
                           color: Colors.grey.shade700,
                         ),
@@ -153,7 +153,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             icon: Icons.edit_outlined,
             disabled: isButtonEnabled,
             onTap: _onSubmit,
-            buttonText: 'Edit',
+            buttonText: '변경',
           ),
         ),
       ),

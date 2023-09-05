@@ -1,4 +1,5 @@
 import 'package:din/constants/gaps.dart';
+import 'package:din/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class AuthHeader extends StatelessWidget {
@@ -24,12 +25,13 @@ class AuthHeader extends StatelessWidget {
               fontSize: 30,
             ),
           ),
-          Gaps.v10,
+          Gaps.v14,
           Text(
             subTitle,
+            style: TextStyle(fontSize: Sizes.size16),
             textAlign: TextAlign.center,
           ),
-          Gaps.v80,
+          Gaps.v60,
         ],
       ),
     );

@@ -15,6 +15,13 @@ class GoalModel {
     this.imageUrl,
   });
 
+  GoalModel copyWith({
+    int? id,
+    String? title,
+  }) {
+    return GoalModel(id: id ?? this.id, title: title ?? this.title);
+  }
+
   void changeTitle(String newTitle) {
     title = newTitle;
   }

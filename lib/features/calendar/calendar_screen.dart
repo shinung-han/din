@@ -56,11 +56,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             TableCalendar(
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.utc(2030, 3, 14),
+              locale: 'ko_KR',
               focusedDay: _focusedDay,
               headerStyle: HeaderStyle(
                 titleTextFormatter: (focusedDay, locale) {
-                  return DateFormat.yMMM(locale)
-                      .format(focusedDay); // 예: "Dec 2023"
+                  return DateFormat.yMMM(locale).format(focusedDay);
                 },
                 formatButtonDecoration: BoxDecoration(
                   border: Border.all(color: Colors.grey, width: 0.5),
@@ -83,6 +83,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   size: 30,
                 ),
               ),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: TextStyle(fontSize: 13),
+                weekendStyle: TextStyle(fontSize: 13),
+              ),
               calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -103,9 +107,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 markersAlignment: Alignment.center,
               ),
               availableCalendarFormats: const {
-                CalendarFormat.twoWeeks: "Switch to 2 Weeks",
-                CalendarFormat.week: "Switch to 1 Week",
-                CalendarFormat.month: "Switch to 1 Month",
+                CalendarFormat.twoWeeks: "2주로 전환",
+                CalendarFormat.week: "1주로 전환",
+                CalendarFormat.month: "1개월로 전환",
               },
               calendarFormat: format,
               onFormatChanged: (format) => _onFormatChanged(format),
@@ -151,7 +155,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       ),
                       Gaps.v16,
                       Text(
-                        "No data available\nPlease create a project",
+                        "데이터가 없습니다\n프로젝트를 생성해 주세요",
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -174,8 +178,6 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                             EventModel? currentEvent =
                                 eventSource[_selectedDay]?[index];
 
-                            // print(currentEvent.date);
-
                             if (currentEvent != null) {
                               return GoalListTile(
                                 key: ValueKey<String>(
@@ -190,8 +192,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                     curve: Curves.easeOutExpo,
                                   );
                             }
-                            return const SizedBox
-                                .shrink(); // This shouldn't happen but is a safe fallback
+                            return const SizedBox.shrink();
                           },
                           separatorBuilder: (context, index) {
                             return Gaps.v8;

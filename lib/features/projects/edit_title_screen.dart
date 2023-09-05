@@ -67,7 +67,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
     }
 
     if (isDuplicate) {
-      showErrorSnack(context, "This title exists. Try another");
+      showErrorSnack(context, "동일한 제목이 존재합니다");
       return;
     }
 
@@ -77,17 +77,20 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
         );
     Navigator.pop(context);
     Navigator.pop(context);
-    showErrorSnack(context, "The title has been changed");
+    showErrorSnack(context, "제목이 변경되었습니다");
   }
 
   bool isButtonEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+    print(widget.title);
+    print(widget.goalList[0].title);
+
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
-        appBar: const CommonAppBar(title: "Edit title"),
+        appBar: const CommonAppBar(title: "제목 변경"),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(Sizes.size20),
@@ -108,7 +111,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400),
                       ),
-                      labelText: "New title",
+                      labelText: "새로운 제목",
                       suffix: Padding(
                         padding: const EdgeInsets.only(right: Sizes.size10),
                         child: GestureDetector(
@@ -132,7 +135,7 @@ class _ModifyTitleScreenState extends ConsumerState<EditTitleScreen> {
           child: SubmitButton(
             disabled: isButtonEnabled,
             onTap: () => _onSubmit(widget.goalList),
-            buttonText: 'Edit',
+            buttonText: '변경',
             icon: Icons.edit_outlined,
           ),
         ),

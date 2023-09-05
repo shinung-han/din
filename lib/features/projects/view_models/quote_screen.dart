@@ -4,7 +4,6 @@ import 'package:din/common/widgets/main_navigation_screen.dart';
 import 'package:din/constants/gaps.dart';
 import 'package:din/features/projects/edit_project_screen.dart';
 import 'package:din/features/projects/view_models/project_view_model.dart';
-import 'package:din/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,25 +16,25 @@ class QuoteScreen extends ConsumerStatefulWidget {
 }
 
 class _QuoteScreenState extends ConsumerState<QuoteScreen> {
-  late List<Map<String, dynamic>> settingModalList;
+  // late List<Map<String, dynamic>> settingModalList;
 
   @override
   void initState() {
     super.initState();
-    settingModalList = [
-      {
-        "text": "Edit project",
-        "icon": Icons.build_outlined,
-        "onTap": () => _onEditProjectTap(),
-      },
-    ];
+    // settingModalList = [
+    //   {
+    //     "text": "프로젝트 설정",
+    //     "icon": Icons.build_outlined,
+    //     "onTap": () => _onEditProjectTap(),
+    //   },
+    // ];
     _generateRandomQuote();
   }
 
-  void _onEditProjectTap() {
-    Navigator.pop(context);
-    context.go('/home/${EditProjectScreen.routeURL}');
-  }
+  // void _onEditProjectTap() {
+  //   Navigator.pop(context);
+  //   context.go('/home/${EditProjectScreen.routeURL}');
+  // }
 
   String _loadStartDate(DateTime date) {
     DateTime currentDate = DateTime.now();
@@ -73,16 +72,14 @@ class _QuoteScreenState extends ConsumerState<QuoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final date = ref.watch(appBarProvider);
     final startDate = ref.watch(projectProvider)!.startDate;
-    // print(startDate);
 
     return Scaffold(
       appBar: AppBar(actions: [
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: IconButton(
-            onPressed: () => showModalBottom(context, settingModalList),
+            onPressed: () => context.go('/home/${EditProjectScreen.routeURL}'),
             icon: const Icon(
               Icons.settings,
               size: 30,
@@ -94,7 +91,6 @@ class _QuoteScreenState extends ConsumerState<QuoteScreen> {
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(

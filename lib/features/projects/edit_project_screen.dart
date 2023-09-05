@@ -61,7 +61,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(left: Sizes.size24),
                   child: Text(
-                    'Edit project',
+                    '프로젝트 설정',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                     ),
@@ -74,7 +74,7 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                   child: IconButton(
                     onPressed: () => showModalBottomWithText(
                       context,
-                      "Are you sure you want to delete the project?",
+                      "프로젝트를 삭제하시겠습니까?",
                       () => _onDeleteProject(user),
                     ),
                     icon: const Icon(
@@ -90,42 +90,14 @@ class _EditProjectScreenState extends ConsumerState<EditProjectScreen> {
                 [
                   Column(
                     children: [
-                      Container(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          left: 15,
-                          bottom: 10,
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Date information",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
+                      Gaps.v14,
                       DateInformation(date: date!),
-                      Gaps.v20,
+                      Gaps.v14,
                       divider(),
+                      Gaps.v14,
                     ],
                   ),
                 ],
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-                child: Text(
-                  "Goal list",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
               ),
             ),
             goalsList.isEmpty
@@ -196,15 +168,11 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
     super.initState();
     goalModalList = [
       {
-        "text": "Edit image",
+        "text": "이미지 변경",
         "icon": Icons.image_search_rounded,
         "onTap": () => _onEditImage(widget.userId, widget.image),
       },
-      {
-        "text": "Edit title",
-        "icon": Icons.build_outlined,
-        "onTap": _onEditTitleTap
-      },
+      {"text": "제목 변경", "icon": Icons.build_outlined, "onTap": _onEditTitleTap},
     ];
   }
 
@@ -241,9 +209,10 @@ class _GoalListTileState extends ConsumerState<GoalListTile> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Gaps.v10,
                   CircularProgressIndicator(color: Colors.black),
-                  Gaps.v16,
-                  Text("Editing image.."),
+                  Gaps.v24,
+                  Text("이미지 변경 중.."),
                 ],
               ),
             ),

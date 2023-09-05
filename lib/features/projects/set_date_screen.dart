@@ -50,7 +50,7 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
     if (newDateRange == null) return null;
 
     if (newDateRange.start == newDateRange.end) {
-      showErrorSnack(context, "You cannot select the same date twice");
+      showErrorSnack(context, "동일한 날짜는 선택할 수 없습니다");
       return null;
     }
 
@@ -64,7 +64,7 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _onSetCardsTap(
       start, end, difference) {
     if (difference == 1) {
-      showErrorSnack(context, 'Please select a date');
+      showErrorSnack(context, '달력을 탭하여 날짜를 선택해 주세요');
     } else {
       ref.read(dateProvider.notifier).setDate(start, end, difference);
 
@@ -87,7 +87,7 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
     );
 
     return Scaffold(
-      appBar: const CommonAppBar(title: 'Create Project'),
+      appBar: const CommonAppBar(title: '프로젝트 생성'),
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -96,12 +96,12 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const AuthHeader(
-                  title: 'Set a Date',
+                  title: '날짜 설정',
                   subTitle:
-                      'Create your own fantastic project to become a better version of yourself than yesterday.',
+                      "프로젝트 시작과 종료 날짜를 선택하세요.\n당신의 변화와 성장의 첫 걸음을 시작해 보세요!",
                 ),
                 CommonButton(
-                  text: 'Calendar',
+                  text: '달력',
                   onTap: _pickDateRange,
                   icon: Icons.edit_calendar_rounded,
                 ),
@@ -113,37 +113,37 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
                       Column(
                         children: [
                           const Text(
-                            'Start date',
+                            "시작일",
                             style: textStyle,
                           ),
                           Gaps.v4,
                           Text(start == end
                               ? '-'
-                              : DateFormat.yMd().format(start)),
+                              : DateFormat('yyyy/MM/dd').format(start)),
                         ],
                       ),
                       verticalDivider(),
                       Column(
                         children: [
                           const Text(
-                            'End date',
+                            "종료일",
                             style: textStyle,
                           ),
                           Gaps.v4,
                           Text(start == end
                               ? '-'
-                              : DateFormat.yMd().format(end)),
+                              : DateFormat('yyyy/MM/dd').format(end)),
                         ],
                       ),
                       verticalDivider(),
                       Column(
                         children: [
                           const Text(
-                            'Period',
+                            '기간',
                             style: textStyle,
                           ),
                           Gaps.v4,
-                          Text(start == end ? '-' : 'For ${difference} days'),
+                          Text(start == end ? '-' : '${difference}일 동안'),
                         ],
                       ),
                     ],
@@ -163,16 +163,22 @@ class _AddProjectScreenState extends ConsumerState<SetDateScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.warning_amber_rounded),
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.grey.shade500,
+                ),
                 Gaps.h5,
-                Text("Date can't be changed after creating a project"),
+                Text(
+                  "프로젝트 생성 후 날짜는 변경할 수 없습니다",
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
               ],
             ),
             Gaps.v10,
             Container(
               height: 66,
               child: CommonButton(
-                text: 'Next',
+                text: '다음',
                 bgColor: Colors.black,
                 color: Colors.white,
                 onTap: () => _onSetCardsTap(start, end, difference),

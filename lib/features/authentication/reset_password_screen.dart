@@ -1,5 +1,6 @@
 import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
+import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/authentication/view_models/login_view_model.dart';
 import 'package:din/utils.dart';
@@ -43,7 +44,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     ref
         .read(loginProvider.notifier)
         .sendPasswordResetEmail(_emailController.text);
-    showErrorSnack(context, "An email has been sent");
+    showErrorSnack(context, "이메일이 전송되었습니다");
   }
 
   bool isButtonEnabled = false;
@@ -53,13 +54,14 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
-        appBar: const CommonAppBar(title: "Reset password"),
+        appBar: const CommonAppBar(title: "비밀번호 재설정"),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(Sizes.size20),
             child: Form(
               key: formKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextFormField(
                     controller: _emailController,
@@ -74,7 +76,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400),
                       ),
-                      labelText: "Email",
+                      labelText: "이메일",
                       suffix: Padding(
                         padding: const EdgeInsets.only(right: Sizes.size10),
                         child: GestureDetector(
@@ -88,6 +90,16 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       ),
                     ),
                   ),
+                  Gaps.v10,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 3),
+                    child: Text(
+                      "비밀번호 재설정을 위한 이메일 주소를 입력해 주세요",
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -98,7 +110,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           child: SubmitButton(
             disabled: isButtonEnabled,
             onTap: _onSubmit,
-            buttonText: 'Send',
+            buttonText: '전송',
             icon: Icons.mark_email_unread_outlined,
           ),
         ),

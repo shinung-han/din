@@ -82,7 +82,7 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
     }
 
     if (isDuplicate) {
-      showErrorSnack(context, "This title exists. Try another");
+      showErrorSnack(context, "동일한 제목이 존재합니다");
       return;
     }
 
@@ -120,7 +120,7 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
             slivers: [
               SliverAppBar(
                 title: const Text(
-                  "Add Goal",
+                  "목표 추가",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
@@ -158,36 +158,12 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
                                       ),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.north_east_rounded,
-                                              color: Colors.grey.shade400,
-                                              size: 50,
-                                            ),
-                                            Icon(
-                                              Icons
-                                                  .add_photo_alternate_outlined,
-                                              color: Colors.grey.shade400,
-                                              size: 50,
-                                            ),
-                                          ],
-                                        ),
-                                        Gaps.v20,
-                                        Text(
-                                          'Tap the icon at the top to select an image',
-                                          style: TextStyle(
-                                            color: Colors.grey.shade500,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.image_not_supported_outlined,
+                                        color: Colors.grey.shade400,
+                                        size: 50,
+                                      ),
                                     ),
                                   )
                                 : Container(
@@ -238,7 +214,7 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
                                     ),
                                   ),
                                 ),
-                                labelText: 'Title',
+                                labelText: '제목',
                               ),
                             ),
                           ],
@@ -259,16 +235,22 @@ class _ListSettingScreenState extends ConsumerState<AddGoalScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.info_outline),
+                  Icon(
+                    Icons.info_outline,
+                    color: Colors.grey.shade500,
+                  ),
                   Gaps.h5,
-                  Text("Image and title can be edited later"),
+                  Text(
+                    "이미지, 제목은 프로젝트 생성 후 변경할 수 있습니다",
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
                 ],
               ),
               Gaps.v10,
               Container(
                 height: 66,
                 child: SubmitButton(
-                  buttonText: 'Create',
+                  buttonText: '추가',
                   disabled: isButtonEnabled,
                   onTap: () => _onSubmit(widget.goalList),
                   icon: Icons.add_circle_outline_rounded,

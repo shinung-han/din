@@ -118,19 +118,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 Gaps.v80,
                 CommonButton(
-                  text: 'Log In with Email',
+                  text: '이메일로 로그인',
                   icon: Icons.alternate_email_rounded,
                   onTap: _onUseEmailLoginTap,
                 ),
                 Gaps.v16,
                 CommonButton(
-                  text: "Sign Up",
+                  text: "회원가입",
                   icon: Icons.login_rounded,
                   onTap: _onSignUpTap,
                 ),
                 Gaps.v16,
                 CommonButton(
-                  text: 'Continue with Google',
+                  text: 'Google로 계속하기',
                   image: Image.asset('assets/images/google_logo.png'),
                   onTap: () => signInWithGoogle(context),
                 ),

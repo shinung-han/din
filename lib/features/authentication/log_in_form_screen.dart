@@ -89,10 +89,6 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
     );
   }
 
-  // [ ] 오류 message들 쉽게 변경
-  // [ ] Header 문구 변경
-  // [ ] 비밀번호 찾기 로직 구현
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -115,9 +111,9 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
                   delegate: SliverChildListDelegate(
                     [
                       const AuthHeader(
-                        title: 'Log In for DIN',
+                        title: '이메일로 로그인',
                         subTitle:
-                            'Manage your account, check notifications, comment on videos, and more.',
+                            "다시 오신 것을 환영합니다!\n당신의 여정은 계속되고 있습니다.\n오늘도 더 나은 자신을 향해 함께 나아가요!",
                       ),
                       Form(
                         key: _formKey,
@@ -156,7 +152,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
                                     ),
                                   ),
                                 ),
-                                labelText: 'Email',
+                                labelText: '이메일',
                               ),
                             ),
                             Gaps.v16,
@@ -179,7 +175,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
                                   borderSide:
                                       BorderSide(color: Colors.grey.shade400),
                                 ),
-                                labelText: 'Password',
+                                labelText: '비밀번호',
                                 suffix: Padding(
                                   padding: const EdgeInsets.only(
                                       right: Sizes.size10),
@@ -215,7 +211,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
                             GestureDetector(
                               onTap: _onForgotPasswordTap,
                               child: Text(
-                                'Forgot your Password?',
+                                '비밀번호를 잊으셨나요?',
                                 style: TextStyle(
                                   color: Colors.grey.shade700,
                                 ),
@@ -236,7 +232,7 @@ class _LogInFormScreenState extends ConsumerState<LogInFormScreen> {
           child: SubmitButton(
             disabled: _isButtonEnabled,
             onTap: _onSubmit,
-            buttonText: 'Log In',
+            buttonText: '로그인',
             icon: Icons.alternate_email_rounded,
           ),
         ),

@@ -159,7 +159,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                   size: _currentIndex == 0 ? 28 : 26,
                 ),
               ),
-              label: 'Home',
+              label: '홈',
             ),
             BottomNavigationBarItem(
               icon: Padding(
@@ -171,7 +171,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                   size: _currentIndex == 1 ? 25 : 23,
                 ),
               ),
-              label: 'Calendar',
+              label: '달력',
             ),
             BottomNavigationBarItem(
               icon: Padding(
@@ -183,7 +183,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                   size: _currentIndex == 2 ? 25 : 23,
                 ),
               ),
-              label: 'Chart',
+              label: '통계',
             ),
             BottomNavigationBarItem(
               icon: Padding(
@@ -193,7 +193,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                   size: _currentIndex == 3 ? 28 : 26,
                 ),
               ),
-              label: 'Profile',
+              label: '프로필',
             ),
           ],
         ),

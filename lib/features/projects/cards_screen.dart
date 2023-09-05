@@ -45,19 +45,19 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   double _rating = 3.0;
 
-  late List<Map<String, dynamic>> settingModalList;
+  // late List<Map<String, dynamic>> settingModalList;
 
   @override
   void initState() {
     super.initState();
     _requestTrackingAuthorization();
-    settingModalList = [
-      {
-        "text": "Edit project",
-        "icon": Icons.build_outlined,
-        "onTap": () => _onEditProjectTap(),
-      },
-    ];
+    // settingModalList = [
+    //   {
+    //     "text": "Edit project",
+    //     "icon": Icons.build_outlined,
+    //     "onTap": () => _onEditProjectTap(),
+    //   },
+    // ];
   }
 
   final ValueNotifier<double> _scroll = ValueNotifier(0.0);
@@ -80,18 +80,6 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TargetPlatform os = Theme.of(context).platform;
-
-    // BannerAd banner = BannerAd(
-    //   size: AdSize.banner,
-    //   adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
-    //   listener: BannerAdListener(
-    //     onAdFailedToLoad: (ad, error) {},
-    //     onAdLoaded: (ad) {},
-    //   ),
-    //   request: AdRequest(),
-    // );
-
     final user = ref.watch(projectProvider);
     final userId = user!.uid;
     final goalsList = ref.watch(dbGoalListProvider);
@@ -101,7 +89,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: ProjectAppBar(
-        onPressed: () => showModalBottom(context, settingModalList),
+        onPressed: () => context.go('/home/${EditProjectScreen.routeURL}'),
       ),
       body: goalsList.isEmpty
           ? const SizedBox(
@@ -257,8 +245,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                                         backgroundColor:
                                                             Colors.white,
                                                         child: Icon(
-                                                          Icons.notes_rounded,
-                                                          size: 30,
+                                                          Icons.edit_note,
+                                                          size: 40,
                                                         ),
                                                       ),
                                                     ),
@@ -266,7 +254,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                                   Gaps.h10,
                                                   Expanded(
                                                     child: CommonButton(
-                                                      text: 'Complete',
+                                                      text: '완료',
                                                       icon: Icons
                                                           .task_alt_rounded,
                                                       bgColor: Colors.black,
@@ -303,8 +291,8 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                                         backgroundColor:
                                                             Colors.white,
                                                         child: Icon(
-                                                          Icons.notes_rounded,
-                                                          size: 30,
+                                                          Icons.edit_note,
+                                                          size: 40,
                                                         ),
                                                       ),
                                                     ),
@@ -312,7 +300,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                                   Gaps.h10,
                                                   Expanded(
                                                     child: CommonButton(
-                                                      text: 'Cancel',
+                                                      text: '취소',
                                                       icon: Icons
                                                           .highlight_off_rounded,
                                                       bgColor: Colors.white,
@@ -321,7 +309,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                                                       onTap: () =>
                                                           showModalBottomWithText(
                                                         context,
-                                                        "Are you sure you want to cancel?",
+                                                        "완료를 취소하시겠습니까?",
                                                         () =>
                                                             _onCompleteGoalTap(
                                                                 userId,
@@ -351,10 +339,10 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
     );
   }
 
-  void _onEditProjectTap() {
-    Navigator.pop(context);
-    context.go('/home/${EditProjectScreen.routeURL}');
-  }
+  // void _onEditProjectTap() {
+  //   Navigator.pop(context);
+  //   context.go('/home/${EditProjectScreen.routeURL}');
+  // }
 
   void _onCompleteTap(String userId, String title) {
     showModalBottomSheet(
@@ -378,7 +366,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                     const SizedBox(
                       height: Sizes.size32,
                       child: Text(
-                        "Did you complete your goal?",
+                        "목표를 달성하셨나요?",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -387,7 +375,7 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                     ),
                     const SizedBox(
                       height: Sizes.size32,
-                      child: Text("Express your goal satisfaction"),
+                      child: Text("목표에 대한 만족도를 평가해 보세요"),
                     ),
                     Gaps.v20,
                     RatingBar.builder(
@@ -412,7 +400,9 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                       height: 66,
                       child: CommonButton(
                           icon: Icons.task_alt_rounded,
-                          text: 'Yes',
+                          text: '예',
+                          bgColor: Colors.black,
+                          color: Colors.white,
                           onTap: () =>
                               _onCompleteGoalTap(userId, title, _rating)),
                     ),
@@ -420,9 +410,9 @@ class _CardsScreenState extends ConsumerState<CardsScreen> {
                     SizedBox(
                       height: 66,
                       child: CommonButton(
-                        text: 'Cancel',
-                        bgColor: Colors.black,
-                        color: Colors.white,
+                        text: '취소',
+                        bgColor: Colors.white,
+                        color: Colors.black,
                         icon: Icons.arrow_back_ios_new_rounded,
                         onTap: () => Navigator.pop(context),
                       ),

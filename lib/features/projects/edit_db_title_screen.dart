@@ -1,6 +1,5 @@
 import 'package:din/common/widgets/common_appbar.dart';
 import 'package:din/common/widgets/submit_button.dart';
-import 'package:din/constants/gaps.dart';
 import 'package:din/constants/sizes.dart';
 import 'package:din/features/calendar/view_models/calendar_view_model.dart';
 import 'package:din/features/chart/view_model/chart_view_model.dart';
@@ -101,7 +100,7 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
 
     Navigator.popUntil(
         context, ModalRoute.withName(EditProjectScreen.routeURL));
-    showErrorSnack(context, "The title has been changed");
+    showErrorSnack(context, "제목이 변경되었습니다");
   }
 
   bool isButtonEnabled = false;
@@ -119,7 +118,7 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
-        appBar: const CommonAppBar(title: "Edit title"),
+        appBar: const CommonAppBar(title: "제목 변경"),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(Sizes.size20),
@@ -141,7 +140,7 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400),
                       ),
-                      labelText: "New title",
+                      labelText: "새로운 제목",
                       counterText: '',
                       suffix: Padding(
                         padding: const EdgeInsets.only(right: Sizes.size10),
@@ -156,16 +155,16 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
                       ),
                     ),
                   ),
-                  Gaps.v10,
-                  const Padding(
-                    padding: EdgeInsets.only(left: Sizes.size2),
-                    child: Text(
-                      'Titles can be changed once every 3 days.',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                  // Gaps.v10,
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: Sizes.size2),
+                  //   child: Text(
+                  //     'Titles can be changed once every 3 days.',
+                  //     style: TextStyle(
+                  //       color: Colors.black,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -180,7 +179,7 @@ class _EditDbTitleScreenState extends ConsumerState<EditDbTitleScreen> {
               widget.title!,
               widget.goalList,
             ),
-            buttonText: 'Edit',
+            buttonText: '변경',
             icon: Icons.edit_outlined,
           ),
         ),

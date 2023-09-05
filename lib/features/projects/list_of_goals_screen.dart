@@ -1,4 +1,5 @@
 import 'package:din/constants/gaps.dart';
+import 'package:din/features/authentication/widgets/auth_header.dart';
 import 'package:din/features/projects/add_goal_screen.dart';
 import 'package:din/features/projects/view_models/goal_list_view_model.dart';
 import 'package:din/features/projects/widgets/goal_list_tile.dart';
@@ -33,7 +34,7 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
 
   void _onSubmit(goals) {
     if (goals.isEmpty) {
-      showErrorSnack(context, "Please create goals");
+      showErrorSnack(context, "우측 상단의 아이콘을 탭 하여 목표를 추가하세요");
     } else {
       Navigator.push(
         context,
@@ -59,7 +60,7 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
               title: const Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'Create Project',
+                  '프로젝트 생성',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
@@ -70,7 +71,7 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
                   GestureDetector(
                     onTap: () => showModalBottomWithText(
                       context,
-                      "Are you sure you want to delete all goals?",
+                      "모든 목표를 삭제하시겠습니까?",
                       () {
                         ref
                             .read(goalListProvider.notifier)
@@ -96,29 +97,17 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
             ),
             isEmpty
                 ? SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     sliver: SliverFillRemaining(
-                      hasScrollBody: false, // 스크롤이 발생하지 않도록 설정
+                      hasScrollBody: false,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.north_east_rounded,
-                                size: 50,
-                              ),
-                              Icon(
-                                Icons.add_circle_outline_rounded,
-                                size: 50,
-                              ),
-                            ],
+                          AuthHeader(
+                            title: '목표 설정',
+                            subTitle:
+                                "프로젝트를 성공적으로 이끌 목표들을 세워보세요.\n작은 발걸음이 큰 변화를 만들어갑니다!",
                           ),
-                          Gaps.v16,
-                          Text("Tap the icon in the top right to add a goal"),
                         ],
                       ),
                     ),
@@ -166,16 +155,22 @@ class _ListOfGoalsScreenState extends ConsumerState<ListOfGoalsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.warning_amber_rounded),
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.grey.shade500,
+                ),
                 Gaps.h5,
-                Text("You can't add or delete goals after creating a project"),
+                Text(
+                  "프로젝트 생성 후 목표를 추가 및 삭제할 수 없습니다",
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
               ],
             ),
             Gaps.v10,
             Container(
               height: 66,
               child: CommonButton(
-                text: 'Next',
+                text: '다음',
                 bgColor: Colors.black,
                 color: Colors.white,
                 onTap: () => _onSubmit(goals),

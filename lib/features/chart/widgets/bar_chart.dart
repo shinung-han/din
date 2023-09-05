@@ -51,25 +51,25 @@ class BarChartWidget extends StatelessWidget {
     String text;
     switch (value.toInt()) {
       case 0:
-        text = 'MON';
+        text = '월';
         break;
       case 1:
-        text = 'TUE';
+        text = '화';
         break;
       case 2:
-        text = 'WED';
+        text = '수';
         break;
       case 3:
-        text = 'THU';
+        text = '목';
         break;
       case 4:
-        text = 'FRI';
+        text = '금';
         break;
       case 5:
-        text = 'SAT';
+        text = '토';
         break;
       case 6:
-        text = 'SUN';
+        text = '일';
         break;
       default:
         text = '';

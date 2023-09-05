@@ -23,6 +23,8 @@ class MemoScreen extends ConsumerStatefulWidget {
 }
 
 class _MemoScreenState extends ConsumerState<MemoScreen> {
+  final FocusNode _focusNode = FocusNode();
+
   late TextEditingController textController =
       textController = TextEditingController(text: widget.memo ?? "")
         ..addListener(() {
@@ -51,7 +53,7 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
       null,
     );
 
-    showErrorSnack(context, "A memo has been entered");
+    showErrorSnack(context, "메모가 저장되었습니다");
   }
 
   @override
@@ -63,6 +65,9 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(_focusNode);
+      },
       onPanDown: (details) {
         FocusScope.of(context).unfocus();
       },
@@ -90,6 +95,7 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Sizes.size20),
           child: TextField(
+            focusNode: _focusNode,
             controller: textController,
             keyboardType: TextInputType.multiline,
             autocorrect: false,
@@ -98,7 +104,7 @@ class _MemoScreenState extends ConsumerState<MemoScreen> {
               setState(() {});
             },
             decoration: InputDecoration(
-              hintText: "Tap here to write a memo",
+              hintText: "탭 하여 메모를 작성해 보세요",
               hintStyle: TextStyle(
                 color: Colors.grey.shade400,
                 fontWeight: FontWeight.normal,

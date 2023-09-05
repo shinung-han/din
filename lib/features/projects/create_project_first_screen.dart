@@ -22,9 +22,8 @@ class CreateProjectFirstScreen extends ConsumerStatefulWidget {
 class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
   void _requestTrackingAuthorization() async {
     if (Platform.isIOS) {
-      final status =
-          await AppTrackingTransparency.requestTrackingAuthorization();
-      print(status);
+      await AppTrackingTransparency.requestTrackingAuthorization();
+      // print(status);
     }
   }
 
@@ -33,7 +32,6 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
   }
 
   void _onViewTutorial(user) {
-    // TODO 나중에 지워야함
     // ref.read(projectProvider.notifier).updateHasProject(!user.hasProject);
   }
 
@@ -60,7 +58,7 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
                   ),
                   Gaps.v40,
                   const Text(
-                    'Creating your project',
+                    '프로젝트 생성 중입니다',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: Sizes.size28,
@@ -68,7 +66,7 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
                   ),
                   Gaps.v10,
                   const Text(
-                    'Please wait a moment',
+                    '잠시만 기다려주세요',
                     style: TextStyle(
                       // fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -91,12 +89,12 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
                   child: Column(
                     children: [
                       const AuthHeader(
-                        title: 'There is no Project',
+                        title: '프로젝트가 없습니다',
                         subTitle:
-                            'Create your own fantastic project to become a better version of yourself than yesterday.',
+                            "어제의 나를 뛰어넘기 위한 놀라운 프로젝트를\n시작하세요. 당신의 내일이 더 빛나길 바랍니다!",
                       ),
                       CommonButton(
-                        text: 'Create a Project',
+                        text: '프로젝트 생성',
                         bgColor: Colors.black,
                         color: Colors.white,
                         icon: Icons.add_location_alt_outlined,
@@ -104,7 +102,7 @@ class _ProjectScreenState extends ConsumerState<CreateProjectFirstScreen> {
                       ),
                       Gaps.v16,
                       CommonButton(
-                        text: 'View Tutorial',
+                        text: '튜토리얼 보기',
                         onTap: () => _onViewTutorial(userModel),
                         icon: Icons.navigation_outlined,
                       ),

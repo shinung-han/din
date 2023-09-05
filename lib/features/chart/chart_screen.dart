@@ -46,7 +46,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                 slivers: [
                   const SliverAppBar(
                     title: Text(
-                      'Chart',
+                      '통계',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                       ),
@@ -62,7 +62,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Weekly Average",
+                            "주간 통계",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
@@ -83,7 +83,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                               child: Tooltip(
                                 key: _weeklyToolTipKey,
                                 message:
-                                    "\nDisplays the weekly star rating average for daily\nobjectives, counting onlycompleted goals\n",
+                                    "\n완료된 목표만을 기준으로 일일 목표의\n주간 별점 평균을 표시합니다\n",
                                 child: Icon(
                                   Icons.info_outline,
                                   size: Sizes.size24,
@@ -100,8 +100,12 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                     child: AspectRatio(
                       aspectRatio: 2.5,
                       child: weekDate.isNotEmpty
-                          ? BarChartWidget(
-                              weekData: getWeeklyAverageRatings(weekDate),
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: Sizes.size10),
+                              child: BarChartWidget(
+                                weekData: getWeeklyAverageRatings(weekDate),
+                              ),
                             )
                           : const Center(
                               child: CircularProgressIndicator(
@@ -138,7 +142,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Rating per Goal",
+                                "목표별 통계",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
@@ -159,7 +163,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                                   child: Tooltip(
                                     key: _ratingPerToolTipKey,
                                     message:
-                                        "\nDisplays the weekly average star rating for\nyour goals, factoring in only completed ones\n",
+                                        "\n완료된 목표만을 기준으로 목표에 대한\n주간 별점 평균을 표시합니다\n",
                                     child: Icon(
                                       Icons.info_outline,
                                       size: Sizes.size24,
@@ -171,7 +175,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                             ],
                           ),
                           Text(
-                            "Tap the goal to see statistics",
+                            "목표를 탭하여 통계를 확인하세요",
                             style: TextStyle(color: Colors.black54),
                           ),
                         ],
@@ -255,7 +259,7 @@ class _ChartScreenState extends ConsumerState<ChartScreen> {
                     ),
                     Gaps.v16,
                     Text(
-                      "No data available\nPlease create a project",
+                      "데이터가 없습니다\n프로젝트를 생성해 주세요",
                       textAlign: TextAlign.center,
                     ),
                   ],

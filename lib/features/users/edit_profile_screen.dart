@@ -84,9 +84,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Gaps.v10,
                   CircularProgressIndicator(color: Colors.black),
-                  Gaps.v16,
-                  Text("Editing image.."),
+                  Gaps.v24,
+                  Text("이미지 변경 중.."),
                 ],
               ),
             ),
@@ -113,7 +114,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       onTap: _onScaffoldTap,
       child: Scaffold(
         appBar: CommonAppBar(
-          title: "Edit profile",
+          title: "프로필 변경",
           icon: Icons.image_search_rounded,
           onPressed: () => _onChangeProfileImage(data.avatarUrl),
         ),
@@ -151,7 +152,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey.shade400),
                           ),
-                          labelText: 'New name',
+                          labelText: '새로운 이름',
                           suffix: Padding(
                             padding: const EdgeInsets.only(right: Sizes.size10),
                             child: GestureDetector(
@@ -171,7 +172,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: Sizes.size4),
                           child: Text(
-                            "The username can be between 2 and 16 characters.",
+                            "이름은 최소 2자리에서 최대 16자리까지 입력해 주세요",
                             style: TextStyle(
                               color: Colors.grey.shade700,
                             ),
@@ -191,7 +192,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             icon: Icons.edit_outlined,
             disabled: isButtonEnabled,
             onTap: _onSubmit,
-            buttonText: 'Edit',
+            buttonText: '변경',
           ),
         ),
       ),

@@ -117,23 +117,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           Gaps.v10,
           ProfileListTile(
             leadingIcon: Icons.check_circle_outline_rounded,
-            title: "Linked account",
-            subTitle: "Check the connected login method",
+            title: "연결된 계정",
+            subTitle: "연결된 로그인 방법을 확인",
             isLogo: isLogo,
             image: 'assets/images/google_logo.png',
             loginMethod: loginMethod.isNotEmpty ? loginMethod[0] : null,
           ),
           ProfileListTile(
-            title: "Edit profile",
-            subTitle: 'Change profile image and user name',
+            title: "프로필 변경",
+            subTitle: '프로필 이미지와 사용자 이름 변경하기',
             leadingIcon: Icons.manage_accounts,
             isLogo: false,
             onPressed: _onEditProfileTap,
           ),
           if (loginMethod.isNotEmpty && loginMethod[0] == "password")
             ProfileListTile(
-              title: "Change password",
-              subTitle: 'Change your current password',
+              title: "비밀번호 변경",
+              subTitle: '현재 비밀번호 바꾸기',
               leadingIcon: Icons.lock_reset_rounded,
               isLogo: false,
               onPressed: _onPasswordChangeTap,
@@ -145,13 +145,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           //   isLogo: false,
           // ),
           ProfileListTile(
-            title: "Log out",
-            subTitle: "You'll be redirected to the login page",
+            title: "로그아웃",
+            subTitle: "로그아웃 후 로그인 페이지로 이동",
             leadingIcon: Icons.logout_rounded,
             isLogo: false,
             onPressed: () => showModalBottomWithText(
               context,
-              "Are you sure you want to log out?",
+              "로그아웃 하시겠습니까?",
               _onLogoutTap,
             ),
           ),
@@ -161,9 +161,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               Icons.info_outline_rounded,
               size: 30,
             ),
-            title: const Text("App version"),
+            title: const Text("앱 버전"),
             subtitle: Text(
-              'Last Updated 30 Jul 2023',
+              '최종 업데이트 2023년 9월 5일',
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.grey.shade800,

@@ -29,33 +29,33 @@ class DateInformation extends StatelessWidget {
             Column(
               children: [
                 const Text(
-                  'Start date',
+                  '시작일',
                   style: textStyle,
                 ),
                 Gaps.v4,
-                Text(DateFormat.yMd().format(date.startDate)),
+                Text(DateFormat('yyyy/MM/dd').format(date.startDate)),
               ],
             ),
             verticalDivider(),
             Column(
               children: [
                 const Text(
-                  'End date',
+                  '종료일',
                   style: textStyle,
                 ),
                 Gaps.v4,
-                Text(DateFormat.yMd().format(date.endDate)),
+                Text(DateFormat('yyyy/MM/dd').format(date.endDate)),
               ],
             ),
             verticalDivider(),
             Column(
               children: [
                 const Text(
-                  'Period',
+                  '기간',
                   style: textStyle,
                 ),
                 Gaps.v4,
-                Text('For ${date.period} days'),
+                Text('${date.period}일 동안'),
               ],
             ),
           ],

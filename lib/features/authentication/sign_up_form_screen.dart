@@ -90,7 +90,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
     setState(() {
       _isButtonEnabled = emailValid(_emailController.text) &&
           _passwordController.text.length > 6 &&
-          _nameController.text.length > 2;
+          _nameController.text.length > 1;
     });
   }
 
@@ -119,13 +119,14 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                   delegate: SliverChildListDelegate(
                     [
                       const AuthHeader(
-                        title: 'Sign Up for DIN',
+                        title: '회원가입',
                         subTitle:
-                            'Create a profile, follow other accounts, make your own videos, and more.',
+                            '환영합니다! 여기서 시작된 모든 노력은\n더 나은 내일의 당신을 만들어갑니다.\n매일매일의 변화를 믿고 함께 나아가요!',
                       ),
                       Form(
                         key: _formKey,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextFormField(
                               controller: _emailController,
@@ -139,7 +140,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                                     .requestFocus(_passwordNode);
                               },
                               decoration: InputDecoration(
-                                labelText: 'Email',
+                                labelText: '이메일',
                                 labelStyle:
                                     TextStyle(color: Colors.grey.shade400),
                                 enabledBorder: OutlineInputBorder(
@@ -184,7 +185,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                                   borderSide:
                                       BorderSide(color: Colors.grey.shade400),
                                 ),
-                                labelText: 'Password',
+                                labelText: '비밀번호',
                                 suffix: Padding(
                                   padding: const EdgeInsets.only(
                                       right: Sizes.size10),
@@ -216,14 +217,28 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                                 ),
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: Sizes.size4,
+                                left: 1,
+                              ),
+                              child: Text(
+                                "비밀번호는 최소 6자리 이상 입력해 주세요",
+                                style: TextStyle(
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
+                            ),
                             Gaps.v16,
                             TextFormField(
                               controller: _nameController,
                               focusNode: _nameNode,
                               cursorHeight: Sizes.size16,
+                              maxLength: 16,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               decoration: InputDecoration(
+                                counterText: '',
                                 labelStyle:
                                     TextStyle(color: Colors.grey.shade400),
                                 enabledBorder: OutlineInputBorder(
@@ -233,7 +248,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                                   borderSide:
                                       BorderSide(color: Colors.grey.shade400),
                                 ),
-                                labelText: 'Name',
+                                labelText: '이름',
                                 suffix: Padding(
                                   padding: const EdgeInsets.only(
                                       right: Sizes.size10),
@@ -245,6 +260,18 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
                                       color: Colors.grey.shade600,
                                     ),
                                   ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: Sizes.size4,
+                                left: 1,
+                              ),
+                              child: Text(
+                                "이름은 최소 2자리에서 최대 16자리까지 입력해 주세요",
+                                style: TextStyle(
+                                  color: Colors.grey.shade700,
                                 ),
                               ),
                             ),
@@ -263,7 +290,7 @@ class _SignUpFormScreenState extends ConsumerState<SignUpFormScreen> {
           child: SubmitButton(
             disabled: _isButtonEnabled,
             onTap: _onSubmit,
-            buttonText: 'Sign Up',
+            buttonText: '회원가입',
             icon: Icons.login_rounded,
           ),
         ),

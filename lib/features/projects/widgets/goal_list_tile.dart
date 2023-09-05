@@ -43,21 +43,21 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
 
     goalModalList = [
       {
-        "text": "Edit image",
+        "text": "이미지 변경",
         "icon": Icons.image_search_rounded,
         "onTap": () => _onChangeImageTap(widget.id),
       },
       {
-        "text": "Edit title",
+        "text": "제목 변경",
         "icon": Icons.build_outlined,
         "onTap": _onEditTitleTap,
       },
       {
-        "text": "Delete goal",
+        "text": "목표 삭제",
         "icon": Icons.remove_circle_outline_rounded,
         "onTap": () => showModalBottomWithText(
               context,
-              "Are you sure you want to delete the goal?",
+              "목표를 삭제하시겠습니까?",
               _onDeleteGoalTap,
             ),
       },
@@ -76,7 +76,7 @@ class _GoalCardState extends ConsumerState<GoalListTile> {
 
       if (!mounted) return;
       Navigator.pop(context);
-      showErrorSnack(context, "Image has been changed");
+      showErrorSnack(context, "이미지가 변경되었습니다");
     }
   }
 

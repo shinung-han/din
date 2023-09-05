@@ -50,7 +50,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
           slivers: [
             const SliverAppBar(
               title: Text(
-                'Wrap up',
+                '마무리',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
@@ -62,11 +62,11 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
                   Column(
                     children: [
                       header(),
-                      title('Date information'),
+                      Gaps.v10,
                       DateInformation(date: date),
-                      Gaps.v20,
+                      Gaps.v14,
                       divider(),
-                      title('Goal list'),
+                      Gaps.v14,
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: SingleChildScrollView(
@@ -105,7 +105,7 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
       bottomNavigationBar: BottomAppBar(
         height: 90,
         child: CommonButton(
-          text: "Create",
+          text: "프로젝트 생성",
           bgColor: Colors.black,
           color: Colors.white,
           onTap: () => _onCreateProject(
@@ -126,35 +126,18 @@ class _WrapUpScreenState extends ConsumerState<WrapUpScreen> {
       child: const Column(
         children: [
           Text(
-            "Are you ready?",
+            "준비됐나요?",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,
             ),
           ),
+          Gaps.v10,
           Text(
-            "Create your own fantastic project to become a better version of yourself than yesterday.",
+            "지금까지의 준비를 살펴보며 자신감을 얻어봅시다.\n시작이 좋으면 결과도 좋습니다!\n준비가 되었다면 이제 시작해 봅시다!",
             textAlign: TextAlign.center,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget title(String title) {
-    return Container(
-      padding: EdgeInsets.only(
-        top: 10,
-        left: 15,
-        bottom: 10,
-      ),
-      alignment: Alignment.centerLeft,
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-        ),
       ),
     );
   }
